@@ -149,13 +149,16 @@
     .sim-mode .sim-slider-container { height: 30px; opacity: 1; margin-top: 5px; }
     input[type=range] { width: 100%; accent-color: var(--color-accent); height: 4px; }
 
-    /* VOCACIONAL */
-    .career-box { padding: 20px; text-align: center; }
-    .career-btn { background: var(--white); color: var(--color-primary); border: 1px solid #e2e8f0; width: 100%; padding: 12px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .career-result { display: none; margin-top: 15px; text-align: left; padding-top: 15px; border-top: 1px dashed #e2e8f0;}
-    .career-text { font-size: 0.95rem; line-height: 1.6; color: var(--color-text); font-weight: 500; }
-    .external-link-box { margin-top: 15px; font-size: 0.8rem; text-align: center; }
-    .external-link { color: var(--color-accent); text-decoration: none; font-weight: 700; }
+    /* --- TERMÓMETRO DE ADMISIÓN (NUEVO ESTILO) --- */
+    .admission-box { padding: 20px; background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .adm-header { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .uni-row { margin-bottom: 12px; }
+    .uni-info { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
+    .uni-name { color: var(--color-text); }
+    .uni-perc { color: var(--color-primary); }
+    .uni-track { width: 100%; height: 6px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative; }
+    .uni-fill { height: 100%; border-radius: 6px; transition: width 2s ease-out; }
+    .adm-note { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 10px; font-style: italic; }
 
     /* MISIONES */
     .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
@@ -267,20 +270,10 @@
 
         <div class="subjects-grid" id="uiGrid"></div>
 
-        <div class="career-box card-box">
-          <button class="career-btn" onclick="revealCareer()" id="careerToggleBtn">
-            <span><i class="fa-solid fa-wand-magic-sparkles"></i> Revelar Proyección</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="career-result" id="careerResult">
-            <div class="career-text" id="careerText"></div>
-            <div class="external-link-box">
-                <a href="https://www.colombiaaprende.edu.co/estudiantes/educacion-superior/orientacion-socio-ocupacional" target="_blank" class="external-link">
-                  Ver Carreras de Referencia <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </a>
-                <span class="disclaimer">*Puntaje referencial. No garantiza admisión.</span>
-            </div>
-          </div>
+        <div class="admission-box">
+          <div class="adm-header"><i class="fa-solid fa-chart-pie"></i> TERMÓMETRO DE ADMISIÓN</div>
+          <div id="admissionList"></div>
+          <div class="adm-note">* Probabilidad estimada basada en puntajes de corte históricos. No garantiza admisión.</div>
         </div>
 
         <div class="mission-box card-box">
@@ -345,15 +338,13 @@
         i: 55   // Max preguntas Inglés
     };
 
-    // Mapeo de Carreras
-    const careerMap = {
-      "Mat": "Ingenierías, Estadística, Economía, Desarrollo de Software.",
-      "Cien": "Medicina, Biología, Química Farmacéutica, Enfermería.",
-      "Soc": "Derecho, Ciencia Política, Sociología, Trabajo Social.",
-      "Lec": "Psicología, Comunicación Social, Literatura, Filosofía.",
-      "Ing": "Negocios Internacionales, Lenguas Modernas, Turismo.",
-      "Default": "Perfil Integral con enfoque multidisciplinario."
-    };
+    // 🏫 DATOS DE UNIVERSIDADES (Cortes aproximados)
+    const UNIVERSITIES = [
+      { name: "Univ. Nacional (Ingenierías)", cut: 400, color: "#15803d" },
+      { name: "Univ. de Antioquia (Salud)", cut: 380, color: "#16a34a" },
+      { name: "Univ. del Valle (Humanas)", cut: 330, color: "#d97706" },
+      { name: "UTP / U. Nariño / U. Cauca", cut: 290, color: "#0284c7" }
+    ];
 
     let subjects = [];
     let realScore = 0;
@@ -500,12 +491,42 @@
       renderSubjects();
       buildNarrative(data.Nombre, realScore);
       buildMissions(); 
+      renderAdmission(realScore); // Nuevo: Termómetro
       
       setTimeout(() => updateCircle(realScore), 500);
       animateNumber(0, realScore, 2000);
       calculateLevel(realScore);
       
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'], scalar: 1.3 }), 1000);
+    }
+
+    // --- NUEVO: FUNCIÓN TERMÓMETRO DE ADMISIÓN ---
+    function renderAdmission(score) {
+        const container = document.getElementById('admissionList');
+        let html = '';
+        UNIVERSITIES.forEach(uni => {
+            // Regla de 3: Si puntaje >= corte, es 100% probable (o 95+).
+            // Si es menor, calculamos qué tan lejos está.
+            // Para ser realistas, usamos una escala ajustada.
+            
+            let percentage = (score / uni.cut) * 100;
+            if (percentage > 100) percentage = 100;
+            if (percentage < 0) percentage = 0;
+            
+            let displayPerc = Math.round(percentage) + '%';
+            
+            html += `
+            <div class="uni-row">
+                <div class="uni-info">
+                    <span class="uni-name">${uni.name}</span>
+                    <span class="uni-perc" style="color:${uni.color}">${displayPerc} Prob.</span>
+                </div>
+                <div class="uni-track">
+                    <div class="uni-fill" style="width: ${percentage}%; background-color: ${uni.color}"></div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
     }
 
     // --- FUNCIÓN DE DESCARGA DIRECTA (SIN VISOR DE DRIVE) ---
@@ -534,11 +555,10 @@
     function toggleGreeting(){ const c=document.getElementById('greetingContent'); c.style.display=c.style.display==="block"?"none":"block"; }
     function toggleMissions(){ const c=document.getElementById('missionList'); c.style.display=c.style.display==="block"?"none":"block"; }
     function buildMissions(){ const l=document.getElementById('missionList'); let h=""; subjects.forEach(s=>{ let i='📌'; if(s.p<60)i='🚨'; else if(s.p>80)i='⭐'; h+=`<div class="mission-item"><div style="font-size:1.2rem;">${i}</div><div class="mission-content"><span style="color:${s.color};font-weight:800;font-size:0.7rem;">${s.n.toUpperCase()}</span><br>${s.rec}</div></div>`; }); h+=`<div class="mission-pdf-note">📄 Ver PDF completo.</div>`; l.innerHTML=h; }
-    function prepareCareer(){ let best=subjects.reduce((m,s)=>s.p>m.p?s:m); let t=careerMap["Default"]; if(best.n.includes("Mat"))t=careerMap["Mat"]; else if(best.n.includes("Cien"))t=careerMap["Cien"]; else if(best.n.includes("Soc"))t=careerMap["Soc"]; else if(best.n.includes("Lec"))t=careerMap["Lec"]; else if(best.n.includes("Ing"))t=careerMap["Ing"]; careerString=t; }
-    function revealCareer(){ const b=document.getElementById('careerResult'); b.style.display=b.style.display==="block"?"none":"block"; if(b.style.display==="block" && document.getElementById('careerText').innerText===""){ let i=0; document.getElementById('careerText').innerText=""; function type(){if(i<careerString.length){document.getElementById('careerText').innerHTML+=careerString.charAt(i);i++;setTimeout(type,20);}} type(); } }
+    
     function toggleSimMode(){ isSimulating=!isSimulating; document.body.classList.toggle('sim-mode'); const b=document.getElementById('btnSim'); if(isSimulating){ Swal.fire({title:'Simulador', text:'Mueve las barras.', icon:'info', confirmButtonColor:'#0f172a'}); b.innerHTML='<i class="fa-solid fa-rotate-left"></i> Restaurar'; b.classList.add('btn-solid'); document.getElementById('uiScore').classList.add('paused'); calculateLevel(parseInt(document.getElementById('uiScore').innerText)); } else { b.innerHTML='<i class="fa-solid fa-sliders"></i> Simular'; b.classList.remove('btn-solid'); document.getElementById('uiScore').classList.remove('paused'); resetSim(); } }
-    function runSim(){ let s=0; subjects.forEach((sub,i)=>{ let v=parseInt(document.getElementById(`slider-${i}`).value); s+=v; }); let p=Math.floor((s/subjects.length)*5); if(p>500)p=500; document.getElementById('uiScore').innerText=p; updateCircle(p); calculateLevel(p); }
-    function resetSim(){ document.getElementById('uiScore').innerText=realScore; updateCircle(realScore); calculateLevel(realScore); subjects.forEach((s,i)=>{ document.getElementById(`slider-${i}`).value=s.p; }); }
+    function runSim(){ let s=0; subjects.forEach((sub,i)=>{ let v=parseInt(document.getElementById(`slider-${i}`).value); s+=v; }); let p=Math.floor((s/subjects.length)*5); if(p>500)p=500; document.getElementById('uiScore').innerText=p; updateCircle(p); calculateLevel(p); renderAdmission(p); /* Actualiza termómetro en simulación */ }
+    function resetSim(){ document.getElementById('uiScore').innerText=realScore; updateCircle(realScore); calculateLevel(realScore); subjects.forEach((s,i)=>{ document.getElementById(`slider-${i}`).value=s.p; }); renderAdmission(realScore); }
     function animateNumber(s,e,d){ const el=document.getElementById('uiScore'); let st=null; function l(t){ if(!st)st=t; const p=Math.min((t-st)/d,1); const ea=1-Math.pow(1-p,3); el.innerText=Math.floor(ea*(e-s)+s); if(p<1)requestAnimationFrame(l); else el.innerText=e; } requestAnimationFrame(l); }
     function openModal(i){ if(isSimulating)return; const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mScore').style.color=s.color; document.getElementById('mFortaleza').innerText=s.f; document.getElementById('mMejora').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
     function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
