@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Resultados S11-R | Academia Quijano</title>
+  <title>Resultados | Academia Quijano</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -214,7 +214,7 @@
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Procesando resultados...</div>
+      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Cargando tus resultados...</div>
     </div>
 
     <div id="scroll-viewport">
@@ -222,7 +222,7 @@
       <div class="header-wrapper">
         <div class="header-info">
           <div class="sub-label">INFORME</div>
-          <div class="main-title">RESULTADO SIMULACRO S11-R</div>
+          <div class="main-title" id="simTitle">RESULTADO SIMULACRO</div>
           <div class="student-info">
             <span id="uiName">...</span> | <span id="uiRank">...</span>
           </div>
@@ -331,65 +331,123 @@
   </div>
 
   <script>
-    // URL EXACTA DEL CSV QUE ME PASASTE
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
-    
-    const DEMO_DATA = {
-        Nombre: "JUAN SEBASTIÁN PÉREZ", Rank: "5/42", Global: "385", 
-        S1_Lec: "78", S1_Mat: "85", S1_Soc: "70", S1_Cien: "91", S2_Ing: "66",
-        PDF_Link: "#"
+    // --- ⚙️ CONFIGURACIÓN ---
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
+    const NOMBRE_SIMULACRO = "S11-R"; // <--- CAMBIA EL NOMBRE AQUÍ
+
+    // Mapeo de Carreras
+    const careerMap = {
+      "Mat": "Ingenierías, Estadística, Economía, Desarrollo de Software.",
+      "Cien": "Medicina, Biología, Química Farmacéutica, Enfermería.",
+      "Soc": "Derecho, Ciencia Política, Sociología, Trabajo Social.",
+      "Lec": "Psicología, Comunicación Social, Literatura, Filosofía.",
+      "Ing": "Negocios Internacionales, Lenguas Modernas, Turismo.",
+      "Default": "Perfil Integral con enfoque multidisciplinario."
     };
 
     let subjects = [];
     let realScore = 0;
     let isSimulating = false;
     let currentPdfLink = "#";
-
-    const careerMap = {
-      "Mat": "Ingenierías, Estadística, Economía, Ciencias de la Computación.",
-      "Cien": "Medicina, Biología, Química Farmacéutica, Enfermería.",
-      "Soc": "Derecho, Ciencia Política, Sociología, Trabajo Social.",
-      "Lec": "Psicología, Comunicación Social, Literatura, Filosofía.",
-      "Ing": "Negocios Internacionales, Lenguas Modernas, Relaciones Internacionales.",
-      "Default": "Perfil Integral con enfoque multidisciplinario."
-    };
+    let studentId = "";
 
     window.onload = function() {
-      setTimeout(() => { if(realScore === 0) initApp(DEMO_DATA); }, 4000);
-      const id = new URLSearchParams(window.location.search).get('id');
-      if(id) {
-        Papa.parse(SHEET_URL, {
+      document.getElementById('simTitle').innerText = "RESULTADO " + NOMBRE_SIMULACRO;
+      const urlParams = new URLSearchParams(window.location.search);
+      studentId = urlParams.get('id');
+
+      if(studentId) {
+        Papa.parse(SHEET_CSV_URL, {
           download: true, header: true,
-          complete: (res) => {
-            // AQUÍ ESTABA EL ERROR: Usar r.TOKEN en lugar de r.ID
-            const found = res.data.find(r => r.TOKEN === id);
-            if(found) initApp(found);
+          complete: function(results) {
+            processRankingAndData(results.data);
+          },
+          error: function(err) {
+             document.getElementById('loader').innerHTML = "Error cargando datos.";
           }
         });
+      } else {
+        setTimeout(() => { 
+           // DEMO
+           initApp(DEMO_DATA, 1, 1); 
+        }, 1000);
       }
     };
 
-    function initApp(data) {
-      if(realScore !== 0) return;
-      document.getElementById('loader').style.opacity = '0';
-      setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
-      loadData(data);
+    // --- NUEVA LÓGICA DE RANKING Y CÁLCULO ---
+    function processRankingAndData(allData) {
+        // 1. Calcular puntajes para TODOS (S1+S2)
+        let calculatedList = allData.map(row => {
+            // Manejo seguro de números (S1 + S2)
+            // Tus columnas según imagen: S1_Mat, S1_Lec, S1_Soc... S2_Mat...
+            let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
+            let sLec = (parseInt(row.S1_Lec)||0); // Solo S1 usualmente
+            let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
+            let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
+            let sIng = (parseInt(row.S2_Ing)||0); // Solo S2 usualmente
+
+            let global = sMat + sLec + sSoc + sCien + sIng;
+
+            return {
+                token: row.TOKEN,
+                data: row,
+                scores: { m: sMat, l: sLec, s: sSoc, c: sCien, i: sIng, g: global }
+            };
+        });
+
+        // 2. Ordenar por Global Descendente
+        calculatedList.sort((a, b) => b.scores.g - a.scores.g);
+
+        // 3. Buscar a nuestro estudiante
+        let myRank = 0;
+        let foundStudent = null;
+        
+        // Filtramos vacíos
+        let validStudents = calculatedList.filter(s => s.token && s.token.length > 2);
+        
+        for(let i=0; i < validStudents.length; i++) {
+            if(validStudents[i].token === studentId) {
+                myRank = i + 1;
+                foundStudent = validStudents[i];
+                break;
+            }
+        }
+
+        if(foundStudent) {
+            initApp(foundStudent.data, myRank, validStudents.length, foundStudent.scores);
+        } else {
+            document.getElementById('loader').innerHTML = "<div style='color:red'>Estudiante no encontrado.</div>";
+        }
     }
 
-    function loadData(data) {
-      realScore = parseInt(data.Global) || 385;
-      // Lectura correcta de la columna 'LINK PDF'
+    const DEMO_DATA = { Nombre: "MODO DEMO", 'LINK PDF': "#" };
+
+    function initApp(data, rank, total, scores) {
+      document.getElementById('loader').style.opacity = '0';
+      setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
+      
+      // Si es demo, inventamos scores
+      if(!scores) scores = { m: 85, l: 78, s: 70, c: 91, i: 66, g: 390 };
+
+      loadData(data, rank, total, scores);
+    }
+
+    function loadData(data, rank, total, scores) {
+      realScore = scores.g;
+      
+      // LEER LINK PDF CORRECTO (Tu columna N se llama 'LINK PDF')
       currentPdfLink = data['LINK PDF'] || "#";
       
-      document.getElementById('uiName').innerText = data.Nombre.toUpperCase();
-      document.getElementById('uiRank').innerText = `Puesto: ${data.Rank || 'Calculando...'}`;
+      document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
+      document.getElementById('uiRank').innerText = `Puesto: ${rank}/${total}`;
       
+      // Armar materias con los puntajes CALCULADOS (Suma S1+S2)
       subjects = [
-        { n: "Lectura Crítica", p: parseInt(data.S1_Lec)||0, f: "Análisis profundo", m: "Inferencia", icon: "fa-book-open", rec: "Leer 1 editorial al día.", color: "var(--col-lec)" },
-        { n: "Matemáticas", p: parseInt(data.S1_Mat)||0, f: "Cálculo ágil", m: "Geometría", icon: "fa-calculator", rec: "Repasar fórmulas geométricas.", color: "var(--col-mat)" },
-        { n: "Sociales y Ciudadanas", p: parseInt(data.S1_Soc)||0, f: "Contexto histórico", m: "Constitución", icon: "fa-users", rec: "Leer Art 1-86 Constitución.", color: "var(--col-soc)" },
-        { n: "Ciencias Naturales", p: parseInt(data.S1_Cien)||0, f: "Biología celular", m: "Física", icon: "fa-dna", rec: "Dibujar procesos celulares.", color: "var(--col-cie)" },
-        { n: "Inglés", p: parseInt(data.S2_Ing)||0, f: "Vocabulario", m: "Gramática", icon: "fa-flag-usa", rec: "Escuchar podcast 15 min.", color: "var(--col-ing)" }
+        { n: "Lectura Crítica", p: scores.l, f: "Análisis", m: "Inferencia", icon: "fa-book-open", rec: "Leer 1 editorial al día.", color: "var(--col-lec)" },
+        { n: "Matemáticas", p: scores.m, f: "Cálculo", m: "Geometría", icon: "fa-calculator", rec: "Repasar fórmulas.", color: "var(--col-mat)" },
+        { n: "Sociales y C.", p: scores.s, f: "Historia", m: "Constitución", icon: "fa-users", rec: "Leer Art 1-86 Constitución.", color: "var(--col-soc)" },
+        { n: "Ciencias Nat.", p: scores.c, f: "Biología", m: "Física", icon: "fa-dna", rec: "Dibujar procesos.", color: "var(--col-cie)" },
+        { n: "Inglés", p: scores.i, f: "Vocabulario", m: "Gramática", icon: "fa-flag-usa", rec: "Duolingo 15 min.", color: "var(--col-ing)" }
       ];
 
       renderSubjects();
@@ -399,7 +457,6 @@
       setTimeout(() => updateCircle(realScore), 500);
       animateNumber(0, realScore, 2000);
       calculateLevel(realScore);
-      prepareCareer();
       
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'], scalar: 1.3 }), 1000);
     }
@@ -408,9 +465,8 @@
       const card = document.getElementById('greetingCard');
       const title = document.getElementById('greetingTitle');
       const text = document.getElementById('greetingText');
-      const firstName = name.split(' ')[0].toUpperCase();
+      const firstName = name ? name.split(' ')[0].toUpperCase() : "ALUMNO";
       let best = subjects.reduce((max, s) => s.p > max.p ? s : max);
-      let worst = subjects.reduce((min, s) => s.p < min.p ? s : min);
 
       if (score >= 380) {
         card.style.borderLeftColor = "var(--level-top)";
@@ -419,11 +475,11 @@
       } else if (score >= 300) {
         card.style.borderLeftColor = "var(--level-high)";
         title.innerText = `¡BUEN TRABAJO, ${firstName}! 👍`;
-        text.innerHTML = `Vas bien. Eres fuerte en <strong>${best.n}</strong>, pero ajusta <strong>${worst.n}</strong> para subir.`;
+        text.innerHTML = `Vas bien. Eres fuerte en <strong>${best.n}</strong>, pero ajusta detalles para subir.`;
       } else {
         card.style.borderLeftColor = "var(--level-mid)";
         title.innerText = `ATENCIÓN REQUERIDA, ${firstName} ⚠️`;
-        text.innerHTML = `Es momento de intensificar el estudio. Enfócate en recuperar <strong>${worst.n}</strong> esta semana.`;
+        text.innerHTML = `Es momento de intensificar el estudio. Enfócate en recuperar terreno esta semana.`;
       }
     }
 
@@ -473,12 +529,12 @@
 
     function calculateLevel(score) {
       const badge = document.getElementById('levelBadge');
-      let label = "", color = "", bg = "", icon = "";
+      let label = "", color = "", icon = "";
 
-      if(score >= 380) { label = "Nivel Superior"; color = "var(--level-top)"; bg = "#f0fdf4"; icon="fa-crown"; }
-      else if(score >= 300) { label = "Nivel Alto"; color = "var(--level-high)"; bg = "#eff6ff"; icon="fa-chart-line"; }
-      else if(score >= 230) { label = "Nivel Medio"; color = "var(--level-mid)"; bg = "#fffbeb"; icon="fa-minus"; }
-      else { label = "Nivel Bajo"; color = "var(--level-low)"; bg = "#fef2f2"; icon="fa-exclamation-triangle"; }
+      if(score >= 380) { label = "Nivel Superior"; color = "var(--level-top)"; icon="fa-crown"; }
+      else if(score >= 300) { label = "Nivel Alto"; color = "var(--level-high)"; icon="fa-chart-line"; }
+      else if(score >= 230) { label = "Nivel Medio"; color = "var(--level-mid)"; icon="fa-minus"; }
+      else { label = "Nivel Bajo"; color = "var(--level-low)"; icon="fa-exclamation-triangle"; }
       
       badge.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
       badge.style.color = color; badge.style.borderColor = "var(--color-accent)";
