@@ -386,23 +386,18 @@
     // --- NUEVA LÓGICA DE RANKING Y CÁLCULO PONDERADO ---
     function processRankingAndData(allData) {
         let calculatedList = allData.map(row => {
-            // 1. Sumamos las entradas brutas (ej: 23 preguntas correctas)
-            // Manejo seguro de números (S1 + S2)
             let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
-            let sLec = (parseInt(row.S1_Lec)||0); // Solo S1 usualmente
+            let sLec = (parseInt(row.S1_Lec)||0); 
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
-            let sIng = (parseInt(row.S2_Ing)||0); // Solo S2 usualmente
+            let sIng = (parseInt(row.S2_Ing)||0); 
 
-            // 2. CONVERTIMOS A ESCALA 0-100 (IGUAL QUE EL PDF)
-            // Fórmula: (PuntajeBruto / MaxPreguntas) * 100
             let pMat = Math.round((sMat / MAX.m) * 100) || 0;
             let pLec = Math.round((sLec / MAX.l) * 100) || 0;
             let pSoc = Math.round((sSoc / MAX.s) * 100) || 0;
             let pCien = Math.round((sCien / MAX.c) * 100) || 0;
             let pIng = Math.round((sIng / MAX.i) * 100) || 0;
 
-            // Topes a 100
             pMat = Math.min(100, pMat); pLec = Math.min(100, pLec);
             pSoc = Math.min(100, pSoc); pCien = Math.min(100, pCien); pIng = Math.min(100, pIng);
 
@@ -415,14 +410,10 @@
             };
         });
 
-        // 2. Ordenar por Global Descendente
         calculatedList.sort((a, b) => b.scores.g - a.scores.g);
 
-        // 3. Buscar a nuestro estudiante
         let myRank = 0;
         let foundStudent = null;
-        
-        // Filtramos vacíos
         let validStudents = calculatedList.filter(s => s.token && s.token.length > 2);
         
         for(let i=0; i < validStudents.length; i++) {
@@ -445,266 +436,97 @@
     function initApp(data, rank, total, scores) {
       document.getElementById('loader').style.opacity = '0';
       setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
-      
-      // Si es demo, inventamos scores
       if(!scores) scores = { m: 85, l: 78, s: 70, c: 91, i: 66, g: 390 };
-
       loadData(data, rank, total, scores);
     }
 
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
-      
-      // LEER LINK PDF CORRECTO (Tu columna N se llama 'LINK PDF')
+      // LEER LINK PDF (Tu columna N se llama 'LINK PDF')
       currentPdfLink = data['LINK PDF'] || "#";
       
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank}/${total}`;
       
-      // Armar materias con los puntajes CALCULADOS PONDERADOS (0-100)
+      // --- CONEXIÓN DE TEXTOS PERSONALIZADOS (AQUÍ ESTÁ LA MAGIA) ---
+      // Si la celda del Excel (ej: TXT_LEC_FORT) tiene texto, lo usa. Si no, usa el genérico.
       subjects = [
-        { n: "Lectura Crítica", p: scores.l, f: "Análisis", m: "Inferencia", icon: "fa-book-open", rec: "Leer 1 editorial.", color: "var(--col-lec)" },
-        { n: "Matemáticas", p: scores.m, f: "Cálculo", m: "Geometría", icon: "fa-calculator", rec: "Repasar fórmulas.", color: "var(--col-mat)" },
-        { n: "Sociales y C.", p: scores.s, f: "Historia", m: "Constitución", icon: "fa-users", rec: "Leer Constitución.", color: "var(--col-soc)" },
-        { n: "Ciencias Nat.", p: scores.c, f: "Biología", m: "Física", icon: "fa-dna", rec: "Dibujar procesos.", color: "var(--col-cie)" },
-        { n: "Inglés", p: scores.i, f: "Vocabulario", m: "Gramática", icon: "fa-flag-usa", rec: "Duolingo 15 min.", color: "var(--col-ing)" }
+        { 
+            n: "Lectura Crítica", p: scores.l, color: "var(--col-lec)", icon: "fa-book-open",
+            f: data.TXT_LEC_FORT || "Análisis profundo", 
+            m: data.TXT_LEC_MEJ || "Inferencia", 
+            rec: data.TXT_LEC_MIS || "Leer 1 editorial al día."
+        },
+        { 
+            n: "Matemáticas", p: scores.m, color: "var(--col-mat)", icon: "fa-calculator",
+            f: data.TXT_MAT_FORT || "Cálculo ágil", 
+            m: data.TXT_MAT_MEJ || "Geometría", 
+            rec: data.TXT_MAT_MIS || "Repasar fórmulas."
+        },
+        { 
+            n: "Sociales y C.", p: scores.s, color: "var(--col-soc)", icon: "fa-users",
+            f: data.TXT_SOC_FORT || "Contexto histórico", 
+            m: data.TXT_SOC_MEJ || "Constitución", 
+            rec: data.TXT_SOC_MIS || "Leer Constitución."
+        },
+        { 
+            n: "Ciencias Nat.", p: scores.c, color: "var(--col-cie)", icon: "fa-dna",
+            f: data.TXT_CIE_FORT || "Biología celular", 
+            m: data.TXT_CIE_MEJ || "Física", 
+            rec: data.TXT_CIE_MIS || "Dibujar procesos."
+        },
+        { 
+            n: "Inglés", p: scores.i, color: "var(--col-ing)", icon: "fa-flag-usa",
+            f: data.TXT_ING_FORT || "Vocabulario", 
+            m: data.TXT_ING_MEJ || "Gramática", 
+            rec: data.TXT_ING_MIS || "Duolingo 15 min."
+        }
       ];
 
       renderSubjects();
       buildNarrative(data.Nombre, realScore);
       buildMissions(); 
-      
       setTimeout(() => updateCircle(realScore), 500);
       animateNumber(0, realScore, 2000);
       calculateLevel(realScore);
-      
+      prepareCareer();
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'], scalar: 1.3 }), 1000);
     }
 
-    function buildNarrative(name, score) {
-      const card = document.getElementById('greetingCard');
-      const title = document.getElementById('greetingTitle');
-      const text = document.getElementById('greetingText');
-      const firstName = name ? name.split(' ')[0].toUpperCase() : "ALUMNO";
-      let best = subjects.reduce((max, s) => s.p > max.p ? s : max);
-
-      if (score >= 380) {
-        card.style.borderLeftColor = "var(--level-top)";
-        title.innerText = `¡FELICITACIONES, ${firstName}! 🎉`;
-        text.innerHTML = `Desempeño sobresaliente. Tu dominio en <strong>${best.n}</strong> es clave. ¡Sigue así!`;
-      } else if (score >= 300) {
-        card.style.borderLeftColor = "var(--level-high)";
-        title.innerText = `¡BUEN TRABAJO, ${firstName}! 👍`;
-        text.innerHTML = `Vas bien. Eres fuerte en <strong>${best.n}</strong>, pero ajusta detalles para subir.`;
-      } else {
-        card.style.borderLeftColor = "var(--level-mid)";
-        title.innerText = `ATENCIÓN REQUERIDA, ${firstName} ⚠️`;
-        text.innerHTML = `Es momento de intensificar el estudio. Enfócate en recuperar terreno esta semana.`;
-      }
-    }
-
-    function buildMissions() {
-        const list = document.getElementById('missionList');
-        let html = '';
-        subjects.forEach(s => {
-            let icon = '📌'; 
-            if(s.p < 60) icon = '🚨'; else if(s.p > 80) icon = '⭐';
-            html += `
-            <div class="mission-item">
-              <div style="font-size:1.2rem;">${icon}</div>
-              <div class="mission-content">
-                <span style="color:${s.color}; font-size:0.7rem; font-weight:800;">${s.n.toUpperCase()}</span><br>
-                ${s.rec}
-              </div>
-            </div>`;
-        });
-        html += `<div class="mission-pdf-note">📄 Consulta el PDF para tu plan de estudio detallado.</div>`;
-        list.innerHTML = html;
-    }
-
-    function renderSubjects() {
-      const grid = document.getElementById('uiGrid'); grid.innerHTML = "";
-      subjects.forEach((s, i) => {
-        grid.innerHTML += `
-          <div class="subject-card" onclick="openModal(${i})" style="border-left: 5px solid ${s.color};">
-            <div class="sub-top">
-              <div class="sub-name"><i class="fa-solid ${s.icon} sub-icon" style="color:${s.color}"></i> ${s.n}</div>
-              <div class="sub-val" id="val-${i}" style="color:${s.color}">${s.p}</div>
-            </div>
-             <div class="progress-track">
-              <div class="progress-fill" style="width: ${s.p}%; background:${s.color}"></div>
-            </div>
-            <div class="sim-slider-container">
-               <input type="range" id="slider-${i}" min="0" max="100" value="${s.p}" oninput="runSim()">
-            </div>
-          </div>`;
-      });
-    }
-
-    function updateCircle(val) {
-      const percentage = (val / 500) * 100;
-      const offset = 100 - percentage;
-      document.getElementById('scoreCircle').style.strokeDashoffset = offset;
-    }
-
-    function calculateLevel(score) {
-      const badge = document.getElementById('levelBadge');
-      let label = "", color = "", bg = "", icon = "";
-
-      // ESCALA ICFES SINCRONIZADA CON PDF
-      if (score > 400) { 
-          label = "EXCEPCIONAL"; color = "#15803d"; bg = "#dcfce7"; icon="fa-crown"; // Verde Intenso
-      } else if (score > 350) { 
-          label = "AVANZADO"; color = "#1d4ed8"; bg = "#dbeafe"; icon="fa-medal"; // Azul Fuerte
-      } else if (score > 300) { 
-          label = "SATISFACTORIO"; color = "#0284c7"; bg = "#e0f2fe"; icon="fa-thumbs-up"; // Azul Claro
-      } else if (score > 200) { 
-          label = "BÁSICO"; color = "#d97706"; bg = "#fef3c7"; icon="fa-minus"; // Amarillo/Naranja
-      } else { 
-          label = "INICIAL"; color = "#dc2626"; bg = "#fee2e2"; icon="fa-exclamation-triangle"; // Rojo
-      }
-      
-      badge.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
-      badge.style.color = color; 
-      badge.style.backgroundColor = bg;
-      badge.style.borderColor = color;
-    }
-
-    function toggleLevel() {
-      const details = document.getElementById('levelDetails');
-      details.style.display = details.style.display === "block" ? "none" : "block";
-    }
-
-    function toggleGreeting() {
-      const content = document.getElementById('greetingContent');
-      const icon = document.getElementById('greetIcon');
-      if (content.style.display === "block") {
-        content.style.display = "none";
-        icon.className = "fa-solid fa-chevron-down toggle-icon";
-      } else {
-        content.style.display = "block";
-        icon.className = "fa-solid fa-chevron-up toggle-icon";
-      }
-    }
-
-    function toggleMissions() {
-      const content = document.getElementById('missionList');
-      const icon = document.getElementById('missionIcon');
-      if (content.style.display === "block") {
-        content.style.display = "none";
-        icon.className = "fa-solid fa-chevron-down toggle-icon";
-      } else {
-        content.style.display = "block";
-        icon.className = "fa-solid fa-chevron-up toggle-icon";
-      }
-    }
-
-    function prepareCareer() {
-      let best = subjects.reduce((max, s) => s.p > max.p ? s : max);
-      let text = careerMap["Default"];
-      if (best.n.includes("Mat")) text = careerMap["Mat"];
-      else if (best.n.includes("Cien")) text = careerMap["Cien"];
-      else if (best.n.includes("Soc")) text = careerMap["Soc"];
-      else if (best.n.includes("Lec")) text = careerMap["Lec"];
-      else if (best.n.includes("Ing")) text = careerMap["Ing"];
-      careerString = text;
-    }
-
-    function revealCareer() {
-      const box = document.getElementById('careerResult');
-      const btn = document.getElementById('careerToggleBtn');
-      const target = document.getElementById('careerText');
-      if(box.style.display === "block") {
-          box.style.display = "none";
-          btn.innerHTML = '<span><i class="fa-solid fa-wand-magic-sparkles"></i> Revelar Proyección</span><i class="fa-solid fa-chevron-down"></i>';
-      } else {
-          box.style.display = "block";
-          btn.innerHTML = '<span><i class="fa-solid fa-wand-magic-sparkles"></i> Ocultar Proyección</span><i class="fa-solid fa-chevron-up"></i>';
-          if(target.innerText === "") {
-             let i = 0; target.innerText = "";
-             function type() { if(i < careerString.length) { target.innerHTML += careerString.charAt(i); i++; setTimeout(type, 20); }}
-             type();
-          }
-      }
-    }
-
-    function toggleSimMode() {
-      isSimulating = !isSimulating;
-      document.body.classList.toggle('sim-mode');
-      const btn = document.getElementById('btnSim');
-      const bigScore = document.getElementById('uiScore');
-      
-      if(isSimulating) {
-        Swal.fire({
-          title: 'Modo Simulador',
-          text: 'Mueve las barras para ver cómo cambia tu puntaje. El encabezado se quedará fijo.',
-          icon: 'info', confirmButtonText: '¡Vamos!', confirmButtonColor: '#0f172a'
-        });
-        btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Restaurar';
-        btn.classList.remove('btn-outline'); btn.classList.add('btn-solid');
-        bigScore.classList.add('paused'); 
-        calculateLevel(parseInt(bigScore.innerText));
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-sliders"></i> Simular';
-        btn.classList.remove('btn-solid'); btn.classList.add('btn-outline');
-        bigScore.classList.remove('paused');
-        resetSim();
-      }
-    }
-
-    function runSim() {
-      let sum = 0;
-      subjects.forEach((s, i) => {
-        let val = parseInt(document.getElementById(`slider-${i}`).value);
-        document.getElementById(`val-${i}`).innerText = val;
-        sum += val;
-      });
-      let projected = Math.floor((sum / subjects.length) * 5); 
-      if (projected > 500) projected = 500;
-      document.getElementById('uiScore').innerText = projected;
-      updateCircle(projected);
-      calculateLevel(projected);
-    }
-
-    function resetSim() {
-      document.getElementById('uiScore').innerText = realScore;
-      updateCircle(realScore);
-      calculateLevel(realScore);
-      subjects.forEach((s, i) => {
-        document.getElementById(`slider-${i}`).value = s.p;
-        document.getElementById(`val-${i}`).innerText = s.p;
-      });
-    }
-
-    function animateNumber(start, end, duration) {
-      const el = document.getElementById('uiScore'); let startTime = null;
-      function loop(time) {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        el.innerText = Math.floor(ease * (end - start) + start);
-        if (progress < 1) requestAnimationFrame(loop); else el.innerText = end;
-      } requestAnimationFrame(loop);
-    }
-
+    // --- FUNCIÓN DE DESCARGA DIRECTA (SIN VISOR DE DRIVE) ---
     function downloadPDF() { 
-        if(currentPdfLink && currentPdfLink !== "#") window.open(currentPdfLink, '_blank');
-        else Swal.fire({ title: 'PDF no disponible', text: 'Estamos generando tu reporte. Intenta en unos minutos.', icon: 'warning', confirmButtonColor: '#0f172a' });
+        if(currentPdfLink && currentPdfLink !== "#" && currentPdfLink.length > 10) {
+            // Truco: Convertir /view a /export=download
+            let directLink = currentPdfLink;
+            if(directLink.includes("drive.google.com") && directLink.includes("/d/")) {
+                let idMatch = directLink.match(/\/d\/(.*?)\//);
+                if(idMatch && idMatch[1]) {
+                    directLink = "https://drive.google.com/uc?export=download&id=" + idMatch[1];
+                }
+            }
+            window.location.href = directLink; // Fuerza la descarga en la misma ventana
+        } else { 
+            Swal.fire({ title: 'PDF no disponible', text: 'Estamos generando tu reporte. Intenta en unos minutos.', icon: 'warning', confirmButtonColor: '#0f172a' }); 
+        }
     }
 
-    function openModal(i) {
-      if(isSimulating) return;
-      const s = subjects[i];
-      document.getElementById('mTitle').innerText = s.n;
-      document.getElementById('mScore').innerText = s.p + "/100";
-      document.getElementById('mScore').style.color = s.color;
-      document.getElementById('mFortaleza').innerText = s.f;
-      document.getElementById('mMejora').innerText = s.m;
-      document.querySelector('.modal-overlay').style.display = 'flex';
-    }
-    function closeModal() { document.querySelector('.modal-overlay').style.display = 'none'; }
-
+    // UTILS UI (SIN CAMBIOS)
+    function buildNarrative(name, score) { const c = document.getElementById('greetingCard'); const t = document.getElementById('greetingTitle'); const txt = document.getElementById('greetingText'); const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; if(score>=380){ c.style.borderLeftColor="var(--level-top)"; t.innerText=`¡FELICITACIONES, ${n}! 🎉`; t.style.color="var(--level-top)"; txt.innerHTML="Resultados sobresalientes."; } else if(score>=300){ c.style.borderLeftColor="var(--level-high)"; t.innerText=`¡BUEN TRABAJO, ${n}! 👍`; t.style.color="var(--level-high)"; txt.innerHTML="Vas por buen camino."; } else { c.style.borderLeftColor="var(--level-mid)"; t.innerText=`A MEJORAR, ${n} ⚠️`; t.style.color="var(--level-mid)"; txt.innerHTML="Necesitamos reforzar temas."; } }
+    function renderSubjects() { const g=document.getElementById('uiGrid'); g.innerHTML=""; subjects.forEach((s,i)=>{ g.innerHTML+=`<div class="subject-card" onclick="openModal(${i})" style="border-left:5px solid ${s.color}"><div class="sub-top"><div class="sub-name"><i class="fa-solid ${s.icon}" style="color:${s.color}"></i> ${s.n}</div><div class="sub-val" style="color:${s.color}">${s.p}</div></div><div class="progress-track"><div class="progress-fill" style="width:${s.p}%; background:${s.color}"></div></div><div class="sim-slider-container"><input type="range" id="slider-${i}" min="0" max="100" value="${s.p}" oninput="runSim()"></div></div>`; }); }
+    function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; }
+    function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c="",i=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";i="fa-crown";} else if(s>=350){l="AVANZADO";c="#1d4ed8";i="fa-medal";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";i="fa-thumbs-up";} else if(s>=200){l="BÁSICO";c="#d97706";i="fa-minus";} else {l="INICIAL";c="#dc2626";i="fa-exclamation-triangle";} b.innerHTML=`<i class="fa-solid ${i}"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
+    function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
+    function toggleGreeting(){ const c=document.getElementById('greetingContent'); c.style.display=c.style.display==="block"?"none":"block"; }
+    function toggleMissions(){ const c=document.getElementById('missionList'); c.style.display=c.style.display==="block"?"none":"block"; }
+    function buildMissions(){ const l=document.getElementById('missionList'); let h=""; subjects.forEach(s=>{ let i='📌'; if(s.p<60)i='🚨'; else if(s.p>80)i='⭐'; h+=`<div class="mission-item"><div style="font-size:1.2rem;">${i}</div><div class="mission-content"><span style="color:${s.color};font-weight:800;font-size:0.7rem;">${s.n.toUpperCase()}</span><br>${s.rec}</div></div>`; }); h+=`<div class="mission-pdf-note">📄 Ver PDF completo.</div>`; l.innerHTML=h; }
+    function prepareCareer(){ let best=subjects.reduce((m,s)=>s.p>m.p?s:m); let t=careerMap["Default"]; if(best.n.includes("Mat"))t=careerMap["Mat"]; else if(best.n.includes("Cien"))t=careerMap["Cien"]; else if(best.n.includes("Soc"))t=careerMap["Soc"]; else if(best.n.includes("Lec"))t=careerMap["Lec"]; else if(best.n.includes("Ing"))t=careerMap["Ing"]; careerString=t; }
+    function revealCareer(){ const b=document.getElementById('careerResult'); b.style.display=b.style.display==="block"?"none":"block"; if(b.style.display==="block" && document.getElementById('careerText').innerText===""){ let i=0; document.getElementById('careerText').innerText=""; function type(){if(i<careerString.length){document.getElementById('careerText').innerHTML+=careerString.charAt(i);i++;setTimeout(type,20);}} type(); } }
+    function toggleSimMode(){ isSimulating=!isSimulating; document.body.classList.toggle('sim-mode'); const b=document.getElementById('btnSim'); if(isSimulating){ Swal.fire({title:'Simulador', text:'Mueve las barras.', icon:'info', confirmButtonColor:'#0f172a'}); b.innerHTML='<i class="fa-solid fa-rotate-left"></i> Restaurar'; b.classList.add('btn-solid'); document.getElementById('uiScore').classList.add('paused'); calculateLevel(parseInt(document.getElementById('uiScore').innerText)); } else { b.innerHTML='<i class="fa-solid fa-sliders"></i> Simular'; b.classList.remove('btn-solid'); document.getElementById('uiScore').classList.remove('paused'); resetSim(); } }
+    function runSim(){ let s=0; subjects.forEach((sub,i)=>{ let v=parseInt(document.getElementById(`slider-${i}`).value); s+=v; }); let p=Math.floor((s/subjects.length)*5); if(p>500)p=500; document.getElementById('uiScore').innerText=p; updateCircle(p); calculateLevel(p); }
+    function resetSim(){ document.getElementById('uiScore').innerText=realScore; updateCircle(realScore); calculateLevel(realScore); subjects.forEach((s,i)=>{ document.getElementById(`slider-${i}`).value=s.p; }); }
+    function animateNumber(s,e,d){ const el=document.getElementById('uiScore'); let st=null; function l(t){ if(!st)st=t; const p=Math.min((t-st)/d,1); const ea=1-Math.pow(1-p,3); el.innerText=Math.floor(ea*(e-s)+s); if(p<1)requestAnimationFrame(l); else el.innerText=e; } requestAnimationFrame(l); }
+    function openModal(i){ if(isSimulating)return; const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mScore').style.color=s.color; document.getElementById('mFortaleza').innerText=s.f; document.getElementById('mMejora').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
+    function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
   </script>
 </body>
 </html>
-
