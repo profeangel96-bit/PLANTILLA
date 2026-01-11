@@ -13,130 +13,57 @@
 
   <style>
     :root {
-      --bg-body: #cbd5e1;
-      --bg-app: #f8fafc;
-      --white: #ffffff;
-      --color-primary: #0f172a;
-      --color-accent: #d4af37;
-      --color-red-btn: #dc2626;
-      --color-text: #334155;
-      --color-muted: #64748b;
-      
-      --level-top: #059669; --level-high: #2563eb;
-      --level-mid: #d97706; --level-low: #dc2626;
-
+      --bg-body: #cbd5e1; --bg-app: #f8fafc; --white: #ffffff;
+      --color-primary: #0f172a; --color-accent: #d4af37; --color-red-btn: #dc2626;
+      --color-text: #334155; --color-muted: #64748b;
+      --level-top: #059669; --level-high: #3b82f6; --level-mid: #d97706; --level-low: #dc2626;
       /* MATERIAS */
-      --col-mat: #3b82f6; --col-lec: #8b5cf6;
-      --col-soc: #06b6d4; --col-cie: #10b981;
-      --col-ing: #f43f5e;
+      --col-mat: #3b82f6; --col-lec: #8b5cf6; --col-soc: #06b6d4; --col-cie: #10b981; --col-ing: #f43f5e;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Manrope', sans-serif;
-      background-color: var(--bg-body);
-      color: var(--color-text);
-      height: 100vh; height: 100dvh; 
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      overflow: hidden; 
-    }
-
-    /* --- MARCO PRINCIPAL --- */
-    .mobile-frame {
-      width: 100%; max-width: 480px; height: 100%; 
-      background-color: var(--bg-app); position: relative;
-      box-shadow: 0 0 50px rgba(0,0,0,0.2);
-      display: flex; flex-direction: column; overflow: hidden;
-    }
+    body { margin: 0; padding: 0; font-family: 'Manrope', sans-serif; background-color: var(--bg-body); color: var(--color-text); height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .mobile-frame { width: 100%; max-width: 480px; height: 100%; background-color: var(--bg-app); position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; }
     @media (min-width: 500px) { .mobile-frame { height: 95vh; border-radius: 30px; border: 4px solid #fff; } }
-
-    /* SCROLL VIEWPORT */
     #scroll-viewport { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; position: relative; padding-bottom: 120px; }
-
-    /* --- BARRA INFERIOR (COMPACTA Y FIJA) --- */
-    .bottom-fixed-area {
-      flex-shrink: 0; width: 100%;
-      background: rgba(255,255,255,1); 
-      border-top: 1px solid #e2e8f0;
-      display: flex; flex-direction: column; align-items: center;
-      z-index: 9999;
-      padding-top: 10px;
-      padding-bottom: max(10px, env(safe-area-inset-bottom)); 
-      box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
-    }
-
-    /* LOADER */
+    .bottom-fixed-area { flex-shrink: 0; width: 100%; background: rgba(255,255,255,1); border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; z-index: 9999; padding-top: 10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.1); }
+    
+    /* LOADER & HEADER */
     .loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
     .brand-loader-logo { font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1; margin-bottom: 5px; }
     .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--color-primary); }
     .loader-bar { width: 150px; height: 4px; background: #e2e8f0; border-radius: 4px; margin-top: 20px; overflow: hidden; }
     .loader-progress { height: 100%; width: 0%; background: var(--color-accent); animation: loadProgress 5s ease-out forwards; }
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
-
-    /* HEADER */
     .header-wrapper { background: var(--bg-app); padding: 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; transition: all 0.3s ease; }
     .sim-mode .header-wrapper { position: sticky; top: 0; background: rgba(248, 250, 252, 0.98); border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 10px rgba(0,0,0,0.05); padding-bottom: 10px; }
     .header-info { text-align: center; margin-bottom: 5px; width: 100%;}
     .sub-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1.5px; }
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
-
-    /* --- CÍRCULO CLÁSICO CON HALO DORADO --- */
+    
+    /* SCORE CIRCLE */
     .core-section { position: relative; margin: 15px 0; cursor: pointer; }
-    .score-circle-svg { 
-        width: 240px; height: 240px; 
-        transform: rotate(-90deg); transition: transform 0.2s; 
-        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); 
-    }
+    .score-circle-svg { width: 240px; height: 240px; transform: rotate(-90deg); transition: transform 0.2s; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); }
     .score-circle-svg:active { transform: rotate(-90deg) scale(0.95); }
     .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 6; }
-    .circle-fill { 
-      fill: none; stroke-width: 6; stroke-linecap: round; 
-      stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100;
-      transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .circle-fill { fill: none; stroke-width: 6; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); }
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; z-index: 20;}
-    
-    .score-big { 
-      font-size: 4.5rem; font-weight: 800; line-height: 1; letter-spacing: -2px;
-      background: linear-gradient(to right, var(--color-primary) 20%, var(--color-accent) 50%, var(--color-primary) 80%);
-      background-size: 200% auto; color: var(--color-primary);
-      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      animation: shine 3s linear infinite;
-    }
+    .score-big { font-size: 4.5rem; font-weight: 800; line-height: 1; letter-spacing: -2px; background: linear-gradient(to right, var(--color-primary) 20%, var(--color-accent) 50%, var(--color-primary) 80%); background-size: 200% auto; color: var(--color-primary); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
     @keyframes shine { to { background-position: 200% center; } }
     .score-big.paused { animation: none; -webkit-text-fill-color: var(--color-primary); }
     .score-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-
-    /* NIVEL FLOTANTE */
-    .level-badge {
-      background: #fff; padding: 8px 25px; border-radius: 30px; 
-      font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); cursor: pointer; 
-      margin-top: 5px; border: 2px solid var(--color-accent); color: var(--color-primary); z-index: 10;
-      animation: floatBadge 3s ease-in-out infinite;
-    }
+    .level-badge { background: #fff; padding: 8px 25px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); cursor: pointer; margin-top: 5px; border: 2px solid var(--color-accent); color: var(--color-primary); z-index: 10; animation: floatBadge 3s ease-in-out infinite; }
     @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
-    /* CONTENIDO */
+    /* CONTENT & CARDS */
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 15px; }
-    .card-box { 
-        background: var(--white); border-radius: 16px; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; 
-        overflow: hidden; transition: transform 0.2s; 
-        border-left: 5px solid transparent; 
-    }
-
-    /* NARRATIVA */
+    .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; transition: transform 0.2s; border-left: 5px solid transparent; }
     .greeting-card { margin-top: 10px; border-left-color: var(--color-primary) !important; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .greeting-title { font-size: 0.95rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: none; }
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
-
-    /* MATERIAS */
     .subjects-grid { display: flex; flex-direction: column; gap: 10px; }
     .subject-card { background: var(--white); padding: 15px 20px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 8px; transition: transform 0.2s; }
     .subject-card:active { transform: scale(0.98); }
@@ -149,16 +76,33 @@
     .sim-mode .sim-slider-container { height: 30px; opacity: 1; margin-top: 5px; }
     input[type=range] { width: 100%; accent-color: var(--color-accent); height: 4px; }
 
-    /* --- TERMÓMETRO DE ADMISIÓN (NUEVO ESTILO) --- */
-    .admission-box { padding: 20px; background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-    .adm-header { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-    .uni-row { margin-bottom: 12px; }
-    .uni-info { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; }
-    .uni-name { color: var(--color-text); }
-    .uni-perc { color: var(--color-primary); }
-    .uni-track { width: 100%; height: 6px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative; }
-    .uni-fill { height: 100%; border-radius: 6px; transition: width 2s ease-out; }
-    .adm-note { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 10px; font-style: italic; }
+    /* --- 📊 NUEVO TERMÓMETRO BINARIO DESPLEGABLE --- */
+    .admission-wrapper { margin-top: 10px; }
+    .admission-btn-toggle {
+        background: #0f172a; color: white; width: 100%; padding: 12px 20px;
+        border-radius: 12px; border: none; font-family: 'Manrope', sans-serif;
+        font-weight: 700; font-size: 0.85rem; cursor: pointer;
+        display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); transition: all 0.2s;
+    }
+    .admission-btn-toggle:active { transform: scale(0.98); }
+    .admission-content { display: none; background: white; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 16px 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: slideDown 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .uni-row { margin-bottom: 15px; }
+    .uni-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
+    .uni-name { color: #475569; }
+    .uni-perc { color: #0f172a; }
+    /* Estilo Binario */
+    .bin-track { width: 100%; height: 10px; background: #e2e8f0; border-radius: 4px; overflow: hidden; position: relative; }
+    .bin-fill { height: 100%; border-radius: 4px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 1.5s; }
+    
+    /* Colores Dinámicos del Termómetro */
+    .fill-low { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); } /* Rojo */
+    .fill-mid { background: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.4); } /* Amarillo */
+    .fill-win { background: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.6); } /* Verde Neon */
+
+    .adm-note { margin-top: 15px; font-size: 0.7rem; color: #94a3b8; text-align: center; font-style: italic; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
 
     /* MISIONES */
     .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
@@ -168,26 +112,11 @@
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 600; flex: 1; }
     .mission-pdf-note { margin-top: 15px; font-size: 0.75rem; color: var(--color-primary); text-align: center; background: #f8fafc; padding: 10px; border-radius: 8px; font-weight: 700; }
 
-    /* --- ELEMENTOS BARRA INFERIOR --- */
-    .pdf-attention {
-      position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-      background: var(--color-red-btn); color: var(--white);
-      font-size: 0.65rem; font-weight: 800; padding: 4px 15px; 
-      border-radius: 20px 20px 0 0; white-space: nowrap;
-      box-shadow: 0 -4px 10px rgba(220, 38, 38, 0.3); 
-      animation: bounceUp 2s infinite; pointer-events: none;
-    }
+    /* FOOTER & BUTTONS */
+    .pdf-attention { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--color-red-btn); color: var(--white); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 20px 20px 0 0; white-space: nowrap; box-shadow: 0 -4px 10px rgba(220, 38, 38, 0.3); animation: bounceUp 2s infinite; pointer-events: none; }
     @keyframes bounceUp { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -5px); } }
-
     .bottom-bar { width: 100%; padding: 5px 20px 10px 20px; display: flex; gap: 10px; }
-    
-    .btn-action {
-      flex: 1; 
-      padding: 10px 12px; 
-      border-radius: 12px; border: none;
-      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.85rem;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
+    .btn-action { flex: 1; padding: 10px 12px; border-radius: 12px; border: none; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-outline { background: white; border: 2px solid var(--color-red-btn); color: var(--color-red-btn); }
     .btn-solid { background: var(--color-red-btn); color: white; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4); border: 2px solid var(--color-red-btn); }
 
@@ -202,17 +131,14 @@
     .fb-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-text); }
     .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
     .close-modal { width: 100%; padding: 15px; border: none; background: #f1f5f9; font-weight: 700; cursor: pointer; color: var(--color-text); }
-    
     .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: var(--shadow-soft); width: 100%;}
     .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
     .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
-
   </style>
 </head>
 <body>
 
   <div class="mobile-frame">
-
     <div class="loader" id="loader">
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
@@ -221,33 +147,22 @@
     </div>
 
     <div id="scroll-viewport">
-      
       <div class="header-wrapper">
         <div class="header-info">
           <div class="sub-label">INFORME</div>
           <div class="main-title" id="simTitle">RESULTADO SIMULACRO</div>
-          <div class="student-info">
-            <span id="uiName">...</span> | <span id="uiRank">...</span>
-          </div>
+          <div class="student-info"><span id="uiName">...</span> | <span id="uiRank">...</span></div>
         </div>
-
         <div class="core-section" onclick="pulseCircle()">
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
             <circle class="circle-fill" id="scoreCircle" cx="110" cy="110" r="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></circle>
           </svg>
-          <div class="core-content">
-            <div class="score-big" id="uiScore">0</div>
-            <div class="score-label">PUNTAJE GLOBAL</div>
-          </div>
+          <div class="core-content"><div class="score-big" id="uiScore">0</div><div class="score-label">PUNTAJE GLOBAL</div></div>
         </div>
-
-        <div class="level-badge" id="levelBadge" onclick="toggleLevel()">
-          <i class="fa-solid fa-chart-simple"></i> ...
-        </div>
-        
+        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
         <div class="level-details-modal" id="levelDetails">
-             <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos de Referencia:</div>
+             <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos:</div>
              <div class="range-list">
                <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-top)"></span>Superior</div><span>380 - 500</span></div>
                <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-high)"></span>Alto</div><span>300 - 379</span></div>
@@ -263,23 +178,25 @@
              <div class="greeting-title" id="greetingTitle">...</div>
              <i class="fa-solid fa-chevron-down toggle-icon" id="greetIcon"></i>
           </div>
-          <div class="greeting-content" id="greetingContent">
-             <div class="greeting-text" id="greetingText">...</div>
-          </div>
+          <div class="greeting-content" id="greetingContent"><div class="greeting-text" id="greetingText">...</div></div>
         </div>
 
         <div class="subjects-grid" id="uiGrid"></div>
 
-        <div class="admission-box">
-          <div class="adm-header"><i class="fa-solid fa-chart-pie"></i> TERMÓMETRO DE ADMISIÓN</div>
-          <div id="admissionList"></div>
-          <div class="adm-note">* Probabilidad estimada basada en puntajes de corte históricos. No garantiza admisión.</div>
+        <div class="admission-wrapper">
+            <button class="admission-btn-toggle" onclick="toggleAdmission()">
+                <span>🔮 Ver Probabilidades de Admisión</span>
+                <i class="fa-solid fa-chevron-down" id="admIcon"></i>
+            </button>
+            <div class="admission-content" id="admContent">
+                <div id="admissionList"></div>
+                <div class="adm-note">*Estimación basada en cortes. No garantiza cupo.</div>
+            </div>
         </div>
 
-        <div class="mission-box card-box">
+        <div class="mission-box card-box" style="margin-top: 15px;">
           <div class="mission-header-bar" onclick="toggleMissions()">
-             <div class="mission-title-text">🎯 Misiones para esta semana</div>
-             <i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
+             <div class="mission-title-text">🎯 Misiones para esta semana</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
           </div>
           <div id="missionList" class="mission-content-box"></div>
         </div>
@@ -289,61 +206,41 @@
     <div class="bottom-fixed-area">
       <div class="pdf-attention">👇 DESCARGA TU PDF AQUÍ</div>
       <div class="bottom-bar">
-        <button class="btn-action btn-solid" onclick="downloadPDF()">
-          <i class="fa-solid fa-file-pdf"></i> Descargar PDF
-        </button>
-        <button class="btn-action btn-outline" onclick="toggleSimMode()" id="btnSim">
-          <i class="fa-solid fa-sliders"></i> Simular
-        </button>
+        <button class="btn-action btn-solid" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Descargar PDF</button>
+        <button class="btn-action btn-outline" onclick="toggleSimMode()" id="btnSim"><i class="fa-solid fa-sliders"></i> Simular</button>
       </div>
     </div>
 
     <div class="modal-overlay" id="modal" onclick="closeModal()">
       <div class="modal-card" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <span style="font-weight:700;" id="mTitle">Materia</span>
-          <span style="font-weight:800; color:var(--color-accent);" id="mScore">0/100</span>
+          <span style="font-weight:700;" id="mTitle">Materia</span><span style="font-weight:800; color:var(--color-accent);" id="mScore">0/100</span>
         </div>
         <div class="modal-body">
-          <div class="feedback-item">
-            <span class="fb-label" style="color:var(--level-top)">Fortaleza</span>
-            <div class="fb-text" id="mFortaleza">...</div>
-          </div>
-          <div class="feedback-item">
-            <span class="fb-label" style="color:var(--level-mid)">Enfoque de Mejora</span>
-            <div class="fb-text" id="mMejora">...</div>
-          </div>
-          <div class="pdf-hint">
-              <i class="fa-solid fa-info-circle"></i> Consulta tu PDF para ver el detalle.
-          </div>
+          <div class="feedback-item"><span class="fb-label" style="color:var(--level-top)">Fortaleza</span><div class="fb-text" id="mFortaleza">...</div></div>
+          <div class="feedback-item"><span class="fb-label" style="color:var(--level-mid)">Enfoque de Mejora</span><div class="fb-text" id="mMejora">...</div></div>
+          <div class="pdf-hint"><i class="fa-solid fa-info-circle"></i> Consulta tu PDF para ver el detalle.</div>
         </div>
         <button class="close-modal" onclick="closeModal()">CERRAR</button>
       </div>
     </div>
-
   </div>
 
   <script>
     // --- ⚙️ CONFIGURACIÓN ---
     // ⚠️ REEMPLAZA ESTE LINK CON EL NUEVO QUE ACABAS DE COPIAR ⚠️
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
-    const NOMBRE_SIMULACRO = "S11-R"; // <--- CAMBIA EL NOMBRE AQUÍ
+    const NOMBRE_SIMULACRO = "S11-R"; 
+    
+    // MÁXIMOS PARA CÁLCULO
+    const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
-    // 🔥 MÁXIMOS PARA CALCULAR PUNTAJE REAL (DEBEN COINCIDIR CON TU EXCEL)
-    const MAX = {
-        m: 50,  // Max preguntas Mate
-        l: 41,  // Max preguntas Lectura
-        s: 50,  // Max preguntas Sociales
-        c: 58,  // Max preguntas Ciencias
-        i: 55   // Max preguntas Inglés
-    };
-
-    // 🏫 DATOS DE UNIVERSIDADES (Cortes aproximados)
+    // 🏫 DATA DE UNIVERSIDADES (Cortes)
     const UNIVERSITIES = [
-      { name: "Univ. Nacional (Ingenierías)", cut: 400, color: "#15803d" },
-      { name: "Univ. de Antioquia (Salud)", cut: 380, color: "#16a34a" },
-      { name: "Univ. del Valle (Humanas)", cut: 330, color: "#d97706" },
-      { name: "UTP / U. Nariño / U. Cauca", cut: 290, color: "#0284c7" }
+      { name: "Univ. Nacional (Ingenierías)", cut: 400 },
+      { name: "Univ. de Antioquia (Salud)", cut: 380 },
+      { name: "Univ. del Valle (Humanas)", cut: 330 },
+      { name: "UTP / U. Nariño / U. Cauca", cut: 290 }
     ];
 
     let subjects = [];
@@ -360,61 +257,38 @@
       if(studentId) {
         Papa.parse(SHEET_CSV_URL, {
           download: true, header: true,
-          complete: function(results) {
-            processRankingAndData(results.data);
-          },
-          error: function(err) {
-             document.getElementById('loader').innerHTML = "Error cargando datos.";
-          }
+          complete: function(results) { processRankingAndData(results.data); },
+          error: function(err) { document.getElementById('loader').innerHTML = "Error cargando datos."; }
         });
       } else {
-        setTimeout(() => { 
-           // DEMO
-           initApp(DEMO_DATA, 1, 1); 
-        }, 1000);
+        setTimeout(() => { initApp(DEMO_DATA, 1, 1); }, 1000);
       }
     };
 
-    // --- NUEVA LÓGICA DE RANKING Y CÁLCULO PONDERADO ---
     function processRankingAndData(allData) {
         let calculatedList = allData.map(row => {
-            // 1. Sumamos las entradas brutas (ej: 23 preguntas correctas)
-            // Manejo seguro de números (S1 + S2)
             let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
-            let sLec = (parseInt(row.S1_Lec)||0); // Solo S1 usualmente
+            let sLec = (parseInt(row.S1_Lec)||0); 
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
-            let sIng = (parseInt(row.S2_Ing)||0); // Solo S2 usualmente
+            let sIng = (parseInt(row.S2_Ing)||0); 
 
-            // 2. CONVERTIMOS A ESCALA 0-100 (IGUAL QUE EL PDF)
-            // Fórmula: (PuntajeBruto / MaxPreguntas) * 100
             let pMat = Math.round((sMat / MAX.m) * 100) || 0;
             let pLec = Math.round((sLec / MAX.l) * 100) || 0;
             let pSoc = Math.round((sSoc / MAX.s) * 100) || 0;
             let pCien = Math.round((sCien / MAX.c) * 100) || 0;
             let pIng = Math.round((sIng / MAX.i) * 100) || 0;
 
-            // Topes a 100
-            pMat = Math.min(100, pMat); pLec = Math.min(100, pLec);
-            pSoc = Math.min(100, pSoc); pCien = Math.min(100, pCien); pIng = Math.min(100, pIng);
-
+            pMat=Math.min(100,pMat); pLec=Math.min(100,pLec); pSoc=Math.min(100,pSoc); pCien=Math.min(100,pCien); pIng=Math.min(100,pIng);
             let total = pMat + pLec + pSoc + pCien + pIng;
 
-            return {
-                token: row.TOKEN,
-                data: row,
-                scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: total }
-            };
+            return { token: row.TOKEN, data: row, scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: total } };
         });
 
-        // 2. Ordenar por Global Descendente
         calculatedList.sort((a, b) => b.scores.g - a.scores.g);
 
-        // 3. Buscar a nuestro estudiante
         let myRank = 0;
         let foundStudent = null;
-        
-        // Filtramos vacíos
         let validStudents = calculatedList.filter(s => s.token && s.token.length > 2);
         
         for(let i=0; i < validStudents.length; i++) {
@@ -428,7 +302,7 @@
         if(foundStudent) {
             initApp(foundStudent.data, myRank, validStudents.length, foundStudent.scores);
         } else {
-            document.getElementById('loader').innerHTML = "<div style='color:red'>Estudiante no encontrado.</div>";
+            document.getElementById('loader').innerHTML = "<div style='color:red; text-align:center;'>Estudiante no encontrado.</div>";
         }
     }
 
@@ -437,55 +311,23 @@
     function initApp(data, rank, total, scores) {
       document.getElementById('loader').style.opacity = '0';
       setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
-      
-      // Si es demo, inventamos scores
       if(!scores) scores = { m: 85, l: 78, s: 70, c: 91, i: 66, g: 390 };
-
       loadData(data, rank, total, scores);
     }
 
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
-      
-      // LEER LINK PDF CORRECTO (Tu columna N se llama 'LINK PDF')
-      currentPdfLink = data['LINK PDF'] || "#";
+      currentPdfLink = data['LINK PDF'] || data['LINKPDF'] || "#"; 
       
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank}/${total}`;
       
-      // --- CONEXIÓN DE TEXTOS PERSONALIZADOS (AQUÍ ESTÁ LA MAGIA) ---
-      // Si la celda del Excel (ej: TXT_LEC_FORT) tiene texto, lo usa. Si no, usa el genérico.
       subjects = [
-        { 
-            n: "Lectura Crítica", p: scores.l, color: "var(--col-lec)", icon: "fa-book-open",
-            f: data['TXT_LEC_FORTALEZA'] || "Análisis profundo", 
-            m: data['TXT_LEC_MEJORA'] || "Inferencia", 
-            rec: data['TXT_LEC_MISION'] || "Leer 1 editorial al día."
-        },
-        { 
-            n: "Matemáticas", p: scores.m, color: "var(--col-mat)", icon: "fa-calculator",
-            f: data['TXT_MAT_FORTALEZA'] || "Cálculo ágil", 
-            m: data['TXT_MAT_MEJORA'] || "Geometría", 
-            rec: data['TXT_MAT_MISIÓN'] || data['TXT_MAT_MISION'] || "Repasar fórmulas."
-        },
-        { 
-            n: "Sociales y C.", p: scores.s, color: "var(--col-soc)", icon: "fa-users",
-            f: data['TXT_SOC_FORTALEZA'] || "Contexto histórico", 
-            m: data['TXT_SOC_MEJORA'] || "Constitución", 
-            rec: data['TXT_SOC_MISION'] || "Leer Constitución."
-        },
-        { 
-            n: "Ciencias Nat.", p: scores.c, color: "var(--col-cie)", icon: "fa-dna",
-            f: data['TXT_CIE_FORTALEZA'] || "Biología celular", 
-            m: data['TXT_CIE_MEJORA'] || "Física", 
-            rec: data['TXT_CIE_MISION'] || "Dibujar procesos."
-        },
-        { 
-            n: "Inglés", p: scores.i, color: "var(--col-ing)", icon: "fa-flag-usa",
-            f: data['TXT_ING_FORTALEZA'] || "Vocabulario", 
-            m: data['TXT_ING_MEJORA'] || "Gramática", 
-            rec: data['TXT_ING_MISION'] || "Duolingo 15 min."
-        }
+        { n: "Lectura Crítica", p: scores.l, color: "var(--col-lec)", icon: "fa-book-open", f: data['TXT_LEC_FORTALEZA'] || "Análisis profundo", m: data['TXT_LEC_MEJORA'] || "Inferencia", rec: data['TXT_LEC_MISION'] || "Leer 1 editorial al día." },
+        { n: "Matemáticas", p: scores.m, color: "var(--col-mat)", icon: "fa-calculator", f: data['TXT_MAT_FORTALEZA'] || "Cálculo ágil", m: data['TXT_MAT_MEJORA'] || "Geometría", rec: data['TXT_MAT_MISIÓN'] || data['TXT_MAT_MISION'] || "Repasar fórmulas." },
+        { n: "Sociales y C.", p: scores.s, color: "var(--col-soc)", icon: "fa-users", f: data['TXT_SOC_FORTALEZA'] || "Contexto histórico", m: data['TXT_SOC_MEJORA'] || "Constitución", rec: data['TXT_SOC_MISION'] || "Leer Constitución." },
+        { n: "Ciencias Nat.", p: scores.c, color: "var(--col-cie)", icon: "fa-dna", f: data['TXT_CIE_FORTALEZA'] || "Biología celular", m: data['TXT_CIE_MEJORA'] || "Física", rec: data['TXT_CIE_MISION'] || "Dibujar procesos." },
+        { n: "Inglés", p: scores.i, color: "var(--col-ing)", icon: "fa-flag-usa", f: data['TXT_ING_FORTALEZA'] || "Vocabulario", m: data['TXT_ING_MEJORA'] || "Gramática", rec: data['TXT_ING_MISION'] || "Duolingo 15 min." }
       ];
 
       renderSubjects();
@@ -497,42 +339,67 @@
       animateNumber(0, realScore, 2000);
       calculateLevel(realScore);
       
-      if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'], scalar: 1.3 }), 1000);
+      if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- NUEVO: FUNCIÓN TERMÓMETRO DE ADMISIÓN ---
+    // --- LÓGICA DEL TERMÓMETRO BINARIO ---
     function renderAdmission(score) {
         const container = document.getElementById('admissionList');
         let html = '';
         UNIVERSITIES.forEach(uni => {
-            // Regla de 3: Si puntaje >= corte, es 100% probable (o 95+).
-            // Si es menor, calculamos qué tan lejos está.
-            // Para ser realistas, usamos una escala ajustada.
+            // Lógica de color semáforo (Binario Visual)
+            let diff = score - uni.cut;
+            let barColor = "fill-low"; // Rojo por defecto
+            let statusText = "Bajo";
+            let widthPerc = (score / uni.cut) * 100;
             
-            let percentage = (score / uni.cut) * 100;
-            if (percentage > 100) percentage = 100;
-            if (percentage < 0) percentage = 0;
+            if (widthPerc > 100) widthPerc = 100;
             
-            let displayPerc = Math.round(percentage) + '%';
-            
+            // Si está muy cerca (90% del corte) -> Amarillo
+            if (widthPerc >= 90 && widthPerc < 100) {
+                barColor = "fill-mid";
+                statusText = "Cerca";
+            }
+            // Si lo supera -> Verde Neon
+            if (score >= uni.cut) {
+                barColor = "fill-win";
+                statusText = "Posible";
+                widthPerc = 100;
+            }
+
             html += `
             <div class="uni-row">
-                <div class="uni-info">
+                <div class="uni-header">
                     <span class="uni-name">${uni.name}</span>
-                    <span class="uni-perc" style="color:${uni.color}">${displayPerc} Prob.</span>
+                    <span class="uni-perc">${statusText}</span>
                 </div>
-                <div class="uni-track">
-                    <div class="uni-fill" style="width: ${percentage}%; background-color: ${uni.color}"></div>
+                <div class="bin-track">
+                    <div class="bin-fill ${barColor}" style="width: ${widthPerc}%;"></div>
                 </div>
             </div>`;
         });
         container.innerHTML = html;
     }
 
-    // --- FUNCIÓN DE DESCARGA DIRECTA (SIN VISOR DE DRIVE) ---
+    // --- FUNCIONES UI / TOGGLE ---
+    function toggleAdmission() {
+        const content = document.getElementById('admContent');
+        const icon = document.getElementById('admIcon');
+        const btn = document.querySelector('.admission-btn-toggle');
+        
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            icon.className = "fa-solid fa-chevron-down";
+            btn.style.borderRadius = "12px"; // Restaurar borde
+        } else {
+            content.style.display = "block";
+            icon.className = "fa-solid fa-chevron-up";
+            btn.style.borderRadius = "12px 12px 0 0"; // Unir visualmente
+        }
+    }
+
     function downloadPDF() { 
         if(currentPdfLink && currentPdfLink !== "#" && currentPdfLink.length > 10) {
-            // Truco: Convertir /view a /export=download
             let directLink = currentPdfLink;
             if(directLink.includes("drive.google.com") && directLink.includes("/d/")) {
                 let idMatch = directLink.match(/\/d\/(.*?)\//);
@@ -540,13 +407,12 @@
                     directLink = "https://drive.google.com/uc?export=download&id=" + idMatch[1];
                 }
             }
-            window.location.href = directLink; // Fuerza la descarga en la misma ventana
+            window.location.href = directLink; 
         } else { 
             Swal.fire({ title: 'PDF no disponible', text: 'Estamos generando tu reporte. Intenta en unos minutos.', icon: 'warning', confirmButtonColor: '#0f172a' }); 
         }
     }
 
-    // UTILS UI (SIN CAMBIOS)
     function buildNarrative(name, score) { const c = document.getElementById('greetingCard'); const t = document.getElementById('greetingTitle'); const txt = document.getElementById('greetingText'); const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; if(score>=380){ c.style.borderLeftColor="var(--level-top)"; t.innerText=`¡FELICITACIONES, ${n}! 🎉`; t.style.color="var(--level-top)"; txt.innerHTML="Resultados sobresalientes."; } else if(score>=300){ c.style.borderLeftColor="var(--level-high)"; t.innerText=`¡BUEN TRABAJO, ${n}! 👍`; t.style.color="var(--level-high)"; txt.innerHTML="Vas por buen camino."; } else { c.style.borderLeftColor="var(--level-mid)"; t.innerText=`A MEJORAR, ${n} ⚠️`; t.style.color="var(--level-mid)"; txt.innerHTML="Necesitamos reforzar temas."; } }
     function renderSubjects() { const g=document.getElementById('uiGrid'); g.innerHTML=""; subjects.forEach((s,i)=>{ g.innerHTML+=`<div class="subject-card" onclick="openModal(${i})" style="border-left:5px solid ${s.color}"><div class="sub-top"><div class="sub-name"><i class="fa-solid ${s.icon}" style="color:${s.color}"></i> ${s.n}</div><div class="sub-val" style="color:${s.color}">${s.p}</div></div><div class="progress-track"><div class="progress-fill" style="width:${s.p}%; background:${s.color}"></div></div><div class="sim-slider-container"><input type="range" id="slider-${i}" min="0" max="100" value="${s.p}" oninput="runSim()"></div></div>`; }); }
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; }
@@ -557,7 +423,7 @@
     function buildMissions(){ const l=document.getElementById('missionList'); let h=""; subjects.forEach(s=>{ let i='📌'; if(s.p<60)i='🚨'; else if(s.p>80)i='⭐'; h+=`<div class="mission-item"><div style="font-size:1.2rem;">${i}</div><div class="mission-content"><span style="color:${s.color};font-weight:800;font-size:0.7rem;">${s.n.toUpperCase()}</span><br>${s.rec}</div></div>`; }); h+=`<div class="mission-pdf-note">📄 Ver PDF completo.</div>`; l.innerHTML=h; }
     
     function toggleSimMode(){ isSimulating=!isSimulating; document.body.classList.toggle('sim-mode'); const b=document.getElementById('btnSim'); if(isSimulating){ Swal.fire({title:'Simulador', text:'Mueve las barras.', icon:'info', confirmButtonColor:'#0f172a'}); b.innerHTML='<i class="fa-solid fa-rotate-left"></i> Restaurar'; b.classList.add('btn-solid'); document.getElementById('uiScore').classList.add('paused'); calculateLevel(parseInt(document.getElementById('uiScore').innerText)); } else { b.innerHTML='<i class="fa-solid fa-sliders"></i> Simular'; b.classList.remove('btn-solid'); document.getElementById('uiScore').classList.remove('paused'); resetSim(); } }
-    function runSim(){ let s=0; subjects.forEach((sub,i)=>{ let v=parseInt(document.getElementById(`slider-${i}`).value); s+=v; }); let p=Math.floor((s/subjects.length)*5); if(p>500)p=500; document.getElementById('uiScore').innerText=p; updateCircle(p); calculateLevel(p); renderAdmission(p); /* Actualiza termómetro en simulación */ }
+    function runSim(){ let s=0; subjects.forEach((sub,i)=>{ let v=parseInt(document.getElementById(`slider-${i}`).value); s+=v; }); let p=Math.floor((s/subjects.length)*5); if(p>500)p=500; document.getElementById('uiScore').innerText=p; updateCircle(p); calculateLevel(p); renderAdmission(p); }
     function resetSim(){ document.getElementById('uiScore').innerText=realScore; updateCircle(realScore); calculateLevel(realScore); subjects.forEach((s,i)=>{ document.getElementById(`slider-${i}`).value=s.p; }); renderAdmission(realScore); }
     function animateNumber(s,e,d){ const el=document.getElementById('uiScore'); let st=null; function l(t){ if(!st)st=t; const p=Math.min((t-st)/d,1); const ea=1-Math.pow(1-p,3); el.innerText=Math.floor(ea*(e-s)+s); if(p<1)requestAnimationFrame(l); else el.innerText=e; } requestAnimationFrame(l); }
     function openModal(i){ if(isSimulating)return; const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mScore').style.color=s.color; document.getElementById('mFortaleza').innerText=s.f; document.getElementById('mMejora').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
