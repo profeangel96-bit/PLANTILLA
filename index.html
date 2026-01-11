@@ -386,18 +386,23 @@
     // --- NUEVA LÓGICA DE RANKING Y CÁLCULO PONDERADO ---
     function processRankingAndData(allData) {
         let calculatedList = allData.map(row => {
+            // 1. Sumamos las entradas brutas (ej: 23 preguntas correctas)
+            // Manejo seguro de números (S1 + S2)
             let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
-            let sLec = (parseInt(row.S1_Lec)||0); 
+            let sLec = (parseInt(row.S1_Lec)||0); // Solo S1 usualmente
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
-            let sIng = (parseInt(row.S2_Ing)||0); 
+            let sIng = (parseInt(row.S2_Ing)||0); // Solo S2 usualmente
 
+            // 2. CONVERTIMOS A ESCALA 0-100 (IGUAL QUE EL PDF)
+            // Fórmula: (PuntajeBruto / MaxPreguntas) * 100
             let pMat = Math.round((sMat / MAX.m) * 100) || 0;
             let pLec = Math.round((sLec / MAX.l) * 100) || 0;
             let pSoc = Math.round((sSoc / MAX.s) * 100) || 0;
             let pCien = Math.round((sCien / MAX.c) * 100) || 0;
             let pIng = Math.round((sIng / MAX.i) * 100) || 0;
 
+            // Topes a 100
             pMat = Math.min(100, pMat); pLec = Math.min(100, pLec);
             pSoc = Math.min(100, pSoc); pCien = Math.min(100, pCien); pIng = Math.min(100, pIng);
 
@@ -410,10 +415,14 @@
             };
         });
 
+        // 2. Ordenar por Global Descendente
         calculatedList.sort((a, b) => b.scores.g - a.scores.g);
 
+        // 3. Buscar a nuestro estudiante
         let myRank = 0;
         let foundStudent = null;
+        
+        // Filtramos vacíos
         let validStudents = calculatedList.filter(s => s.token && s.token.length > 2);
         
         for(let i=0; i < validStudents.length; i++) {
@@ -436,13 +445,17 @@
     function initApp(data, rank, total, scores) {
       document.getElementById('loader').style.opacity = '0';
       setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
+      
+      // Si es demo, inventamos scores
       if(!scores) scores = { m: 85, l: 78, s: 70, c: 91, i: 66, g: 390 };
+
       loadData(data, rank, total, scores);
     }
 
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
-      // LEER LINK PDF (Tu columna N se llama 'LINK PDF')
+      
+      // LEER LINK PDF CORRECTO (Tu columna N se llama 'LINK PDF')
       currentPdfLink = data['LINK PDF'] || "#";
       
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
@@ -453,32 +466,32 @@
       subjects = [
         { 
             n: "Lectura Crítica", p: scores.l, color: "var(--col-lec)", icon: "fa-book-open",
-            f: data.TXT_LEC_FORT || "Análisis profundo", 
-            m: data.TXT_LEC_MEJ || "Inferencia", 
-            rec: data.TXT_LEC_MIS || "Leer 1 editorial al día."
+            f: data['TXT_LEC_FORT'] || "Análisis profundo", 
+            m: data['TXT_LEC_MEJ'] || "Inferencia", 
+            rec: data['TXT_LEC_MIS'] || "Leer 1 editorial al día."
         },
         { 
             n: "Matemáticas", p: scores.m, color: "var(--col-mat)", icon: "fa-calculator",
-            f: data.TXT_MAT_FORT || "Cálculo ágil", 
-            m: data.TXT_MAT_MEJ || "Geometría", 
+            f: data['TXT_MAT_FORT'] || "Cálculo ágil", 
+            m: data['TXT_MAT_MEJ'] || "Geometría", 
             rec: data.TXT_MAT_MIS || "Repasar fórmulas."
         },
         { 
             n: "Sociales y C.", p: scores.s, color: "var(--col-soc)", icon: "fa-users",
-            f: data.TXT_SOC_FORT || "Contexto histórico", 
-            m: data.TXT_SOC_MEJ || "Constitución", 
+            f: data['TXT_SOC_FORT'] || "Contexto histórico", 
+            m: data['TXT_SOC_MEJ'] || "Constitución", 
             rec: data.TXT_SOC_MIS || "Leer Constitución."
         },
         { 
             n: "Ciencias Nat.", p: scores.c, color: "var(--col-cie)", icon: "fa-dna",
-            f: data.TXT_CIE_FORT || "Biología celular", 
-            m: data.TXT_CIE_MEJ || "Física", 
+            f: data['TXT_CIE_FORT'] || "Biología celular", 
+            m: data['TXT_CIE_MEJ'] || "Física", 
             rec: data.TXT_CIE_MIS || "Dibujar procesos."
         },
         { 
             n: "Inglés", p: scores.i, color: "var(--col-ing)", icon: "fa-flag-usa",
-            f: data.TXT_ING_FORT || "Vocabulario", 
-            m: data.TXT_ING_MEJ || "Gramática", 
+            f: data['TXT_ING_FORT'] || "Vocabulario", 
+            m: data['TXT_ING_MEJ'] || "Gramática", 
             rec: data.TXT_ING_MIS || "Duolingo 15 min."
         }
       ];
@@ -486,10 +499,11 @@
       renderSubjects();
       buildNarrative(data.Nombre, realScore);
       buildMissions(); 
+      
       setTimeout(() => updateCircle(realScore), 500);
       animateNumber(0, realScore, 2000);
       calculateLevel(realScore);
-      prepareCareer();
+      
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'], scalar: 1.3 }), 1000);
     }
 
