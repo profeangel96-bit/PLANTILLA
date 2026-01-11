@@ -551,13 +551,23 @@
       const badge = document.getElementById('levelBadge');
       let label = "", color = "", bg = "", icon = "";
 
-      if(score >= 380) { label = "Nivel Superior"; color = "var(--level-top)"; bg = "#f0fdf4"; icon="fa-crown"; }
-      else if(score >= 300) { label = "Nivel Alto"; color = "var(--level-high)"; bg = "#eff6ff"; icon="fa-chart-line"; }
-      else if(score >= 230) { label = "Nivel Medio"; color = "var(--level-mid)"; bg = "#fffbeb"; icon="fa-minus"; }
-      else { label = "Nivel Bajo"; color = "var(--level-low)"; bg = "#fef2f2"; icon="fa-exclamation-triangle"; }
+      // ESCALA ICFES SINCRONIZADA CON PDF
+      if (score > 400) { 
+          label = "EXCEPCIONAL"; color = "#15803d"; bg = "#dcfce7"; icon="fa-crown"; // Verde Intenso
+      } else if (score > 350) { 
+          label = "AVANZADO"; color = "#1d4ed8"; bg = "#dbeafe"; icon="fa-medal"; // Azul Fuerte
+      } else if (score > 300) { 
+          label = "SATISFACTORIO"; color = "#0284c7"; bg = "#e0f2fe"; icon="fa-thumbs-up"; // Azul Claro
+      } else if (score > 200) { 
+          label = "BÁSICO"; color = "#d97706"; bg = "#fef3c7"; icon="fa-minus"; // Amarillo/Naranja
+      } else { 
+          label = "INICIAL"; color = "#dc2626"; bg = "#fee2e2"; icon="fa-exclamation-triangle"; // Rojo
+      }
       
       badge.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
-      badge.style.color = color; badge.style.borderColor = "var(--color-accent)";
+      badge.style.color = color; 
+      badge.style.backgroundColor = bg;
+      badge.style.borderColor = color;
     }
 
     function toggleLevel() {
@@ -697,3 +707,4 @@
   </script>
 </body>
 </html>
+
