@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Resultados | Academia Quijano</title>
+  <title>Resultados S11-R | Academia Quijano</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -214,7 +214,7 @@
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Cargando tus resultados...</div>
+      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Procesando resultados...</div>
     </div>
 
     <div id="scroll-viewport">
@@ -335,6 +335,15 @@
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
     const NOMBRE_SIMULACRO = "S11-R"; // <--- CAMBIA EL NOMBRE AQUÍ
 
+    // 🔥 MÁXIMOS PARA CALCULAR PUNTAJE REAL (DEBEN COINCIDIR CON TU EXCEL)
+    const MAX = {
+        m: 50,  // Max preguntas Mate
+        l: 41,  // Max preguntas Lectura
+        s: 50,  // Max preguntas Sociales
+        c: 58,  // Max preguntas Ciencias
+        i: 55   // Max preguntas Inglés
+    };
+
     // Mapeo de Carreras
     const careerMap = {
       "Mat": "Ingenierías, Estadística, Economía, Desarrollo de Software.",
@@ -374,24 +383,35 @@
       }
     };
 
-    // --- NUEVA LÓGICA DE RANKING Y CÁLCULO ---
+    // --- NUEVA LÓGICA DE RANKING Y CÁLCULO PONDERADO ---
     function processRankingAndData(allData) {
-        // 1. Calcular puntajes para TODOS (S1+S2)
         let calculatedList = allData.map(row => {
+            // 1. Sumamos las entradas brutas (ej: 23 preguntas correctas)
             // Manejo seguro de números (S1 + S2)
-            // Tus columnas según imagen: S1_Mat, S1_Lec, S1_Soc... S2_Mat...
             let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
             let sLec = (parseInt(row.S1_Lec)||0); // Solo S1 usualmente
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
             let sIng = (parseInt(row.S2_Ing)||0); // Solo S2 usualmente
 
-            let global = sMat + sLec + sSoc + sCien + sIng;
+            // 2. CONVERTIMOS A ESCALA 0-100 (IGUAL QUE EL PDF)
+            // Fórmula: (PuntajeBruto / MaxPreguntas) * 100
+            let pMat = Math.round((sMat / MAX.m) * 100) || 0;
+            let pLec = Math.round((sLec / MAX.l) * 100) || 0;
+            let pSoc = Math.round((sSoc / MAX.s) * 100) || 0;
+            let pCien = Math.round((sCien / MAX.c) * 100) || 0;
+            let pIng = Math.round((sIng / MAX.i) * 100) || 0;
+
+            // Topes a 100
+            pMat = Math.min(100, pMat); pLec = Math.min(100, pLec);
+            pSoc = Math.min(100, pSoc); pCien = Math.min(100, pCien); pIng = Math.min(100, pIng);
+
+            let total = pMat + pLec + pSoc + pCien + pIng;
 
             return {
                 token: row.TOKEN,
                 data: row,
-                scores: { m: sMat, l: sLec, s: sSoc, c: sCien, i: sIng, g: global }
+                scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: total }
             };
         });
 
@@ -441,11 +461,11 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank}/${total}`;
       
-      // Armar materias con los puntajes CALCULADOS (Suma S1+S2)
+      // Armar materias con los puntajes CALCULADOS PONDERADOS (0-100)
       subjects = [
-        { n: "Lectura Crítica", p: scores.l, f: "Análisis", m: "Inferencia", icon: "fa-book-open", rec: "Leer 1 editorial al día.", color: "var(--col-lec)" },
+        { n: "Lectura Crítica", p: scores.l, f: "Análisis", m: "Inferencia", icon: "fa-book-open", rec: "Leer 1 editorial.", color: "var(--col-lec)" },
         { n: "Matemáticas", p: scores.m, f: "Cálculo", m: "Geometría", icon: "fa-calculator", rec: "Repasar fórmulas.", color: "var(--col-mat)" },
-        { n: "Sociales y C.", p: scores.s, f: "Historia", m: "Constitución", icon: "fa-users", rec: "Leer Art 1-86 Constitución.", color: "var(--col-soc)" },
+        { n: "Sociales y C.", p: scores.s, f: "Historia", m: "Constitución", icon: "fa-users", rec: "Leer Constitución.", color: "var(--col-soc)" },
         { n: "Ciencias Nat.", p: scores.c, f: "Biología", m: "Física", icon: "fa-dna", rec: "Dibujar procesos.", color: "var(--col-cie)" },
         { n: "Inglés", p: scores.i, f: "Vocabulario", m: "Gramática", icon: "fa-flag-usa", rec: "Duolingo 15 min.", color: "var(--col-ing)" }
       ];
@@ -529,12 +549,12 @@
 
     function calculateLevel(score) {
       const badge = document.getElementById('levelBadge');
-      let label = "", color = "", icon = "";
+      let label = "", color = "", bg = "", icon = "";
 
-      if(score >= 380) { label = "Nivel Superior"; color = "var(--level-top)"; icon="fa-crown"; }
-      else if(score >= 300) { label = "Nivel Alto"; color = "var(--level-high)"; icon="fa-chart-line"; }
-      else if(score >= 230) { label = "Nivel Medio"; color = "var(--level-mid)"; icon="fa-minus"; }
-      else { label = "Nivel Bajo"; color = "var(--level-low)"; icon="fa-exclamation-triangle"; }
+      if(score >= 380) { label = "Nivel Superior"; color = "var(--level-top)"; bg = "#f0fdf4"; icon="fa-crown"; }
+      else if(score >= 300) { label = "Nivel Alto"; color = "var(--level-high)"; bg = "#eff6ff"; icon="fa-chart-line"; }
+      else if(score >= 230) { label = "Nivel Medio"; color = "var(--level-mid)"; bg = "#fffbeb"; icon="fa-minus"; }
+      else { label = "Nivel Bajo"; color = "var(--level-low)"; bg = "#fef2f2"; icon="fa-exclamation-triangle"; }
       
       badge.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
       badge.style.color = color; badge.style.borderColor = "var(--color-accent)";
