@@ -332,6 +332,7 @@
 
   <script>
     // --- ⚙️ CONFIGURACIÓN ---
+    // ⚠️ REEMPLAZA ESTE LINK CON EL NUEVO QUE ACABAS DE COPIAR ⚠️
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
     const NOMBRE_SIMULACRO = "S11-R"; // <--- CAMBIA EL NOMBRE AQUÍ
 
@@ -466,33 +467,33 @@
       subjects = [
         { 
             n: "Lectura Crítica", p: scores.l, color: "var(--col-lec)", icon: "fa-book-open",
-            f: data['TXT_LEC_FORT'] || "Análisis profundo", 
-            m: data['TXT_LEC_MEJ'] || "Inferencia", 
-            rec: data['TXT_LEC_MIS'] || "Leer 1 editorial al día."
+            f: data['TXT_LEC_FORTALEZA'] || "Análisis profundo", 
+            m: data['TXT_LEC_MEJORA'] || "Inferencia", 
+            rec: data['TXT_LEC_MISION'] || "Leer 1 editorial al día."
         },
         { 
             n: "Matemáticas", p: scores.m, color: "var(--col-mat)", icon: "fa-calculator",
-            f: data['TXT_MAT_FORT'] || "Cálculo ágil", 
-            m: data['TXT_MAT_MEJ'] || "Geometría", 
-            rec: data.TXT_MAT_MIS || "Repasar fórmulas."
+            f: data['TXT_MAT_FORTALEZA'] || "Cálculo ágil", 
+            m: data['TXT_MAT_MEJORA'] || "Geometría", 
+            rec: data['TXT_MAT_MISIÓN'] || data['TXT_MAT_MISION'] || "Repasar fórmulas."
         },
         { 
             n: "Sociales y C.", p: scores.s, color: "var(--col-soc)", icon: "fa-users",
-            f: data['TXT_SOC_FORT'] || "Contexto histórico", 
-            m: data['TXT_SOC_MEJ'] || "Constitución", 
-            rec: data.TXT_SOC_MIS || "Leer Constitución."
+            f: data['TXT_SOC_FORTALEZA'] || "Contexto histórico", 
+            m: data['TXT_SOC_MEJORA'] || "Constitución", 
+            rec: data['TXT_SOC_MISION'] || "Leer Constitución."
         },
         { 
             n: "Ciencias Nat.", p: scores.c, color: "var(--col-cie)", icon: "fa-dna",
-            f: data['TXT_CIE_FORT'] || "Biología celular", 
-            m: data['TXT_CIE_MEJ'] || "Física", 
-            rec: data.TXT_CIE_MIS || "Dibujar procesos."
+            f: data['TXT_CIE_FORTALEZA'] || "Biología celular", 
+            m: data['TXT_CIE_MEJORA'] || "Física", 
+            rec: data['TXT_CIE_MISION'] || "Dibujar procesos."
         },
         { 
             n: "Inglés", p: scores.i, color: "var(--col-ing)", icon: "fa-flag-usa",
-            f: data['TXT_ING_FORT'] || "Vocabulario", 
-            m: data['TXT_ING_MEJ'] || "Gramática", 
-            rec: data.TXT_ING_MIS || "Duolingo 15 min."
+            f: data['TXT_ING_FORTALEZA'] || "Vocabulario", 
+            m: data['TXT_ING_MEJORA'] || "Gramática", 
+            rec: data['TXT_ING_MISION'] || "Duolingo 15 min."
         }
       ];
 
@@ -544,4 +545,3 @@
   </script>
 </body>
 </html>
-
