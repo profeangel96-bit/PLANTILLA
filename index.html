@@ -45,16 +45,29 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (Interactivo) */
+    /* SCORE CIRCLE (Interactivo con Sombra Lenta) */
     .core-section { position: relative; margin: 10px 0; cursor: pointer; }
     .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
-    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; transition: stroke 0.3s ease; }
+    
+    /* Transición lenta para el rojo (2s) */
+    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; transition: stroke 2s ease; }
     .core-section.show-gap .circle-bg { stroke: var(--color-red-btn); } 
+    
     .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
     .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
     
+    /* Mensaje Flotante de Falta (Nuevo) */
+    .gap-message-overlay {
+        position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
+        background: rgba(220, 38, 38, 0.9); color: white;
+        padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        opacity: 0; transition: opacity 0.5s ease; pointer-events: none; white-space: nowrap;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .core-section.show-gap .gap-message-overlay { opacity: 1; top: 80%; }
+
     /* BADGE FLOTANTE */
     .level-badge { 
         background: #fff; padding: 8px 30px; border-radius: 30px; 
@@ -69,34 +82,42 @@
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
     /* TARJETA DE MENSAJE */
-    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
+    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICO BARRAS */
-    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    /* GRÁFICO BARRAS (Sombra fuerte) */
+    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GRÁFICO DONA/POLAR (GAP) */
-    .gap-chart-box { background: white; padding: 20px; border-radius: 16px; border: 1px solid #f1f5f9; height: 350px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center;}
-    .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
+    /* GRÁFICO DONA/POLAR (GAP) - Ajustado para móviles */
+    .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: 360px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center;}
+    .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
+    
+    /* Texto inferior rosquilla (Más visible) */
+    .gap-chart-text-container {
+        margin-top: 10px; margin-bottom: 20px;
+        background: #f1f5f9; padding: 8px 15px; border-radius: 8px;
+        text-align: center; width: 90%;
+    }
+    .gap-text-style { font-size: 0.75rem; color: var(--color-primary); font-weight: 700; line-height: 1.3; }
 
     /* MISIONES (Estilo Bicolor: Azul oscuro header, Blanco contenido) */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
     
     .mission-box.dark-mode {
         border: none;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.3);
-        background: var(--color-primary); /* Color del header */
+        box-shadow: 0 15px 40px rgba(15, 23, 42, 0.4); /* Sombra fuerte */
+        background: var(--color-primary); 
     }
     .mission-box.dark-mode .mission-header-bar {
         background: transparent;
         border-bottom: none;
     }
     .mission-box.dark-mode .mission-title-text,
-    .mission-box.dark-mode .toggle-icon { color: white; } /* Texto blanco en header */
+    .mission-box.dark-mode .toggle-icon { color: white; } 
 
     /* CONTENIDO BLANCO */
     .mission-box.dark-mode .mission-content-box {
@@ -158,6 +179,7 @@
             <div class="score-big" id="uiScore">0</div>
             <div class="score-label">PUNTAJE GLOBAL</div>
           </div>
+          <div class="gap-message-overlay" id="gapMsg">...</div>
         </div>
         
         <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
@@ -189,8 +211,12 @@
 
         <div class="gap-chart-box">
             <div class="gap-title">🏆 CAMINO A LA EXCELENCIA</div>
-            <canvas id="gapChart"></canvas>
-            <div class="chart-hint" style="margin-bottom: 40px;">Cuanto más lleno el círculo, más cerca de la perfección (100/100).</div>
+            <div style="flex:1; width:100%; position:relative;">
+                <canvas id="gapChart"></canvas>
+            </div>
+            <div class="gap-chart-text-container">
+                <div class="gap-text-style">Cuanto más lleno el círculo, más cerca de la perfección (100%).</div>
+            </div>
         </div>
 
         <div class="mission-box card-box dark-mode">
@@ -298,7 +324,7 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CONEXIÓN LECTURA (Usando el nombre con error del Excel)
+      // ✅ LECTURA CORREGIDA (XT_LEC_VEREDICTO)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
@@ -369,7 +395,7 @@
         });
     }
 
-    // --- GRÁFICO 2: POLAR AREA (CON PORCENTAJES) ---
+    // --- GRÁFICO 2: POLAR AREA (GAP) ---
     function renderGapChart(subs) {
         const ctx = document.getElementById('gapChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -383,7 +409,7 @@
         ];
 
         if(gapChart) gapChart.destroy();
-        Chart.register(ChartDataLabels); // Asegurar que el plugin esté registrado
+        Chart.register(ChartDataLabels); 
 
         gapChart = new Chart(ctx, {
             type: 'polarArea',
@@ -398,38 +424,27 @@
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                layout: { padding: 10 },
+                layout: { padding: 5 }, // Menos padding para que se vea más grande en móvil
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 10 }, boxWidth: 10 } },
-                    // Configuración de los porcentajes
+                    legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 9 }, boxWidth: 10, padding: 10 } },
                     datalabels: {
                         display: true,
                         color: 'white',
-                        font: { weight: 'bold', size: 11 },
+                        font: { weight: 'bold', size: 10 },
                         backgroundColor: function(context) {
-                             // Usar el mismo color del segmento pero sólido (sin transparencia)
                              return context.dataset.backgroundColor[context.dataIndex].replace('0.7', '1');
                         },
-                        borderRadius: 4,
-                        padding: 4,
-                        formatter: function(value) {
-                            return value + '%';
-                        }
+                        borderRadius: 3,
+                        padding: 3,
+                        formatter: function(value) { return value + '%'; }
                     }
                 },
                 scales: {
                     r: { 
-                        min: 0, 
-                        max: 100, 
-                        ticks: { 
-                            display: true, // Mostrar el 100
-                            stepSize: 100,
-                            color: '#94a3b8',
-                            backdropColor: 'transparent',
-                            font: { size: 10 }
-                         }, 
+                        min: 0, max: 100, 
+                        ticks: { display: true, stepSize: 100, color: '#94a3b8', backdropColor: 'transparent', font: { size: 9 } }, 
                         grid: { color: '#e2e8f0' },
-                        pointLabels: { display: true, font: { size: 11, family: 'Manrope' } }
+                        pointLabels: { display: false } // Oculto nombres para ganar espacio, están en leyenda
                     }
                 }
             }
@@ -490,18 +505,16 @@
 
     function pulseCircle() {
         const container = document.querySelector('.core-section');
+        const gapMsg = document.getElementById('gapMsg');
         const gap = 500 - realScore;
-        container.classList.add('show-gap');
         
-        Swal.fire({
-            title: `¡Te faltan ${gap} puntos!`,
-            text: 'Esa es la brecha exacta para alcanzar la excelencia total (500/500). ¡Vamos a cerrarla!',
-            icon: 'info',
-            confirmButtonColor: '#dc2626',
-            confirmButtonText: '¡A POR ELLOS!'
-        }).then(() => {
+        container.classList.add('show-gap'); // Activa rojo
+        gapMsg.innerText = `¡Te faltan ${gap} puntos para la excelencia!`; // Texto pequeño
+        
+        // Desactiva después de 3 segundos
+        setTimeout(() => {
              container.classList.remove('show-gap');
-        });
+        }, 3000);
     }
     
     function calculateLevel(s){ 
