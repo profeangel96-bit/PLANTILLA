@@ -45,7 +45,7 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (BOLA GIGANTE + HALO) */
+    /* SCORE CIRCLE */
     .core-section { position: relative; margin: 10px 0; cursor: pointer; }
     .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
     .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
@@ -67,9 +67,9 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* TARJETA DE REGAÑO/FELICITACIÓN */
-    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; transition: transform 0.2s; }
-    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    /* TARJETA DE MENSAJE (REGAÑO/FELICITACIÓN) */
+    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
+    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
@@ -86,8 +86,7 @@
     .mission-item { display: flex; gap: 12px; align-items: start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
-    .mission-pdf-note { margin-top: 15px; font-size: 0.75rem; color: var(--color-primary); text-align: center; background: #f8fafc; padding: 10px; border-radius: 8px; font-weight: 700; }
-
+    
     /* BOTÓN PDF */
     .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
     .btn-action:active { transform: scale(0.98); }
@@ -104,6 +103,8 @@
     .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
     
     .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
+    .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
+    
     .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
     .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
     .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
@@ -165,9 +166,12 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <div class="chart-box" style="height: 220px;">
+        <div class="chart-box" style="height: 250px;">
             <canvas id="uniChart"></canvas>
-            <div class="chart-hint">Comparativa de tu puntaje vs. Cortes de admisión.</div>
+            <div class="chart-hint" style="margin-top:5px; line-height:1.2;">
+                *Comparativa de tu puntaje vs. Cortes aproximados de admisión.<br>
+                <strong>El corte es una referencia, no garantiza ingreso.</strong>
+            </div>
         </div>
 
         <div class="mission-box card-box">
@@ -199,6 +203,7 @@
             <span class="verdict-label">VEREDICTO ACADÉMICO:</span>
             <div class="verdict-text" id="mVeredicto">...</div>
           </div>
+          <div class="pdf-hint"><i class="fa-solid fa-info-circle"></i> Consulta tu PDF para ver el detalle.</div>
         </div>
         <button class="close-modal" onclick="closeModal()">ENTENDIDO</button>
       </div>
@@ -212,9 +217,10 @@
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
     const UNIVERSITIES = [
-      { name: "Nacional", cut: 400 },
-      { name: "Antioquia", cut: 380 },
-      { name: "Valle", cut: 330 },
+      { name: "U. Nacional", cut: 400 },
+      { name: "U. de Antioquia", cut: 380 },
+      { name: "Univalle", cut: 330 },
+      { name: "UTP / Nariño", cut: 290 },
       { name: "Tu Puntaje", cut: 0 } // Se llena dinámicamente
     ];
 
@@ -277,41 +283,40 @@
       realScore = scores.g;
       currentPdfLink = data['LINK PDF'] || "#"; 
       
-      // ✅ CORRECCIÓN NOMBRE COMPLETO
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CORRECCIÓN NOMBRES COLUMNAS (Sin T ni N al final)
+      // ✅ CORRECCIÓN FINAL (NOMBRES DE COLUMNA DE IMAGEN 6a00cb)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
-            v: data['TXT_LEC_FOR'] || "Sin diagnóstico.", 
-            m: data['TXT_LEC_MISIO'] || "Sin misión."
+            v: data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
+            m: data['TXT_LEC_MISION'] || "Sin misión."
         },
         { 
             n: "Matemáticas", p: scores.m, 
-            v: data['TXT_MAT_FOR'] || "Sin diagnóstico.", 
-            m: data['TXT_MAT_MISIO'] || "Sin misión."
+            v: data['TXT_MAT_VEREDICTO'] || "Sin diagnóstico.", 
+            m: data['TXT_MAT_MISION'] || "Sin misión."
         },
         { 
             n: "Sociales", p: scores.s, 
-            v: data['TXT_SOC_FOR'] || "Sin diagnóstico.", 
-            m: data['TXT_SOC_MISIO'] || "Sin misión."
+            v: data['TXT_SOC_VEREDICTO'] || "Sin diagnóstico.", 
+            m: data['TXT_SOC_MISION'] || "Sin misión."
         },
         { 
             n: "Ciencias", p: scores.c, 
-            v: data['TXT_CIE_FOR'] || "Sin diagnóstico.", 
-            m: data['TXT_CIE_MISIO'] || "Sin misión."
+            v: data['TXT_CIE_VEREDICTO'] || "Sin diagnóstico.", 
+            m: data['TXT_CIE_MISION'] || "Sin misión."
         },
         { 
             n: "Inglés", p: scores.i, 
-            v: data['TXT_ING_FOR'] || "Sin diagnóstico.", 
-            m: data['TXT_ING_MISIO'] || "Sin misión."
+            v: data['TXT_ING_VEREDICTO'] || "Sin diagnóstico.", 
+            m: data['TXT_ING_MISION'] || "Sin misión."
         }
       ];
 
       renderChart(subjects);
-      renderUniChart(realScore); // Nuevo Gráfico de Universidades
+      renderUniChart(realScore); 
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
       
@@ -321,7 +326,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO 1: MATERIAS (VERTICAL) ---
+    // --- GRÁFICO 1: MATERIAS ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -352,11 +357,10 @@
         });
     }
 
-    // --- GRÁFICO 2: UNIVERSIDADES (HORIZONTAL) ---
+    // --- GRÁFICO 2: UNIVERSIDADES ---
     function renderUniChart(score) {
         const ctx = document.getElementById('uniChart').getContext('2d');
-        // Actualizamos "Tu Puntaje"
-        UNIVERSITIES[3].cut = score;
+        UNIVERSITIES[4].cut = score; // Set real score
         
         const labels = UNIVERSITIES.map(u => u.name);
         const dataValues = UNIVERSITIES.map(u => u.cut);
@@ -366,7 +370,7 @@
 
         uniChart = new Chart(ctx, {
             type: 'bar',
-            indexAxis: 'y', // Hace que sea horizontal
+            indexAxis: 'y', 
             data: {
                 labels: labels,
                 datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 4, barPercentage: 0.6 }]
@@ -376,17 +380,17 @@
                 plugins: {
                     legend: { display: false },
                     datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start' },
-                    title: { display: true, text: 'Tu Puntaje vs. Cortes Estimados', font: {family: 'Manrope', size: 14} }
+                    title: { display: true, text: 'Tu Puntaje vs. Cortes', font: {family: 'Manrope', size: 14} }
                 },
                 scales: {
-                    x: { beginAtZero: false, min: 200, max: 500 }, // Escala ajustada para que se vea la diferencia
+                    x: { beginAtZero: false, min: 200, max: 500 },
                     y: { grid: { display: false } }
                 }
             }
         });
     }
 
-    // --- MISIONES (PLAN DE ACCIÓN) ---
+    // --- MISIONES ---
     function renderMissions(subs) {
         const list = document.getElementById('missionList');
         let html = '';
@@ -404,6 +408,7 @@
         list.innerHTML = html;
     }
 
+    // --- LOGICA DE REGAÑO Y NIVEL ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
@@ -431,11 +436,22 @@
 
     // --- UTILS ---
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
-    function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";} else if(s>=350){l="AVANZADO";c="#1d4ed8";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";} else if(s>=200){l="BÁSICO";c="#d97706";} else {l="INICIAL";c="#dc2626";} b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
+    
+    // CORRECCIÓN: NIVELES COINCIDENTES CON TABLA (Imagen 6a07d3)
+    function calculateLevel(s){ 
+        const b=document.getElementById('levelBadge'); 
+        let l="",c=""; 
+        if(s>=380){l="SUPERIOR";c="#15803d";} 
+        else if(s>=300){l="ALTO";c="#1d4ed8";} 
+        else if(s>=230){l="MEDIO";c="#d97706";} 
+        else {l="BAJO";c="#dc2626";} 
+        b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; 
+        b.style.color=c; b.style.borderColor=c; 
+    }
+    
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
     function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
     
-    // Modal Simplified: Only Verdict
     function openModal(i){ 
         const s=subjects[i]; 
         document.getElementById('mTitle').innerText=s.n; 
