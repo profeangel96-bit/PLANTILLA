@@ -45,24 +45,20 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (Interactivo con Sombra 3D MEJORADA) */
+    /* SCORE CIRCLE (3D Effect) */
     .core-section { position: relative; margin: 10px 0; cursor: pointer; }
     .score-circle-svg { 
         width: 260px; height: 260px; transform: rotate(-90deg); 
-        /* TRIPLE CAPA DE SOMBRA PARA EFECTO 3D PREMIUM */
         filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)) drop-shadow(0 15px 35px rgba(0,0,0,0.3)) drop-shadow(0 0 25px rgba(212, 175, 55, 0.7));
     }
-    
-    /* Transición lenta para el rojo (2s) */
     .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; transition: stroke 2s ease; }
     .core-section.show-gap .circle-bg { stroke: var(--color-red-btn); } 
-    
     .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
     .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
     
-    /* Mensaje Flotante de Falta */
+    /* Gap Message */
     .gap-message-overlay {
         position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
         background: rgba(220, 38, 38, 0.9); color: white;
@@ -85,22 +81,20 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* TARJETA DE MENSAJE (Sombra Profunda) */
+    /* GREETING CARD */
     .greeting-card { background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICO BARRAS (Sombra Profunda) */
+    /* CHART BOX */
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
+    /* GAP CHART BOX */
     .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
     .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
-    
-    /* Texto inferior rosquilla (Espaciado Corregido) */
     .gap-chart-text-container {
         margin-top: 25px; margin-bottom: 35px; 
         background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
@@ -108,26 +102,12 @@
     }
     .gap-text-style { font-size: 0.75rem; color: var(--color-primary); font-weight: 700; line-height: 1.3; }
 
-    /* MISIONES (Estilo Bicolor y Sombra Profunda) */
+    /* MISIONES */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
-    
-    .mission-box.dark-mode {
-        border: none;
-        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); /* SOMBRA PROFUNDA */
-        background: var(--color-primary); 
-    }
-    .mission-box.dark-mode .mission-header-bar {
-        background: transparent;
-        border-bottom: none;
-    }
-    .mission-box.dark-mode .mission-title-text,
-    .mission-box.dark-mode .toggle-icon { color: white; } 
-
-    /* CONTENIDO BLANCO */
-    .mission-box.dark-mode .mission-content-box {
-        background: var(--white);
-        padding: 20px;
-    }
+    .mission-box.dark-mode { border: none; box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); background: var(--color-primary); }
+    .mission-box.dark-mode .mission-header-bar { background: transparent; border-bottom: none; }
+    .mission-box.dark-mode .mission-title-text, .mission-box.dark-mode .toggle-icon { color: white; } 
+    .mission-box.dark-mode .mission-content-box { background: var(--white); padding: 20px; }
 
     .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
     .mission-title-text { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-muted); letter-spacing: 1px; }
@@ -136,7 +116,7 @@
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     
-    /* BOTÓN PDF */
+    /* BOTÓN */
     .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
     .btn-action:active { transform: scale(0.98); }
 
@@ -328,7 +308,6 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CONEXIÓN LECTURA (Usando el nombre con error del Excel)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
@@ -368,7 +347,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO 1: BARRAS ---
+    // --- GRÁFICO 1: BARRAS (Contraste Inteligente V.37) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -387,7 +366,14 @@
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    datalabels: { color: 'white', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'start' },
+                    datalabels: { 
+                        // LÓGICA DE COLOR DINÁMICO (V.37)
+                        color: (ctx) => { 
+                            const v = ctx.dataset.data[ctx.dataIndex]; 
+                            return (v >= 60 && v < 80) ? '#0f172a' : 'white'; 
+                        },
+                        font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'start' 
+                    },
                     title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
                 },
                 scales: {
@@ -399,7 +385,7 @@
         });
     }
 
-    // --- GRÁFICO 2: POLAR AREA (GAP) ---
+    // --- GRÁFICO 2: POLAR AREA (Contraste Inteligente V.37) ---
     function renderGapChart(subs) {
         const ctx = document.getElementById('gapChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -428,12 +414,16 @@
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                layout: { padding: 5 }, // Menos padding para que se vea más grande en móvil
+                layout: { padding: 5 }, 
                 plugins: {
                     legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 9 }, boxWidth: 10, padding: 10 } },
                     datalabels: {
                         display: true,
-                        color: 'white',
+                        // LÓGICA DE COLOR DINÁMICO (V.37)
+                        color: (context) => {
+                             // Si es el Amarillo (Index 2), usa oscuro. Si no, blanco.
+                             return context.dataIndex === 2 ? '#0f172a' : 'white';
+                        },
                         font: { weight: 'bold', size: 10 },
                         backgroundColor: function(context) {
                              return context.dataset.backgroundColor[context.dataIndex].replace('0.7', '1');
@@ -448,7 +438,7 @@
                         min: 0, max: 100, 
                         ticks: { display: true, stepSize: 100, color: '#94a3b8', backdropColor: 'transparent', font: { size: 9 } }, 
                         grid: { color: '#e2e8f0' },
-                        pointLabels: { display: false } // Oculto nombres para ganar espacio, están en leyenda
+                        pointLabels: { display: false } 
                     }
                 }
             }
@@ -478,27 +468,26 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO Y NIVEL (CORREGIDA CON RANGOS) ---
+    // --- LOGICA DE REGAÑO Y NIVEL (CORREGIDA AL 100%) ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
         const txt = document.getElementById('greetingText'); 
         const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; 
         
-        // RANGOS AJUSTADOS A LA TABLA
-        if(score >= 380){ // SUPERIOR
+        if(score >= 380){ 
             c.style.borderLeftColor="var(--level-top)"; 
             t.innerText=`¡INCREÍBLE, ${n}! 🏆`; t.style.color="var(--level-top)"; 
             txt.innerHTML="Estás volando alto. Mantén este ritmo y la beca es tuya. ¡Orgullo total!"; 
-        } else if(score >= 300){ // ALTO
+        } else if(score >= 300){ 
             c.style.borderLeftColor="var(--level-high)"; 
             t.innerText=`¡BIEN JUGADO, ${n}! 🤙`; t.style.color="var(--level-high)"; 
             txt.innerHTML="Tienes buen nivel, pero no te confíes. Afina esos detalles pequeños para llegar a la excelencia."; 
-        } else if(score >= 230){ // MEDIO
+        } else if(score >= 230){ 
             c.style.borderLeftColor="var(--level-mid)"; 
             t.innerText=`¡PILAS, ${n}! ⚠️`; t.style.color="var(--level-mid)"; 
             txt.innerHTML="Estás en el promedio y el promedio es peligroso. No es suficiente para asegurar tu cupo. ¡Aprieta!"; 
-        } else { // BAJO
+        } else {
             c.style.borderLeftColor="var(--color-red-btn)"; 
             t.innerText=`¡ALARMA, ${n}! 🚨`; t.style.color="var(--color-red-btn)"; 
             txt.innerHTML="Si el examen fuera hoy, no pasamos. Necesito que te despiertes y empieces a estudiar de verdad."; 
