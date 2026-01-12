@@ -45,11 +45,11 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE - BOLA GIGANTE */
-    .core-section { position: relative; margin: 15px 0; cursor: pointer; }
-    .score-circle-svg { width: 240px; height: 240px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
-    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 10; }
-    .circle-fill { fill: none; stroke-width: 10; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* SCORE CIRCLE (BOLA GIGANTE + HALO) */
+    .core-section { position: relative; margin: 10px 0; cursor: pointer; }
+    .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+    .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
     .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
@@ -67,28 +67,16 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* TARJETA DE REGAÑO/FELICITACIÓN (RESTAURADA) */
+    /* TARJETA DE REGAÑO/FELICITACIÓN */
     .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; transition: transform 0.2s; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
-    .greeting-content { padding: 0 15px 15px 15px; display: block; }
+    .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICO */
+    /* GRÁFICOS (CAJAS) */
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
-
-    /* ADMISIÓN (BLOQUE ÚNICO) */
-    .adm-toggle-btn { background: #0f172a; color: white; width: 100%; padding: 15px; border-radius: 16px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(15, 23, 42, 0.3); margin-bottom: 5px; }
-    .adm-content-box { display: none; background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); animation: slideDown 0.3s ease; margin-bottom: 20px; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .uni-item { margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
-    .uni-item:last-child { border-bottom: none; }
-    .uni-top { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.8rem; font-weight: 800; color: var(--color-primary); }
-    .uni-bar-bg { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
-    .uni-bar-fill { height: 100%; border-radius: 4px; }
-    .adm-legal { margin-top: 15px; padding: 10px; background: #fffbeb; border-left: 4px solid #f59e0b; font-size: 0.7rem; color: #78350f; line-height: 1.4; font-weight: 600; border-radius: 4px; }
 
     /* MISIONES */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
@@ -110,10 +98,11 @@
     @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-header { background: var(--color-primary); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
     .modal-body { padding: 25px 20px; }
+    
     .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--color-accent); margin-bottom: 20px; }
     .verdict-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--color-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
     .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
-    .mission-mini { font-size: 0.85rem; color: var(--color-text); margin-bottom: 20px; background: #fff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+    
     .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
     .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
     .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
@@ -127,7 +116,7 @@
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Procesando resultados...</div>
+      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Cargando...</div>
     </div>
 
     <div id="scroll-viewport">
@@ -150,6 +139,7 @@
         </div>
         
         <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
+        
         <div class="level-details-modal" id="levelDetails">
              <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos de Referencia:</div>
              <div class="range-list">
@@ -175,20 +165,14 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <button class="adm-toggle-btn" onclick="toggleAdm()">
-            <span><i class="fa-solid fa-university"></i> VIABILIDAD DE ADMISIÓN</span>
-            <i class="fa-solid fa-chevron-down" id="admArrow"></i>
-        </button>
-        <div class="adm-content-box" id="admBox">
-            <div id="admList"></div>
-            <div class="adm-legal">
-                ⚠️ <strong>IMPORTANTE:</strong> El puntaje de corte es el mínimo histórico para ingresar a la carrera de menor demanda en dicha universidad. <strong>En ningún momento este resultado garantiza tu ingreso</strong> a cualquier carrera con ese puntaje.
-            </div>
+        <div class="chart-box" style="height: 220px;">
+            <canvas id="uniChart"></canvas>
+            <div class="chart-hint">Comparativa de tu puntaje vs. Cortes de admisión.</div>
         </div>
 
         <div class="mission-box card-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
-             <div class="mission-title-text">🎯 Misiones Semanales</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
+             <div class="mission-title-text">🚀 Plan de Acción Personalizado</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
           </div>
           <div id="missionList" class="mission-content-box"></div>
         </div>
@@ -215,13 +199,6 @@
             <span class="verdict-label">VEREDICTO ACADÉMICO:</span>
             <div class="verdict-text" id="mVeredicto">...</div>
           </div>
-          <div class="mission-mini">
-             <i class="fa-solid fa-crosshairs" style="color:var(--color-red-btn)"></i>
-             <div>
-                 <strong style="display:block; font-size:0.7rem; color:var(--color-muted); text-transform:uppercase;">Misión Inmediata:</strong>
-                 <span id="mMision" style="font-weight:700;">...</span>
-             </div>
-          </div>
         </div>
         <button class="close-modal" onclick="closeModal()">ENTENDIDO</button>
       </div>
@@ -235,16 +212,17 @@
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
     const UNIVERSITIES = [
-      { name: "U. Nacional", cut: 400 },
-      { name: "U. de Antioquia", cut: 380 },
-      { name: "Univalle", cut: 330 },
-      { name: "UTP / Nariño", cut: 290 }
+      { name: "Nacional", cut: 400 },
+      { name: "Antioquia", cut: 380 },
+      { name: "Valle", cut: 330 },
+      { name: "Tu Puntaje", cut: 0 } // Se llena dinámicamente
     ];
 
     let subjects = [];
     let realScore = 0;
     let currentPdfLink = "#";
     let myChart = null;
+    let uniChart = null;
 
     window.onload = function() {
       document.getElementById('simTitle').innerText = NOMBRE_SIMULACRO;
@@ -299,43 +277,43 @@
       realScore = scores.g;
       currentPdfLink = data['LINK PDF'] || "#"; 
       
-      document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.split(" ")[0].toUpperCase() : "ALUMNO";
+      // ✅ CORRECCIÓN NOMBRE COMPLETO
+      document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CORRECCIÓN FINAL: NOMBRES EXACTOS DE TU EXCEL
-      // En Excel tienes: TXT_LEC_VEREDICTO, TXT_LEC_MISION, etc. (según tu instrucción de pegar encabezados)
+      // ✅ CORRECCIÓN NOMBRES COLUMNAS (Sin T ni N al final)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
-            v: data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
-            m: data['TXT_LEC_MISION'] || "Sin misión."
+            v: data['TXT_LEC_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_LEC_MISIO'] || "Sin misión."
         },
         { 
             n: "Matemáticas", p: scores.m, 
-            v: data['TXT_MAT_VEREDICTO'] || "Sin diagnóstico.", 
-            m: data['TXT_MAT_MISION'] || "Sin misión."
+            v: data['TXT_MAT_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_MAT_MISIO'] || "Sin misión."
         },
         { 
             n: "Sociales", p: scores.s, 
-            v: data['TXT_SOC_VEREDICTO'] || "Sin diagnóstico.", 
-            m: data['TXT_SOC_MISION'] || "Sin misión."
+            v: data['TXT_SOC_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_SOC_MISIO'] || "Sin misión."
         },
         { 
             n: "Ciencias", p: scores.c, 
-            v: data['TXT_CIE_VEREDICTO'] || "Sin diagnóstico.", 
-            m: data['TXT_CIE_MISION'] || "Sin misión."
+            v: data['TXT_CIE_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_CIE_MISIO'] || "Sin misión."
         },
         { 
             n: "Inglés", p: scores.i, 
-            v: data['TXT_ING_VEREDICTO'] || "Sin diagnóstico.", 
-            m: data['TXT_ING_MISION'] || "Sin misión."
+            v: data['TXT_ING_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_ING_MISIO'] || "Sin misión."
         }
       ];
 
       renderChart(subjects);
-      renderUniversities(realScore);
+      renderUniChart(realScore); // Nuevo Gráfico de Universidades
       renderMissions(subjects);
-      buildNarrative(data.Nombre, realScore); // ESTA ES LA FUNCIÓN DEL REGAÑO/FELICITACIÓN
+      buildNarrative(data.Nombre, realScore); 
       
       updateCircle(realScore);
       calculateLevel(realScore);
@@ -343,7 +321,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO (Chart.js) ---
+    // --- GRÁFICO 1: MATERIAS (VERTICAL) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -363,54 +341,52 @@
                 plugins: {
                     legend: { display: false },
                     datalabels: { color: 'white', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'start' },
-                    annotation: {
-                        annotations: {
-                            line1: { type: 'line', yMin: 50, yMax: 50, borderColor: '#94a3b8', borderWidth: 2, borderDash: [5, 5] }
-                        }
-                    }
+                    title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
                 },
                 scales: {
                     y: { beginAtZero: true, max: 100, grid: { display: true, color: '#f1f5f9' } },
                     x: { grid: { display: false } }
                 },
-                onClick: (e, activeEls) => {
-                    if(activeEls.length > 0) openModal(activeEls[0].index);
+                onClick: (e, activeEls) => { if(activeEls.length > 0) openModal(activeEls[0].index); }
+            }
+        });
+    }
+
+    // --- GRÁFICO 2: UNIVERSIDADES (HORIZONTAL) ---
+    function renderUniChart(score) {
+        const ctx = document.getElementById('uniChart').getContext('2d');
+        // Actualizamos "Tu Puntaje"
+        UNIVERSITIES[3].cut = score;
+        
+        const labels = UNIVERSITIES.map(u => u.name);
+        const dataValues = UNIVERSITIES.map(u => u.cut);
+        const bgColors = UNIVERSITIES.map(u => u.name === "Tu Puntaje" ? '#0f172a' : '#94a3b8');
+
+        if(uniChart) uniChart.destroy();
+
+        uniChart = new Chart(ctx, {
+            type: 'bar',
+            indexAxis: 'y', // Hace que sea horizontal
+            data: {
+                labels: labels,
+                datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 4, barPercentage: 0.6 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start' },
+                    title: { display: true, text: 'Tu Puntaje vs. Cortes Estimados', font: {family: 'Manrope', size: 14} }
+                },
+                scales: {
+                    x: { beginAtZero: false, min: 200, max: 500 }, // Escala ajustada para que se vea la diferencia
+                    y: { grid: { display: false } }
                 }
             }
         });
     }
 
-    // --- UNIVERSIDADES (Bloque único) ---
-    function renderUniversities(score) {
-        const container = document.getElementById('admList');
-        let html = '';
-        UNIVERSITIES.forEach(uni => {
-            let widthPerc = (score / uni.cut) * 100;
-            if (widthPerc > 100) widthPerc = 100;
-            let color = widthPerc >= 100 ? "#22c55e" : (widthPerc >= 90 ? "#eab308" : "#ef4444");
-            
-            html += `
-            <div class="uni-item">
-                <div class="uni-top">
-                    <span>${uni.name}</span>
-                    <span>${Math.round(widthPerc)}%</span>
-                </div>
-                <div class="uni-bar-bg">
-                    <div class="uni-bar-fill" style="width:${widthPerc}%; background:${color}"></div>
-                </div>
-            </div>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function toggleAdm() {
-        const c = document.getElementById('admBox');
-        const i = document.getElementById('admArrow');
-        if(c.style.display==="block"){ c.style.display="none"; i.className="fa-solid fa-chevron-down"; }
-        else{ c.style.display="block"; i.className="fa-solid fa-chevron-up"; }
-    }
-
-    // --- MISIONES ---
+    // --- MISIONES (PLAN DE ACCIÓN) ---
     function renderMissions(subs) {
         const list = document.getElementById('missionList');
         let html = '';
@@ -428,7 +404,6 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO (RESTAURADA) ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
@@ -458,10 +433,18 @@
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
     function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";} else if(s>=350){l="AVANZADO";c="#1d4ed8";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";} else if(s>=200){l="BÁSICO";c="#d97706";} else {l="INICIAL";c="#dc2626";} b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
-    function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.v; document.getElementById('mMision').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
-    function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
     function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
-
+    
+    // Modal Simplified: Only Verdict
+    function openModal(i){ 
+        const s=subjects[i]; 
+        document.getElementById('mTitle').innerText=s.n; 
+        document.getElementById('mScore').innerText=s.p+"/100"; 
+        document.getElementById('mVeredicto').innerText=s.v; 
+        document.querySelector('.modal-overlay').style.display='flex'; 
+    }
+    function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
+    
     function downloadPDF() { 
         if(currentPdfLink && currentPdfLink.length > 10) {
             let directLink = currentPdfLink;
