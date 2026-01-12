@@ -68,21 +68,26 @@
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
     /* TARJETA DE MENSAJE */
-    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
-    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; transition: transform 0.2s; }
+    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICOS (CAJAS) */
+    /* GRÁFICO BARRAS */
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
+    /* GRÁFICO DONA/POLAR (GAP) */
+    .gap-chart-box { background: white; padding: 20px; border-radius: 16px; border: 1px solid #f1f5f9; height: 320px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center;}
+    .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; text-transform: uppercase; text-align: center; }
 
     /* MISIONES */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
     .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
     .mission-title-text { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-muted); letter-spacing: 1px; }
-    .mission-content-box { padding: 15px 20px; display: none; }
+    /* MISIONES ABIERTAS POR DEFECTO */
+    .mission-content-box { padding: 15px 20px; display: block; } 
     .mission-item { display: flex; gap: 12px; align-items: start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
@@ -91,7 +96,7 @@
     .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
     .btn-action:active { transform: scale(0.98); }
 
-    /* MODAL VEREDICTO */
+    /* MODAL */
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; }
     .modal-card { background: var(--white); width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
     @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -163,9 +168,16 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
+        <div class="gap-chart-box">
+            <div class="gap-title">🏆 CAMINO A LA EXCELENCIA</div>
+            <canvas id="gapChart"></canvas>
+            <div class="chart-hint">¿Qué tan lleno está tu círculo en cada materia?</div>
+        </div>
+
         <div class="mission-box card-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
-             <div class="mission-title-text">🚀 Plan de Acción Personalizado</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
+             <div class="mission-title-text">🚀 Plan de Acción Personalizado</div>
+             <i class="fa-solid fa-chevron-up toggle-icon" id="missionIcon"></i>
           </div>
           <div id="missionList" class="mission-content-box"></div>
         </div>
@@ -209,6 +221,7 @@
     let realScore = 0;
     let currentPdfLink = "#";
     let myChart = null;
+    let gapChart = null;
 
     window.onload = function() {
       document.getElementById('simTitle').innerText = NOMBRE_SIMULACRO;
@@ -266,11 +279,12 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CONEXIÓN LECTURA REVISADA: Busca TXT_LEC_VEREDICTO y TXT_LEC_MISION
+      // ✅ CORRECCIÓN CLAVE: XT_LEC_VEREDICTO (sin T al inicio) y TXT_..._MISIO (sin N al final)
+      // Basado en las imágenes de errores
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
-            v: data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
+            v: data['XT_LEC_VEREDICTO'] || data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_LEC_MISION'] || "Sin misión."
         },
         { 
@@ -296,6 +310,7 @@
       ];
 
       renderChart(subjects);
+      renderGapChart(subjects); // Nuevo gráfico rosquilla
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
       
@@ -305,7 +320,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO 1: MATERIAS ---
+    // --- GRÁFICO 1: BARRAS ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -336,16 +351,56 @@
         });
     }
 
-    // --- MISIONES (PLAN DE ACCIÓN) - EMOJIS DIVERSIFICADOS ---
+    // --- GRÁFICO 2: POLAR AREA (CAMINO A LA EXCELENCIA) ---
+    function renderGapChart(subs) {
+        const ctx = document.getElementById('gapChart').getContext('2d');
+        const dataValues = subs.map(s => s.p);
+        
+        // Colores con opacidad
+        const colors = [
+            'rgba(239, 68, 68, 0.7)', // Rojo
+            'rgba(59, 130, 246, 0.7)', // Azul
+            'rgba(234, 179, 8, 0.7)',  // Amarillo
+            'rgba(16, 185, 129, 0.7)', // Verde
+            'rgba(244, 63, 94, 0.7)'   // Rosa
+        ];
+
+        if(gapChart) gapChart.destroy();
+
+        gapChart = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: subs.map(s => s.n),
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: colors,
+                    borderWidth: 1,
+                    borderColor: 'white'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 10 }, boxWidth: 10 } },
+                    datalabels: { display: false }
+                },
+                scales: {
+                    r: { min: 0, max: 100, ticks: { display: false }, grid: { color: '#f1f5f9' } }
+                }
+            }
+        });
+    }
+
+    // --- MISIONES (PLAN DE ACCIÓN) ---
     function renderMissions(subs) {
         const list = document.getElementById('missionList');
         let html = '';
         subs.forEach(s => {
             let icon = '⭐'; // Default
-            if (s.p < 60) icon = '🚨';      // Bajo
-            else if (s.p < 80) icon = '⚠️'; // Medio
-            else if (s.p < 90) icon = '💪'; // Alto
-            else icon = '🏆';              // Superior
+            if (s.p < 60) icon = '🚨';      
+            else if (s.p < 80) icon = '⚠️'; 
+            else if (s.p < 90) icon = '💪'; 
+            else icon = '🏆';              
 
             html += `
             <div class="mission-item">
@@ -359,7 +414,7 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO Y NIVEL ---
+    // --- UTILS ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
@@ -385,7 +440,6 @@
         } 
     }
 
-    // --- UTILS ---
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
     
     function calculateLevel(s){ 
