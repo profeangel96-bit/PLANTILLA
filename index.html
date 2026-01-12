@@ -58,7 +58,7 @@
     .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
     .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
     
-    /* Mensaje Flotante de Falta (Nuevo) */
+    /* Mensaje Flotante de Falta */
     .gap-message-overlay {
         position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
         background: rgba(220, 38, 38, 0.9); color: white;
@@ -81,35 +81,35 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* TARJETA DE MENSAJE */
-    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
+    /* TARJETA DE MENSAJE (Sombra Profunda) */
+    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICO BARRAS (Sombra fuerte) */
-    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    /* GRÁFICO BARRAS (Sombra Profunda) */
+    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GRÁFICO DONA/POLAR (GAP) - Ajustado para móviles */
-    .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: 360px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center;}
+    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
+    .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
     .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
     
-    /* Texto inferior rosquilla (Más visible) */
+    /* Texto inferior rosquilla (Espaciado Corregido) */
     .gap-chart-text-container {
-        margin-top: 10px; margin-bottom: 20px;
-        background: #f1f5f9; padding: 8px 15px; border-radius: 8px;
+        margin-top: 25px; margin-bottom: 35px; /* MÁRGENES AUMENTADOS */
+        background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
         text-align: center; width: 90%;
     }
     .gap-text-style { font-size: 0.75rem; color: var(--color-primary); font-weight: 700; line-height: 1.3; }
 
-    /* MISIONES (Estilo Bicolor: Azul oscuro header, Blanco contenido) */
+    /* MISIONES (Estilo Bicolor y Sombra Profunda) */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
     
     .mission-box.dark-mode {
         border: none;
-        box-shadow: 0 15px 40px rgba(15, 23, 42, 0.4); /* Sombra fuerte */
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); /* SOMBRA PROFUNDA */
         background: var(--color-primary); 
     }
     .mission-box.dark-mode .mission-header-bar {
@@ -324,7 +324,7 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ LECTURA CORREGIDA (XT_LEC_VEREDICTO)
+      // ✅ CONEXIÓN LECTURA (Usando el nombre con error del Excel)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
