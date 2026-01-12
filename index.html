@@ -67,7 +67,7 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* TARJETA DE MENSAJE (REGAÑO/FELICITACIÓN) */
+    /* TARJETA DE MENSAJE */
     .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
@@ -97,14 +97,11 @@
     @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-header { background: var(--color-primary); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
     .modal-body { padding: 25px 20px; }
-    
     .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--color-accent); margin-bottom: 20px; }
     .verdict-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--color-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
     .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
-    
     .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
     .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
-    
     .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
     .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
     .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
@@ -166,14 +163,6 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <div class="chart-box" style="height: 250px;">
-            <canvas id="uniChart"></canvas>
-            <div class="chart-hint" style="margin-top:5px; line-height:1.2;">
-                *Comparativa de tu puntaje vs. Cortes aproximados de admisión.<br>
-                <strong>El corte es una referencia, no garantiza ingreso.</strong>
-            </div>
-        </div>
-
         <div class="mission-box card-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
              <div class="mission-title-text">🚀 Plan de Acción Personalizado</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
@@ -216,19 +205,10 @@
     const NOMBRE_SIMULACRO = "S11-R"; 
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
-    const UNIVERSITIES = [
-      { name: "U. Nacional", cut: 400 },
-      { name: "U. de Antioquia", cut: 380 },
-      { name: "Univalle", cut: 330 },
-      { name: "UTP / Nariño", cut: 290 },
-      { name: "Tu Puntaje", cut: 0 } // Se llena dinámicamente
-    ];
-
     let subjects = [];
     let realScore = 0;
     let currentPdfLink = "#";
     let myChart = null;
-    let uniChart = null;
 
     window.onload = function() {
       document.getElementById('simTitle').innerText = NOMBRE_SIMULACRO;
@@ -286,7 +266,7 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CORRECCIÓN FINAL (NOMBRES DE COLUMNA DE IMAGEN 6a00cb)
+      // ✅ CONEXIÓN LECTURA REVISADA: Busca TXT_LEC_VEREDICTO y TXT_LEC_MISION
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
@@ -316,7 +296,6 @@
       ];
 
       renderChart(subjects);
-      renderUniChart(realScore); 
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
       
@@ -357,45 +336,17 @@
         });
     }
 
-    // --- GRÁFICO 2: UNIVERSIDADES ---
-    function renderUniChart(score) {
-        const ctx = document.getElementById('uniChart').getContext('2d');
-        UNIVERSITIES[4].cut = score; // Set real score
-        
-        const labels = UNIVERSITIES.map(u => u.name);
-        const dataValues = UNIVERSITIES.map(u => u.cut);
-        const bgColors = UNIVERSITIES.map(u => u.name === "Tu Puntaje" ? '#0f172a' : '#94a3b8');
-
-        if(uniChart) uniChart.destroy();
-
-        uniChart = new Chart(ctx, {
-            type: 'bar',
-            indexAxis: 'y', 
-            data: {
-                labels: labels,
-                datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 4, barPercentage: 0.6 }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start' },
-                    title: { display: true, text: 'Tu Puntaje vs. Cortes', font: {family: 'Manrope', size: 14} }
-                },
-                scales: {
-                    x: { beginAtZero: false, min: 200, max: 500 },
-                    y: { grid: { display: false } }
-                }
-            }
-        });
-    }
-
-    // --- MISIONES ---
+    // --- MISIONES (PLAN DE ACCIÓN) - EMOJIS DIVERSIFICADOS ---
     function renderMissions(subs) {
         const list = document.getElementById('missionList');
         let html = '';
         subs.forEach(s => {
-            let icon = s.p < 60 ? '🚨' : '⭐';
+            let icon = '⭐'; // Default
+            if (s.p < 60) icon = '🚨';      // Bajo
+            else if (s.p < 80) icon = '⚠️'; // Medio
+            else if (s.p < 90) icon = '💪'; // Alto
+            else icon = '🏆';              // Superior
+
             html += `
             <div class="mission-item">
                 <div style="font-size:1.2rem;">${icon}</div>
@@ -437,7 +388,6 @@
     // --- UTILS ---
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
     
-    // CORRECCIÓN: NIVELES COINCIDENTES CON TABLA (Imagen 6a07d3)
     function calculateLevel(s){ 
         const b=document.getElementById('levelBadge'); 
         let l="",c=""; 
