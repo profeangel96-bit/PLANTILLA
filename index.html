@@ -39,60 +39,44 @@
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     
     /* HEADER */
-    .header-wrapper { background: var(--bg-app); padding: 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative; }
+    .header-wrapper { background: var(--bg-app); padding: 20px 20px 40px 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative; }
     .header-info { text-align: center; margin-bottom: 10px; width: 100%;}
     .sub-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1.5px; }
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (Con Halo y Brillo) */
-    .core-section { position: relative; margin: 20px 0; cursor: pointer; }
-    .score-circle-svg { width: 220px; height: 220px; transform: rotate(-90deg); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); }
-    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 10; }
-    .circle-fill { fill: none; stroke-width: 10; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* SCORE CIRCLE - RESTAURADO EN GRANDE Y CON HALO */
+    .core-section { position: relative; margin: 10px 0; cursor: pointer; }
+    .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+    .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
-    .score-big { font-size: 4.5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
-    .score-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+    .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+    .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
     
-    /* Badge de Nivel Flotante */
+    /* BADGE FLOTANTE (Como te gusta) */
     .level-badge { 
-        background: #fff; padding: 8px 25px; border-radius: 30px; 
-        font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; 
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-        margin-top: -20px; position: relative; z-index: 10; 
-        border: 2px solid var(--color-accent); color: var(--color-primary); 
+        background: #fff; padding: 8px 30px; border-radius: 30px; 
+        font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+        margin-top: -30px; position: relative; z-index: 20; 
+        border: 3px solid var(--color-accent); color: var(--color-primary); 
         animation: floatBadge 3s ease-in-out infinite; 
     }
     @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    .greeting-card { margin-top: 10px; border-left-color: var(--color-primary) !important; }
+    /* TARJETA DE REGAÑO/FELICITACIÓN (RESTAURADA) */
+    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; transition: transform 0.2s; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .greeting-title { font-size: 0.95rem; font-weight: 800; color: var(--color-primary); margin: 0; }
-    .greeting-content { padding: 0 15px 15px 15px; display: none; }
-    .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
+    .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
+    .greeting-content { padding: 0 15px 15px 15px; display: block; } /* Visible por defecto */
+    .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* GRÁFICO */
-    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 280px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    /* GRÁFICO DE BARRAS */
+    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
-
-    /* --- NUEVO DISEÑO: TARJETAS DE ADMISIÓN EXPANDIBLES --- */
-    .uni-section-title { font-weight: 800; color: #0f172a; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-    .uni-grid { display: flex; flex-direction: column; gap: 10px; }
-    
-    .uni-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: all 0.2s; }
-    .uni-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
-    .uni-title { font-size: 0.85rem; font-weight: 800; color: var(--color-primary); }
-    .uni-status { font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
-    
-    .status-ok { background: #dcfce7; color: #15803d; }
-    .status-warn { background: #fef9c3; color: #a16207; }
-    .status-bad { background: #fee2e2; color: #b91c1c; }
-
-    .uni-details { display: none; padding: 15px; background: #f8fafc; border-top: 1px dashed #e2e8f0; font-size: 0.8rem; color: var(--color-text); }
-    .uni-row-detail { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    .uni-gap-msg { margin-top: 10px; font-weight: 700; font-style: italic; color: var(--color-primary); }
 
     /* MISIONES */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
@@ -104,6 +88,17 @@
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     .mission-pdf-note { margin-top: 15px; font-size: 0.75rem; color: var(--color-primary); text-align: center; background: #f8fafc; padding: 10px; border-radius: 8px; font-weight: 700; }
 
+    /* ADMISIÓN (BLOQUE ÚNICO DESPLEGABLE) */
+    .adm-toggle-btn { background: #0f172a; color: white; width: 100%; padding: 15px; border-radius: 16px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(15, 23, 42, 0.3); margin-bottom: 5px; }
+    .adm-content-box { display: none; background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); animation: slideDown 0.3s ease; margin-bottom: 20px; }
+    
+    .uni-item { margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+    .uni-item:last-child { border-bottom: none; }
+    .uni-top { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.8rem; font-weight: 800; color: var(--color-primary); }
+    .uni-bar-bg { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+    .uni-bar-fill { height: 100%; border-radius: 4px; }
+    .adm-legal { margin-top: 15px; padding: 10px; background: #fffbeb; border-left: 4px solid #f59e0b; font-size: 0.7rem; color: #78350f; line-height: 1.4; font-weight: 600; border-radius: 4px; }
+
     /* BOTÓN PDF */
     .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
     .btn-action:active { transform: scale(0.98); }
@@ -111,7 +106,6 @@
     /* MODAL VEREDICTO */
     .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; }
     .modal-card { background: var(--white); width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-header { background: var(--color-primary); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
     .modal-body { padding: 25px 20px; }
     .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--color-accent); margin-bottom: 20px; }
@@ -119,8 +113,6 @@
     .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
     .mission-mini { font-size: 0.85rem; color: var(--color-text); margin-bottom: 20px; background: #fff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
     .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
-    .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
-    
     .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
     .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
     .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
@@ -154,8 +146,8 @@
             <div class="score-label">PUNTAJE GLOBAL</div>
           </div>
         </div>
-        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
         
+        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
         <div class="level-details-modal" id="levelDetails">
              <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos de Referencia:</div>
              <div class="range-list">
@@ -169,12 +161,11 @@
 
       <div class="content-padder">
         
-        <div class="greeting-card card-box" id="greetingCard">
-          <div class="greeting-header" onclick="toggleGreeting()">
+        <div class="greeting-card" id="greetingCard">
+          <div class="greeting-header">
              <div class="greeting-title" id="greetingTitle">...</div>
-             <i class="fa-solid fa-chevron-down toggle-icon" id="greetIcon"></i>
           </div>
-          <div class="greeting-content" id="greetingContent"><div class="greeting-text" id="greetingText">...</div></div>
+          <div class="greeting-content"><div class="greeting-text" id="greetingText">...</div></div>
         </div>
 
         <div class="chart-box">
@@ -182,15 +173,20 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <div class="uni-section">
-            <div class="uni-section-title"><i class="fa-solid fa-university"></i> VIABILIDAD DE ADMISIÓN</div>
-            <div class="uni-grid" id="uniGrid"></div>
+        <button class="adm-toggle-btn" onclick="toggleAdm()">
+            <span><i class="fa-solid fa-university"></i> VIABILIDAD DE ADMISIÓN</span>
+            <i class="fa-solid fa-chevron-down" id="admArrow"></i>
+        </button>
+        <div class="adm-content-box" id="admBox">
+            <div id="admList"></div>
+            <div class="adm-legal">
+                ⚠️ <strong>IMPORTANTE:</strong> El puntaje de corte es el mínimo histórico para ingresar a la carrera de menor demanda en dicha universidad. <strong>En ningún momento este resultado garantiza tu ingreso</strong> a cualquier carrera. Es solo una referencia teórica.
+            </div>
         </div>
 
         <div class="mission-box card-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
-             <div class="mission-title-text">🎯 Misiones Semanales</div>
-             <i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
+             <div class="mission-title-text">🎯 Misiones Semanales</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
           </div>
           <div id="missionList" class="mission-content-box"></div>
         </div>
@@ -199,7 +195,6 @@
     </div>
 
     <div class="bottom-fixed-area">
-      <div class="pdf-attention">👇 DESCARGA TU PDF AQUÍ</div>
       <div class="bottom-bar">
         <button class="btn-action" onclick="downloadPDF()">
           <i class="fa-solid fa-file-pdf"></i> DESCARGAR INFORME PDF
@@ -218,7 +213,6 @@
             <span class="verdict-label">VEREDICTO ACADÉMICO:</span>
             <div class="verdict-text" id="mVeredicto">...</div>
           </div>
-          
           <div class="mission-mini">
              <i class="fa-solid fa-crosshairs" style="color:var(--color-red-btn)"></i>
              <div>
@@ -226,7 +220,6 @@
                  <span id="mMision" style="font-weight:700;">...</span>
              </div>
           </div>
-          <div class="pdf-hint"><i class="fa-solid fa-info-circle"></i> Consulta tu PDF para ver el detalle.</div>
         </div>
         <button class="close-modal" onclick="closeModal()">ENTENDIDO</button>
       </div>
@@ -240,10 +233,10 @@
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
     const UNIVERSITIES = [
-      { name: "U. Nacional (Ingeniería)", cut: 400 },
-      { name: "U. de Antioquia (Salud)", cut: 380 },
-      { name: "Univalle (Humanidades)", cut: 330 },
-      { name: "UTP / U. Nariño / U. Cauca", cut: 290 }
+      { name: "U. Nacional", cut: 400 },
+      { name: "U. de Antioquia", cut: 380 },
+      { name: "Univalle", cut: 330 },
+      { name: "UTP / Nariño", cut: 290 }
     ];
 
     let subjects = [];
@@ -307,39 +300,39 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.split(" ")[0].toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // ✅ CORRECCIÓN FINAL DE NOMBRES DE COLUMNA (Imagen 5afc92)
-      // Usamos TXT_..._FORT y TXT_..._MISIO (sin N al final)
+      // ✅ CORRECCIÓN DE NOMBRES EXACTOS (Sin T ni N al final, según imagen 5afc92)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
-            v: data['TXT_LEC_FORT'] || "Sin datos.", 
-            m: data['TXT_LEC_MISIO'] || "Sin datos."
+            v: data['TXT_LEC_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_LEC_MISIO'] || "Sin misión."
         },
         { 
             n: "Matemáticas", p: scores.m, 
-            v: data['TXT_MAT_FORT'] || "Sin datos.", 
-            m: data['TXT_MAT_MISIO'] || "Sin datos."
+            v: data['TXT_MAT_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_MAT_MISIO'] || "Sin misión."
         },
         { 
             n: "Sociales", p: scores.s, 
-            v: data['TXT_SOC_FORT'] || "Sin datos.", 
-            m: data['TXT_SOC_MISIO'] || "Sin datos."
+            v: data['TXT_SOC_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_SOC_MISIO'] || "Sin misión."
         },
         { 
             n: "Ciencias", p: scores.c, 
-            v: data['TXT_CIE_FORT'] || "Sin datos.", 
-            m: data['TXT_CIE_MISIO'] || "Sin datos."
+            v: data['TXT_CIE_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_CIE_MISIO'] || "Sin misión."
         },
         { 
             n: "Inglés", p: scores.i, 
-            v: data['TXT_ING_FORT'] || "Sin datos.", 
-            m: data['TXT_ING_MISIO'] || "Sin datos."
+            v: data['TXT_ING_FOR'] || "Sin diagnóstico.", 
+            m: data['TXT_ING_MISIO'] || "Sin misión."
         }
       ];
 
       renderChart(subjects);
       renderUniversities(realScore);
       renderMissions(subjects);
+      buildNarrative(data.Nombre, realScore); // ESTA ES LA FUNCIÓN DEL REGAÑO/FELICITACIÓN
       
       updateCircle(realScore);
       calculateLevel(realScore);
@@ -384,36 +377,34 @@
         });
     }
 
-    // --- TARJETAS DE ADMISIÓN (Expandibles) ---
+    // --- UNIVERSIDADES (Bloque único) ---
     function renderUniversities(score) {
-        const container = document.getElementById('uniGrid');
+        const container = document.getElementById('admList');
         let html = '';
         UNIVERSITIES.forEach(uni => {
-            let gap = score - uni.cut;
-            let status = gap >= 0 ? {t: "ALCANZABLE", c:"status-ok"} : (gap >= -30 ? {t: "CERCA", c:"status-warn"} : {t: "LEJOS", c:"status-bad"});
-            let msg = gap >= 0 
-                ? `¡Superas el corte por ${gap} puntos! Tienes altas probabilidades.` 
-                : `Te faltan ${Math.abs(gap)} puntos. Enfócate en subir tus materias rojas.`;
-
+            let widthPerc = (score / uni.cut) * 100;
+            if (widthPerc > 100) widthPerc = 100;
+            let color = widthPerc >= 100 ? "#22c55e" : (widthPerc >= 90 ? "#eab308" : "#ef4444");
+            
             html += `
-            <div class="uni-card" onclick="toggleUniDetails(this)">
-                <div class="uni-header">
-                    <span class="uni-title">${uni.name}</span>
-                    <span class="uni-status ${status.c}">${status.t}</span>
+            <div class="uni-item">
+                <div class="uni-top">
+                    <span>${uni.name}</span>
+                    <span>${Math.round(widthPerc)}%</span>
                 </div>
-                <div class="uni-details">
-                    <div class="uni-row-detail"><span>Puntaje de Corte:</span> <strong>${uni.cut}</strong></div>
-                    <div class="uni-row-detail"><span>Tu Puntaje:</span> <strong>${score}</strong></div>
-                    <div class="uni-gap-msg">${msg}</div>
+                <div class="uni-bar-bg">
+                    <div class="uni-bar-fill" style="width:${widthPerc}%; background:${color}"></div>
                 </div>
             </div>`;
         });
         container.innerHTML = html;
     }
 
-    function toggleUniDetails(card) {
-        const details = card.querySelector('.uni-details');
-        details.style.display = details.style.display === "block" ? "none" : "block";
+    function toggleAdm() {
+        const c = document.getElementById('admBox');
+        const i = document.getElementById('admArrow');
+        if(c.style.display==="block"){ c.style.display="none"; i.className="fa-solid fa-chevron-down"; }
+        else{ c.style.display="block"; i.className="fa-solid fa-chevron-up"; }
     }
 
     // --- MISIONES ---
@@ -434,15 +425,40 @@
         list.innerHTML = html;
     }
 
+    // --- LOGICA DE REGAÑO (RESTAURADA) ---
+    function buildNarrative(name, score) { 
+        const c = document.getElementById('greetingCard'); 
+        const t = document.getElementById('greetingTitle'); 
+        const txt = document.getElementById('greetingText'); 
+        const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; 
+        
+        if(score >= 400){ 
+            c.style.borderLeftColor="var(--level-top)"; 
+            t.innerText=`¡INCREÍBLE, ${n}! 🏆`; t.style.color="var(--level-top)"; 
+            txt.innerHTML="Estás volando alto. Mantén este ritmo y la beca es tuya. ¡Orgullo total!"; 
+        } else if(score >= 320){ 
+            c.style.borderLeftColor="var(--level-high)"; 
+            t.innerText=`¡BIEN JUGADO, ${n}! 🤙`; t.style.color="var(--level-high)"; 
+            txt.innerHTML="Tienes buen nivel, pero no te confíes. Afina esos detalles pequeños para llegar a la excelencia."; 
+        } else if(score >= 250){ 
+            c.style.borderLeftColor="var(--level-mid)"; 
+            t.innerText=`PILA, ${n}. ⚠️`; t.style.color="var(--level-mid)"; 
+            txt.innerHTML="Estás en el promedio y el promedio es peligroso. No es suficiente para asegurar tu cupo. ¡Aprieta!"; 
+        } else {
+            c.style.borderLeftColor="var(--color-red-btn)"; 
+            t.innerText=`¡ALARMA, ${n}! 🚨`; t.style.color="var(--color-red-btn)"; 
+            txt.innerHTML="Si el examen fuera hoy, no pasamos. Necesito que te despiertes y empieces a estudiar de verdad."; 
+        } 
+    }
+
     // --- UTILS ---
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
     function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";} else if(s>=350){l="AVANZADO";c="#1d4ed8";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";} else if(s>=200){l="BÁSICO";c="#d97706";} else {l="INICIAL";c="#dc2626";} b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
-    function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
-    function toggleGreeting(){ const c=document.getElementById('greetingContent'); c.style.display=c.style.display==="block"?"none":"block"; }
     function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.v; document.getElementById('mMision').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
     function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
-    
+    function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
+
     function downloadPDF() { 
         if(currentPdfLink && currentPdfLink.length > 10) {
             let directLink = currentPdfLink;
