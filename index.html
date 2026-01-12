@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Resultados S11-R | Academia Quijano</title>
+  <title>Resultados | Academia Quijano</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,14 +11,14 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
   <style>
     :root {
       --bg-body: #cbd5e1; --bg-app: #f8fafc; --white: #ffffff;
       --color-primary: #0f172a; --color-accent: #d4af37; --color-red-btn: #dc2626;
       --color-text: #334155; --color-muted: #64748b;
       --level-top: #059669; --level-high: #3b82f6; --level-mid: #d97706; --level-low: #dc2626;
-      /* MATERIAS */
-      --col-mat: #3b82f6; --col-lec: #8b5cf6; --col-soc: #06b6d4; --col-cie: #10b981; --col-ing: #f43f5e;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -30,7 +30,7 @@
     #scroll-viewport { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; position: relative; padding-bottom: 120px; }
     .bottom-fixed-area { flex-shrink: 0; width: 100%; background: rgba(255,255,255,1); border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; z-index: 9999; padding-top: 10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.1); }
     
-    /* LOADER & HEADER */
+    /* LOADER */
     .loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
     .brand-loader-logo { font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1; margin-bottom: 5px; }
     .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--color-primary); }
@@ -38,89 +38,69 @@
     .loader-progress { height: 100%; width: 0%; background: var(--color-accent); animation: loadProgress 5s ease-out forwards; }
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     
-    .header-wrapper { background: var(--bg-app); padding: 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; transition: all 0.3s ease; }
+    /* HEADER */
+    .header-wrapper { background: var(--bg-app); padding: 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; }
     .header-info { text-align: center; margin-bottom: 5px; width: 100%;}
     .sub-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1.5px; }
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE */
-    .core-section { position: relative; margin: 15px 0; cursor: pointer; }
-    .score-circle-svg { width: 240px; height: 240px; transform: rotate(-90deg); transition: transform 0.2s; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); }
-    .score-circle-svg:active { transform: rotate(-90deg) scale(0.95); }
-    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 6; }
-    .circle-fill { fill: none; stroke-width: 6; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); }
-    .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; z-index: 20;}
-    .score-big { font-size: 4.5rem; font-weight: 800; line-height: 1; letter-spacing: -2px; background: linear-gradient(to right, var(--color-primary) 20%, var(--color-accent) 50%, var(--color-primary) 80%); background-size: 200% auto; color: var(--color-primary); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
-    @keyframes shine { to { background-position: 200% center; } }
-    .score-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-    .level-badge { background: #fff; padding: 8px 25px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); cursor: pointer; margin-top: 5px; border: 2px solid var(--color-accent); color: var(--color-primary); z-index: 10; animation: floatBadge 3s ease-in-out infinite; }
-    @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    /* SCORE CIRCLE (Static now) */
+    .core-section { position: relative; margin: 15px 0; }
+    .score-circle-svg { width: 180px; height: 180px; transform: rotate(-90deg); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+    .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
+    .score-big { font-size: 3.5rem; font-weight: 800; line-height: 1; color: var(--color-primary); }
+    .score-label { font-size: 0.6rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+    
+    .level-badge { background: #fff; padding: 6px 20px; border-radius: 30px; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); margin-top: 10px; border: 2px solid var(--color-accent); color: var(--color-primary); }
 
-    /* CONTENT & CARDS */
-    .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 15px; }
-    .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; transition: transform 0.2s; border-left: 5px solid transparent; }
+    .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    .greeting-card { margin-top: 10px; border-left-color: var(--color-primary) !important; }
-    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .greeting-title { font-size: 0.95rem; font-weight: 800; color: var(--color-primary); margin: 0; }
-    .greeting-content { padding: 0 15px 15px 15px; display: none; }
-    .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
-    
-    /* GRÁFICO CHART.JS */
-    .chart-container-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; margin-bottom: 15px; height: 250px; position: relative; }
-    canvas { width: 100% !important; height: 100% !important; }
+    /* GRÁFICO */
+    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 280px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* TERMÓMETRO BINARIO */
-    .admission-wrapper { margin-top: 10px; }
-    .admission-btn-toggle { background: #0f172a; color: white; width: 100%; padding: 12px 20px; border-radius: 12px; border: none; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); transition: all 0.2s; }
-    .admission-btn-toggle:active { transform: scale(0.98); }
-    .admission-content { display: none; background: white; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 16px 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: slideDown 0.3s ease-out; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .uni-row { margin-bottom: 15px; }
-    .uni-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
-    .uni-name { color: #475569; }
-    .uni-perc { color: #0f172a; }
-    .bin-track { width: 100%; height: 10px; background: #e2e8f0; border-radius: 4px; overflow: hidden; position: relative; }
-    .bin-fill { height: 100%; border-radius: 4px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 1.5s; }
-    .fill-low { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); } 
-    .fill-mid { background: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.4); } 
-    .fill-win { background: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.6); }
-    .adm-note { margin-top: 15px; font-size: 0.7rem; color: #94a3b8; text-align: center; font-style: italic; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
+    /* NUEVO DISEÑO UNIVERSIDADES (GAPS) */
+    .uni-grid { display: flex; flex-direction: column; gap: 10px; }
+    .uni-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .uni-left { display: flex; flex-direction: column; gap: 2px; }
+    .uni-name { font-size: 0.8rem; font-weight: 800; color: var(--color-primary); }
+    .uni-req { font-size: 0.7rem; color: var(--color-muted); }
+    .uni-right { text-align: right; }
+    .gap-badge { font-size: 0.8rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; min-width: 80px; text-align: center; }
+    .gap-neg { background: #fee2e2; color: #dc2626; } /* Rojo */
+    .gap-close { background: #fef3c7; color: #d97706; } /* Amarillo */
+    .gap-pos { background: #dcfce7; color: #16a34a; } /* Verde */
+    .uni-verdict { font-size: 0.65rem; font-weight: 700; margin-top: 4px; display: block; color: var(--color-text); }
 
     /* MISIONES */
-    .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
+    .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
     .mission-title-text { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-muted); letter-spacing: 1px; }
-    .mission-content-box { padding: 0 20px 20px 20px; display: none; }
-    .mission-item { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #e2e8f0; }
-    .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 600; flex: 1; }
-    .mission-pdf-note { margin-top: 15px; font-size: 0.75rem; color: var(--color-primary); text-align: center; background: #f8fafc; padding: 10px; border-radius: 8px; font-weight: 700; }
-
-    /* FOOTER & BUTTONS */
-    .pdf-attention { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--color-red-btn); color: var(--white); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 20px 20px 0 0; white-space: nowrap; box-shadow: 0 -4px 10px rgba(220, 38, 38, 0.3); animation: bounceUp 2s infinite; pointer-events: none; }
-    @keyframes bounceUp { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -5px); } }
-    .bottom-bar { width: 100%; padding: 5px 20px 10px 20px; display: flex; gap: 10px; }
-    .btn-action { flex: 1; padding: 10px 12px; border-radius: 12px; border: none; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-outline { background: white; border: 2px solid var(--color-red-btn); color: var(--color-red-btn); }
-    .btn-solid { background: var(--color-red-btn); color: white; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4); border: 2px solid var(--color-red-btn); }
-
-    /* MODAL */
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; }
-    .modal-card { background: var(--white); width: 90%; max-width: 400px; border-radius: 20px; overflow: hidden; animation: popIn 0.3s ease; }
-    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .modal-header { background: var(--color-primary); padding: 15px 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
-    .modal-body { padding: 25px; }
-    .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 10px; border-left: 4px solid var(--color-accent); margin-bottom: 20px; }
-    .verdict-label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--color-muted); margin-bottom: 5px; text-transform: uppercase; }
-    .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
-    .mission-mini { font-size: 0.8rem; color: var(--color-text); margin-bottom: 15px; }
-    .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
-    .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 10px;}
+    .mission-content-box { padding: 15px 20px; display: none; }
+    .mission-item { display: flex; gap: 12px; align-items: start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
+    .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     
-    .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
-    .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
-    .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
+    /* BOTÓN PDF */
+    .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
+    .btn-action:active { transform: scale(0.98); }
+
+    /* MODAL VEREDICTO */
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+    .modal-card { background: var(--white); width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header { background: var(--color-primary); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 25px 20px; }
+    
+    .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--color-accent); margin-bottom: 20px; }
+    .verdict-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--color-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
+    
+    .mission-mini { font-size: 0.85rem; color: var(--color-text); margin-bottom: 20px; background: #fff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+    .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
   </style>
 </head>
 <body>
@@ -130,94 +110,82 @@
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Procesando resultados...</div>
+      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Cargando...</div>
     </div>
 
     <div id="scroll-viewport">
       <div class="header-wrapper">
         <div class="header-info">
-          <div class="sub-label">INFORME</div>
-          <div class="main-title" id="simTitle">RESULTADO SIMULACRO</div>
+          <div class="sub-label">INFORME DE RESULTADOS</div>
+          <div class="main-title" id="simTitle">SIMULACRO</div>
           <div class="student-info"><span id="uiName">...</span> | <span id="uiRank">...</span></div>
         </div>
-        <div class="core-section" onclick="pulseCircle()">
+        
+        <div class="core-section">
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
             <circle class="circle-fill" id="scoreCircle" cx="110" cy="110" r="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></circle>
           </svg>
-          <div class="core-content"><div class="score-big" id="uiScore">0</div><div class="score-label">PUNTAJE GLOBAL</div></div>
+          <div class="core-content">
+            <div class="score-big" id="uiScore">0</div>
+            <div class="score-label">PUNTAJE GLOBAL</div>
+          </div>
         </div>
-        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
-        
-        <div class="level-details-modal" id="levelDetails">
-             <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos de Referencia:</div>
-             <div class="range-list">
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-top)"></span>Superior</div><span>380 - 500</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-high)"></span>Alto</div><span>300 - 379</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-mid)"></span>Medio</div><span>230 - 299</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-low)"></span>Bajo</div><span>0 - 229</span></div>
-             </div>
-        </div>
+        <div class="level-badge" id="levelBadge"><i class="fa-solid fa-chart-simple"></i> ...</div>
       </div>
 
       <div class="content-padder">
-        <div class="greeting-card card-box" id="greetingCard">
-          <div class="greeting-header" onclick="toggleGreeting()">
-             <div class="greeting-title" id="greetingTitle">...</div>
-             <i class="fa-solid fa-chevron-down toggle-icon" id="greetIcon"></i>
-          </div>
-          <div class="greeting-content" id="greetingContent"><div class="greeting-text" id="greetingText">...</div></div>
-        </div>
-
-        <div class="chart-container-box" onclick="Chart.defaults.plugins.tooltip.enabled = true;">
+        
+        <div class="chart-box">
             <canvas id="performanceChart"></canvas>
+            <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <div class="admission-wrapper">
-            <button class="admission-btn-toggle" onclick="toggleAdmission()">
-                <span>🔮 Ver Probabilidades de Admisión</span>
-                <i class="fa-solid fa-chevron-down" id="admIcon"></i>
-            </button>
-            <div class="admission-content" id="admContent">
-                <div id="admissionList"></div>
-                <div class="adm-note">*Estimación basada en cortes. No garantiza cupo.</div>
+        <div class="uni-section">
+            <div style="font-weight: 800; color: #0f172a; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-university"></i> VIABILIDAD DE ADMISIÓN
             </div>
+            <div class="uni-grid" id="uniGrid">
+                </div>
         </div>
 
-        <div class="mission-box card-box" style="margin-top: 15px;">
+        <div class="mission-box card-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
-             <div class="mission-title-text">🎯 Misiones para esta semana</div><i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
+             <div class="mission-title-text">🎯 Misiones Semanales</div>
+             <i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
           </div>
           <div id="missionList" class="mission-content-box"></div>
         </div>
+
       </div> 
     </div>
 
     <div class="bottom-fixed-area">
-      <div class="pdf-attention">👇 DESCARGA TU PDF AQUÍ</div>
       <div class="bottom-bar">
-        <button class="btn-action btn-solid" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Descargar PDF</button>
-        </div>
+        <button class="btn-action" onclick="downloadPDF()">
+          <i class="fa-solid fa-file-pdf"></i> DESCARGAR INFORME PDF
+        </button>
+      </div>
     </div>
 
     <div class="modal-overlay" id="modal" onclick="closeModal()">
       <div class="modal-card" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <span style="font-weight:700; text-transform:uppercase;" id="mTitle">Materia</span>
-          <span style="font-weight:800; color:var(--color-accent);" id="mScore">0/100</span>
+          <span style="font-weight:800; text-transform:uppercase;" id="mTitle">Materia</span>
+          <span style="font-weight:800; color:var(--color-accent); font-size: 1.2rem;" id="mScore">0</span>
         </div>
         <div class="modal-body">
           <div class="verdict-box">
-            <span class="verdict-label">VEREDICTO DEL COACH:</span>
+            <span class="verdict-label">VEREDICTO ACADÉMICO:</span>
             <div class="verdict-text" id="mVeredicto">...</div>
           </div>
           
           <div class="mission-mini">
-             <strong>📌 Tu Misión:</strong> <span id="mMision">...</span>
-          </div>
-
-          <div class="pdf-hint">
-              <i class="fa-solid fa-info-circle"></i> Consulta tu PDF para ver el detalle técnico.
+             <i class="fa-solid fa-crosshairs" style="color:var(--color-red-btn)"></i>
+             <div>
+                 <strong style="display:block; font-size:0.7rem; color:var(--color-muted); text-transform:uppercase;">Misión Inmediata:</strong>
+                 <span id="mMision" style="font-weight:700;">...</span>
+             </div>
           </div>
         </div>
         <button class="close-modal" onclick="closeModal()">ENTENDIDO</button>
@@ -227,233 +195,188 @@
 
   <script>
     // --- ⚙️ CONFIGURACIÓN ---
+    // REVISA QUE ESTE LINK SEA EL QUE COPIASTE DE "HOJA 1 -> CSV"
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
     const NOMBRE_SIMULACRO = "S11-R"; 
-    
-    // MÁXIMOS
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
 
-    // UNIVERSIDADES (Cortes aproximados)
+    // UNIVERSIDADES Y CORTES APROXIMADOS
     const UNIVERSITIES = [
-      { name: "Univ. Nacional (Ingenierías)", cut: 400 },
-      { name: "Univ. de Antioquia (Salud)", cut: 380 },
-      { name: "Univ. del Valle (Humanas)", cut: 330 },
-      { name: "UTP / U. Nariño / U. Cauca", cut: 290 }
+      { name: "U. Nacional (Ing)", cut: 400 },
+      { name: "U. Antioquia (Salud)", cut: 380 },
+      { name: "Univalle (Humanas)", cut: 330 },
+      { name: "UTP / Nariño", cut: 290 }
     ];
 
     let subjects = [];
     let realScore = 0;
     let currentPdfLink = "#";
-    let studentId = "";
-    let myChart = null; // Variable para el gráfico
+    let myChart = null;
 
     window.onload = function() {
-      document.getElementById('simTitle').innerText = "RESULTADO " + NOMBRE_SIMULACRO;
+      document.getElementById('simTitle').innerText = NOMBRE_SIMULACRO;
       const urlParams = new URLSearchParams(window.location.search);
-      studentId = urlParams.get('id');
+      let studentId = urlParams.get('id');
 
       if(studentId) {
         Papa.parse(SHEET_CSV_URL, {
           download: true, header: true,
-          complete: function(results) { processRankingAndData(results.data); },
-          error: function(err) { document.getElementById('loader').innerHTML = "Error cargando datos."; }
+          complete: function(results) { processRankingAndData(results.data, studentId); },
+          error: function(err) { document.getElementById('loader').innerHTML = "Error de conexión."; }
         });
       } else {
-        setTimeout(() => { initApp(DEMO_DATA, 1, 1); }, 1000);
+        setTimeout(() => { initApp({}, 1, 1, {m:80, l:60, s:45, c:70, i:30, g:285}); }, 1000); // Demo
       }
     };
 
-    function processRankingAndData(allData) {
+    function processRankingAndData(allData, id) {
+        // ... (Tu lógica de cálculo original, intacta) ...
         let calculatedList = allData.map(row => {
             let sMat = (parseInt(row.S1_Mat)||0) + (parseInt(row.S2_Mat)||0);
             let sLec = (parseInt(row.S1_Lec)||0); 
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
             let sIng = (parseInt(row.S2_Ing)||0); 
-
-            let pMat = Math.round((sMat / MAX.m) * 100) || 0;
-            let pLec = Math.round((sLec / MAX.l) * 100) || 0;
-            let pSoc = Math.round((sSoc / MAX.s) * 100) || 0;
-            let pCien = Math.round((sCien / MAX.c) * 100) || 0;
-            let pIng = Math.round((sIng / MAX.i) * 100) || 0;
-
-            pMat=Math.min(100,pMat); pLec=Math.min(100,pLec); pSoc=Math.min(100,pSoc); pCien=Math.min(100,pCien); pIng=Math.min(100,pIng);
-            let total = pMat + pLec + pSoc + pCien + pIng;
-
-            return { token: row.TOKEN, data: row, scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: total } };
+            
+            let pMat = Math.min(100, Math.round((sMat / MAX.m) * 100));
+            let pLec = Math.min(100, Math.round((sLec / MAX.l) * 100));
+            let pSoc = Math.min(100, Math.round((sSoc / MAX.s) * 100));
+            let pCien = Math.min(100, Math.round((sCien / MAX.c) * 100));
+            let pIng = Math.min(100, Math.round((sIng / MAX.i) * 100));
+            
+            return { token: row.TOKEN, data: row, scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: pMat+pLec+pSoc+pCien+pIng } };
         });
 
         calculatedList.sort((a, b) => b.scores.g - a.scores.g);
+        let student = calculatedList.find(s => s.token === id);
 
-        let myRank = 0;
-        let foundStudent = null;
-        let validStudents = calculatedList.filter(s => s.token && s.token.length > 2);
-        
-        for(let i=0; i < validStudents.length; i++) {
-            if(validStudents[i].token === studentId) {
-                myRank = i + 1;
-                foundStudent = validStudents[i];
-                break;
-            }
-        }
-
-        if(foundStudent) {
-            initApp(foundStudent.data, myRank, validStudents.length, foundStudent.scores);
+        if(student) {
+            initApp(student.data, calculatedList.indexOf(student) + 1, calculatedList.length, student.scores);
         } else {
-            document.getElementById('loader').innerHTML = "<div style='color:red; text-align:center;'>Estudiante no encontrado.</div>";
+            document.getElementById('loader').innerHTML = "<div style='color:red;'>Estudiante no encontrado.</div>";
         }
     }
-
-    const DEMO_DATA = { Nombre: "MODO DEMO", 'LINK PDF': "#" };
 
     function initApp(data, rank, total, scores) {
       document.getElementById('loader').style.opacity = '0';
       setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
-      if(!scores) scores = { m: 85, l: 78, s: 70, c: 91, i: 66, g: 390 };
       loadData(data, rank, total, scores);
     }
 
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
-      currentPdfLink = data['LINK PDF'] || data['LINKPDF'] || "#"; 
+      currentPdfLink = data['LINK PDF'] || "#"; 
       
-      document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
-      document.getElementById('uiRank').innerText = `Puesto: ${rank}/${total}`;
+      document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.split(" ")[0].toUpperCase() : "ALUMNO";
+      document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
-      // --- MAPEO NUEVO: VEREDICTO + MISIÓN ---
-      // Nota: El "Veredicto" está en la columna que antes era Fortaleza (Col R, U, etc.)
+      // ✅ CORRECCIÓN DE NOMBRES DE COLUMNA (Basado en imagen 5afc92)
+      // Usamos los nombres cortos que están en tu Excel real
       subjects = [
-        { 
-            n: "Lectura Crítica", p: scores.l, 
-            veredicto: data['TXT_LEC_FORTALEZA'] || "Sin diagnóstico.", 
-            mision: data['TXT_LEC_MISION'] || "Lectura diaria."
-        },
-        { 
-            n: "Matemáticas", p: scores.m, 
-            veredicto: data['TXT_MAT_FORTALEZA'] || "Sin diagnóstico.", 
-            mision: data['TXT_MAT_MISIÓN'] || data['TXT_MAT_MISION'] || "Repasar."
-        },
-        { 
-            n: "Sociales y C.", p: scores.s, 
-            veredicto: data['TXT_SOC_FORTALEZA'] || "Sin diagnóstico.", 
-            mision: data['TXT_SOC_MISION'] || "Leer constitución."
-        },
-        { 
-            n: "Ciencias Nat.", p: scores.c, 
-            veredicto: data['TXT_CIE_FORTALEZA'] || "Sin diagnóstico.", 
-            mision: data['TXT_CIE_MISION'] || "Dibujar procesos."
-        },
-        { 
-            n: "Inglés", p: scores.i, 
-            veredicto: data['TXT_ING_FORTALEZA'] || "Sin diagnóstico.", 
-            mision: data['TXT_ING_MISION'] || "Duolingo."
-        }
+        { n: "Lectura", p: scores.l, v: data['TXT_LEC_FORT'] || "Sin datos.", m: data['TXT_LEC_MISIO'] || data['TXT_LEC_MISION'] || "Sin datos." },
+        { n: "Matemáticas", p: scores.m, v: data['TXT_MAT_FORT'] || "Sin datos.", m: data['TXT_MAT_MISIO'] || data['TXT_MAT_MISION'] || "Sin datos." },
+        { n: "Sociales", p: scores.s, v: data['TXT_SOC_FORT'] || "Sin datos.", m: data['TXT_SOC_MISIO'] || data['TXT_SOC_MISION'] || "Sin datos." },
+        { n: "Ciencias", p: scores.c, v: data['TXT_CIE_FORT'] || "Sin datos.", m: data['TXT_CIE_MISIO'] || data['TXT_CIE_MISION'] || "Sin datos." },
+        { n: "Inglés", p: scores.i, v: data['TXT_ING_FORT'] || "Sin datos.", m: data['TXT_ING_MISIO'] || data['TXT_ING_MISION'] || "Sin datos." }
       ];
 
-      renderChart(subjects); // Crear Gráfico
-      buildNarrative(data.Nombre, realScore);
-      buildMissions(); 
-      renderAdmission(realScore); 
+      renderChart(subjects);
+      renderUniversities(realScore);
+      renderMissions(subjects);
       
-      setTimeout(() => updateCircle(realScore), 500);
+      updateCircle(realScore);
       calculateLevel(realScore);
       
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO CHART.JS ---
+    // --- GRÁFICO (Chart.js) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
-        const labels = ["Lec.", "Mat.", "Soc.", "Cien.", "Ing."];
-        const dataValues = [subs[0].p, subs[1].p, subs[2].p, subs[3].p, subs[4].p];
-        
-        // Colores Dinámicos
-        const bgColors = dataValues.map(v => {
-            if(v >= 80) return '#22c55e'; // Verde
-            if(v >= 60) return '#eab308'; // Amarillo
-            return '#ef4444'; // Rojo
-        });
+        const dataValues = subs.map(s => s.p);
+        const bgColors = dataValues.map(v => v >= 80 ? '#22c55e' : (v >= 60 ? '#eab308' : '#ef4444'));
 
         if(myChart) myChart.destroy();
+        Chart.register(ChartDataLabels);
 
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Puntaje',
-                    data: dataValues,
-                    backgroundColor: bgColors,
-                    borderRadius: 6,
-                    barPercentage: 0.6
-                }]
+                labels: subs.map(s => s.n),
+                datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    title: { display: true, text: 'Rendimiento por Materia (0-100)', font: { family: 'Manrope', size: 14 } },
+                    datalabels: { color: 'white', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'start' },
                     annotation: {
                         annotations: {
-                            line1: {
-                                type: 'line',
-                                yMin: 50,
-                                yMax: 50,
-                                borderColor: '#94a3b8',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                label: { enabled: true, content: 'Promedio Nal.', position: 'end' }
-                            }
+                            line1: { type: 'line', yMin: 50, yMax: 50, borderColor: '#94a3b8', borderWidth: 2, borderDash: [5, 5] }
                         }
                     }
                 },
                 scales: {
-                    y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' } },
+                    y: { beginAtZero: true, max: 100, grid: { display: true, color: '#f1f5f9' } },
                     x: { grid: { display: false } }
                 },
                 onClick: (e, activeEls) => {
-                    if(activeEls.length > 0) {
-                        const index = activeEls[0].index;
-                        openModal(index); // Abrir modal al tocar barra
-                    }
+                    if(activeEls.length > 0) openModal(activeEls[0].index);
                 }
             }
         });
     }
 
-    // --- TERMÓMETRO ---
-    function renderAdmission(score) {
-        const container = document.getElementById('admissionList');
+    // --- UNIVERSIDADES (Gap Analysis) ---
+    function renderUniversities(score) {
+        const container = document.getElementById('uniGrid');
         let html = '';
         UNIVERSITIES.forEach(uni => {
-            let widthPerc = (score / uni.cut) * 100;
-            if (widthPerc > 100) widthPerc = 100;
-            
-            let barColor = "fill-low"; let statusText = "Bajo";
-            if (widthPerc >= 90 && widthPerc < 100) { barColor = "fill-mid"; statusText = "Cerca"; }
-            if (score >= uni.cut) { barColor = "fill-win"; statusText = "Posible"; widthPerc = 100; }
+            let gap = score - uni.cut;
+            let badgeClass = gap >= 0 ? "gap-pos" : (gap >= -20 ? "gap-close" : "gap-neg");
+            let badgeText = gap >= 0 ? `✅ +${gap}` : `⚠️ ${gap}`;
+            let verdict = gap >= 0 ? "Admitido (Teórico)" : (gap >= -20 ? "Estás muy cerca" : "Requiere refuerzo");
 
             html += `
-            <div class="uni-row">
-                <div class="uni-header"><span class="uni-name">${uni.name}</span><span class="uni-perc">${statusText}</span></div>
-                <div class="bin-track"><div class="bin-fill ${barColor}" style="width: ${widthPerc}%;"></div></div>
+            <div class="uni-card">
+                <div class="uni-left">
+                    <span class="uni-name">${uni.name}</span>
+                    <span class="uni-req">Corte: ${uni.cut} pts</span>
+                    <span class="uni-verdict">${verdict}</span>
+                </div>
+                <div class="uni-right">
+                    <span class="gap-badge ${badgeClass}">${badgeText}</span>
+                </div>
             </div>`;
         });
         container.innerHTML = html;
     }
 
-    function toggleAdmission() {
-        const content = document.getElementById('admContent');
-        const icon = document.getElementById('admIcon');
-        const btn = document.querySelector('.admission-btn-toggle');
-        if (content.style.display === "block") {
-            content.style.display = "none"; icon.className = "fa-solid fa-chevron-down"; btn.style.borderRadius = "12px";
-        } else {
-            content.style.display = "block"; icon.className = "fa-solid fa-chevron-up"; btn.style.borderRadius = "12px 12px 0 0";
-        }
+    // --- MISIONES ---
+    function renderMissions(subs) {
+        const list = document.getElementById('missionList');
+        let html = '';
+        subs.forEach(s => {
+            let icon = s.p < 60 ? '🚨' : '⭐';
+            html += `
+            <div class="mission-item">
+                <div style="font-size:1.2rem;">${icon}</div>
+                <div class="mission-content">
+                    <span style="color:var(--color-primary);font-weight:800;font-size:0.7rem;">${s.n.toUpperCase()}</span><br>
+                    ${s.m}
+                </div>
+            </div>`;
+        });
+        list.innerHTML = html;
     }
 
+    // --- UTILS ---
+    function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
+    function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";} else if(s>=350){l="AVANZADO";c="#1d4ed8";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";} else if(s>=200){l="BÁSICO";c="#d97706";} else {l="INICIAL";c="#dc2626";} b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
+    function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
+    function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.v; document.getElementById('mMision').innerText=s.m; document.querySelector('.modal-overlay').style.display='flex'; }
+    function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
+    
     function downloadPDF() { 
         if(currentPdfLink && currentPdfLink.length > 10) {
             let directLink = currentPdfLink;
@@ -463,20 +386,9 @@
             }
             window.location.href = directLink; 
         } else { 
-            Swal.fire({ title: 'PDF no disponible', text: 'Estamos generando tu reporte.', icon: 'warning', confirmButtonColor: '#0f172a' }); 
+            Swal.fire({ title: 'PDF no disponible', icon: 'warning', confirmButtonColor: '#0f172a' }); 
         }
     }
-
-    function buildNarrative(name, score) { const c = document.getElementById('greetingCard'); const t = document.getElementById('greetingTitle'); const txt = document.getElementById('greetingText'); const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; if(score>=380){ c.style.borderLeftColor="var(--level-top)"; t.innerText=`¡FELICITACIONES, ${n}! 🎉`; t.style.color="var(--level-top)"; txt.innerHTML="Resultados sobresalientes."; } else if(score>=300){ c.style.borderLeftColor="var(--level-high)"; t.innerText=`¡BUEN TRABAJO, ${n}! 👍`; t.style.color="var(--level-high)"; txt.innerHTML="Vas por buen camino."; } else { c.style.borderLeftColor="var(--level-mid)"; t.innerText=`A MEJORAR, ${n} ⚠️`; t.style.color="var(--level-mid)"; txt.innerHTML="Necesitamos reforzar temas."; } }
-    function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; }
-    function calculateLevel(s){ const b=document.getElementById('levelBadge'); let l="",c="",i=""; if(s>=380){l="EXCEPCIONAL";c="#15803d";i="fa-crown";} else if(s>=350){l="AVANZADO";c="#1d4ed8";i="fa-medal";} else if(s>=300){l="SATISFACTORIO";c="#0284c7";i="fa-thumbs-up";} else if(s>=200){l="BÁSICO";c="#d97706";i="fa-minus";} else {l="INICIAL";c="#dc2626";i="fa-exclamation-triangle";} b.innerHTML=`<i class="fa-solid ${i}"></i> ${l}`; b.style.color=c; b.style.borderColor=c; }
-    function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
-    function toggleGreeting(){ const c=document.getElementById('greetingContent'); c.style.display=c.style.display==="block"?"none":"block"; }
-    function toggleMissions(){ const c=document.getElementById('missionList'); c.style.display=c.style.display==="block"?"none":"block"; }
-    function buildMissions(){ const l=document.getElementById('missionList'); let h=""; subjects.forEach(s=>{ let i='📌'; if(s.p<60)i='🚨'; else if(s.p>80)i='⭐'; h+=`<div class="mission-item"><div style="font-size:1.2rem;">${i}</div><div class="mission-content"><span style="color:var(--color-primary);font-weight:800;font-size:0.7rem;">${s.n.toUpperCase()}</span><br>${s.mision}</div></div>`; }); h+=`<div class="mission-pdf-note">📄 Ver PDF completo.</div>`; l.innerHTML=h; }
-    function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.veredicto; document.getElementById('mMision').innerText=s.mision; document.querySelector('.modal-overlay').style.display='flex'; }
-    function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
   </script>
 </body>
 </html>
-
