@@ -45,7 +45,7 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (3D Effect) */
+    /* SCORE CIRCLE (Interactivo con Sombra 3D MEJORADA) */
     .core-section { position: relative; margin: 10px 0; cursor: pointer; }
     .score-circle-svg { 
         width: 260px; height: 260px; transform: rotate(-90deg); 
@@ -58,7 +58,7 @@
     .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
     .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
     
-    /* Gap Message */
+    /* Mensaje Flotante de Falta */
     .gap-message-overlay {
         position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
         background: rgba(220, 38, 38, 0.9); color: white;
@@ -81,20 +81,22 @@
 
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* GREETING CARD */
+    /* TARJETA DE MENSAJE (Sombra Profunda) */
     .greeting-card { background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
     .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
     .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
     .greeting-content { padding: 0 15px 15px 15px; display: block; } 
     .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* CHART BOX */
+    /* GRÁFICO BARRAS (Sombra Profunda) */
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GAP CHART BOX */
+    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
     .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
     .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
+    
+    /* Texto inferior rosquilla */
     .gap-chart-text-container {
         margin-top: 25px; margin-bottom: 35px; 
         background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
@@ -102,12 +104,26 @@
     }
     .gap-text-style { font-size: 0.75rem; color: var(--color-primary); font-weight: 700; line-height: 1.3; }
 
-    /* MISIONES */
+    /* MISIONES (Estilo Bicolor y Sombra Profunda) */
     .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
-    .mission-box.dark-mode { border: none; box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); background: var(--color-primary); }
-    .mission-box.dark-mode .mission-header-bar { background: transparent; border-bottom: none; }
-    .mission-box.dark-mode .mission-title-text, .mission-box.dark-mode .toggle-icon { color: white; } 
-    .mission-box.dark-mode .mission-content-box { background: var(--white); padding: 20px; }
+    
+    .mission-box.dark-mode {
+        border: none;
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); 
+        background: var(--color-primary); 
+    }
+    .mission-box.dark-mode .mission-header-bar {
+        background: transparent;
+        border-bottom: none;
+    }
+    .mission-box.dark-mode .mission-title-text,
+    .mission-box.dark-mode .toggle-icon { color: white; } 
+
+    /* CONTENIDO BLANCO */
+    .mission-box.dark-mode .mission-content-box {
+        background: var(--white);
+        padding: 20px;
+    }
 
     .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
     .mission-title-text { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-muted); letter-spacing: 1px; }
@@ -116,7 +132,7 @@
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     
-    /* BOTÓN */
+    /* BOTÓN PDF */
     .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
     .btn-action:active { transform: scale(0.98); }
 
@@ -347,7 +363,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- GRÁFICO 1: BARRAS (Contraste Inteligente V.37) ---
+    // --- GRÁFICO 1: BARRAS (Texto Blanco con Borde Negro) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -367,12 +383,12 @@
                 plugins: {
                     legend: { display: false },
                     datalabels: { 
-                        // LÓGICA DE COLOR DINÁMICO (V.37)
-                        color: (ctx) => { 
-                            const v = ctx.dataset.data[ctx.dataIndex]; 
-                            return (v >= 60 && v < 80) ? '#0f172a' : 'white'; 
-                        },
-                        font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'start' 
+                        // SIEMPRE BLANCO CON BORDE NEGRO
+                        color: 'white',
+                        textStrokeColor: 'rgba(0,0,0,0.7)',
+                        textStrokeWidth: 4,
+                        font: { weight: '900', size: 13 }, // Un poco más grande para que se lea mejor
+                        anchor: 'end', align: 'start' 
                     },
                     title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
                 },
@@ -385,7 +401,7 @@
         });
     }
 
-    // --- GRÁFICO 2: POLAR AREA (Contraste Inteligente V.37) ---
+    // --- GRÁFICO 2: POLAR AREA (Texto Blanco con Borde Negro) ---
     function renderGapChart(subs) {
         const ctx = document.getElementById('gapChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
@@ -419,12 +435,11 @@
                     legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 9 }, boxWidth: 10, padding: 10 } },
                     datalabels: {
                         display: true,
-                        // LÓGICA DE COLOR DINÁMICO (V.37)
-                        color: (context) => {
-                             // Si es el Amarillo (Index 2), usa oscuro. Si no, blanco.
-                             return context.dataIndex === 2 ? '#0f172a' : 'white';
-                        },
-                        font: { weight: 'bold', size: 10 },
+                        // SIEMPRE BLANCO CON BORDE NEGRO
+                        color: 'white',
+                        textStrokeColor: 'rgba(0,0,0,0.7)',
+                        textStrokeWidth: 4,
+                        font: { weight: '900', size: 12 },
                         backgroundColor: function(context) {
                              return context.dataset.backgroundColor[context.dataIndex].replace('0.7', '1');
                         },
@@ -468,7 +483,7 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO Y NIVEL (CORREGIDA AL 100%) ---
+    // --- LOGICA DE REGAÑO Y NIVEL ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
