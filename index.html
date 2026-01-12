@@ -45,9 +45,13 @@
     .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
     .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
     
-    /* SCORE CIRCLE (Interactivo con Sombra Lenta) */
+    /* SCORE CIRCLE (Interactivo con Sombra EXPERIMENTAL) */
     .core-section { position: relative; margin: 10px 0; cursor: pointer; }
-    .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+    .score-circle-svg { 
+        width: 260px; height: 260px; transform: rotate(-90deg); 
+        /* EXPERIMENTO DE SOMBRA: Sombra oscura profunda + Halo dorado */
+        filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)) drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
+    }
     
     /* Transición lenta para el rojo (2s) */
     .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; transition: stroke 2s ease; }
@@ -98,7 +102,7 @@
     
     /* Texto inferior rosquilla (Espaciado Corregido) */
     .gap-chart-text-container {
-        margin-top: 25px; margin-bottom: 35px; /* MÁRGENES AUMENTADOS */
+        margin-top: 25px; margin-bottom: 35px; 
         background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
         text-align: center; width: 90%;
     }
@@ -491,7 +495,8 @@
             txt.innerHTML="Tienes buen nivel, pero no te confíes. Afina esos detalles pequeños para llegar a la excelencia."; 
         } else if(score >= 250){ 
             c.style.borderLeftColor="var(--level-mid)"; 
-            t.innerText=`PILA, ${n}. ⚠️`; t.style.color="var(--level-mid)"; 
+            // CORRECCIÓN DE TEXTO "PILAS"
+            t.innerText=`¡PILAS, ${n}! ⚠️`; t.style.color="var(--level-mid)"; 
             txt.innerHTML="Estás en el promedio y el promedio es peligroso. No es suficiente para asegurar tu cupo. ¡Aprieta!"; 
         } else {
             c.style.borderLeftColor="var(--color-red-btn)"; 
