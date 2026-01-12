@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Resultados | Academia Quijano</title>
   
+  <meta property="og:title" content="Resultados Simulacro | Academia Quijano">
+  <meta property="og:description" content="Consulta tu informe de desempeño detallado, plan de acción y análisis de admisión aquí.">
+  <meta property="og:image" content="https://github.com/profeangel96-bit/PLANTILLA/blob/main/Gemini_Generated_Image_wrevswwrevswwrev.png?raw=true">
+  <meta property="og:url" content="https://plantilla-delta.vercel.app">
+  <meta property="og:type" content="website">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -92,7 +100,7 @@
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
+    /* GRÁFICO DONA/POLAR (GAP) */
     .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
     .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
     
@@ -324,6 +332,7 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
+      // ✅ CONEXIÓN LECTURA (Usando el nombre con error del Excel)
       subjects = [
         { 
             n: "Lectura", p: scores.l, 
@@ -387,7 +396,7 @@
                         color: 'white',
                         textStrokeColor: 'rgba(0,0,0,0.7)',
                         textStrokeWidth: 4,
-                        font: { weight: '900', size: 13 }, // Un poco más grande para que se lea mejor
+                        font: { weight: '900', size: 13 },
                         anchor: 'end', align: 'start' 
                     },
                     title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
@@ -483,7 +492,7 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO Y NIVEL ---
+    // --- LOGICA DE REGAÑO Y NIVEL (CORREGIDA CON RANGOS) ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
