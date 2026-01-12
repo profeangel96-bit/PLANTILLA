@@ -100,11 +100,11 @@
     .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
     .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-    /* GRÁFICO DONA/POLAR (GAP) */
+    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
     .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
     .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
     
-    /* Texto inferior rosquilla */
+    /* Texto inferior rosquilla (Espaciado Corregido) */
     .gap-chart-text-container {
         margin-top: 25px; margin-bottom: 35px; 
         background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
@@ -492,7 +492,7 @@
         list.innerHTML = html;
     }
 
-    // --- LOGICA DE REGAÑO Y NIVEL (CORREGIDA CON RANGOS) ---
+    // --- LOGICA DE REGAÑO Y NIVEL ---
     function buildNarrative(name, score) { 
         const c = document.getElementById('greetingCard'); 
         const t = document.getElementById('greetingTitle'); 
@@ -573,4 +573,3 @@
   </script>
 </body>
 </html>
-
