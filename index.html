@@ -23,141 +23,258 @@
 
   <style>
     :root {
-      --bg-body: #cbd5e1; --bg-app: #f8fafc; --white: #ffffff;
-      --color-primary: #0f172a; --color-accent: #d4af37; --color-red-btn: #dc2626;
-      --color-text: #334155; --color-muted: #64748b;
-      --level-top: #059669; --level-high: #3b82f6; --level-mid: #d97706; --level-low: #dc2626;
+      /* PALETA DE COLORES PREMIUM */
+      --bg-body: #cbd5e1; 
+      --bg-app: #f8fafc; /* Blanco humo para la parte inferior */
+      --color-primary: #0f172a; /* Azul Navy Profundo (Fondo Superior) */
+      --color-accent: #d4af37; /* Dorado Clásico */
+      --white: #ffffff;
+      --color-text: #334155; 
+      --color-muted: #94a3b8;
+      
+      /* Niveles */
+      --level-top: #059669; 
+      --level-high: #3b82f6; 
+      --level-mid: #d97706; 
+      --level-low: #dc2626;
+
+      /* Gradientes y Sombras */
+      --btn-gradient: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
+      --card-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { margin: 0; padding: 0; font-family: 'Manrope', sans-serif; background-color: var(--bg-body); color: var(--color-text); height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
     
-    .mobile-frame { width: 100%; max-width: 480px; height: 100%; background-color: var(--bg-app); position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; }
-    @media (min-width: 500px) { .mobile-frame { height: 95vh; border-radius: 30px; border: 4px solid #fff; } }
+    body { 
+      margin: 0; padding: 0; 
+      font-family: 'Manrope', sans-serif; 
+      background-color: var(--bg-body); 
+      color: var(--color-text); 
+      height: 100vh; height: 100dvh; 
+      display: flex; flex-direction: column; 
+      align-items: center; justify-content: center; 
+      overflow: hidden; 
+    }
     
-    #scroll-viewport { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; position: relative; padding-bottom: 120px; }
-    .bottom-fixed-area { flex-shrink: 0; width: 100%; background: rgba(255,255,255,1); border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; z-index: 9999; padding-top: 10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.1); }
+    /* MARCO DEL MÓVIL CON FONDO DIVIDIDO (SPLIT BACKGROUND) */
+    .mobile-frame { 
+      width: 100%; max-width: 480px; height: 100%; 
+      position: relative; 
+      box-shadow: 0 0 50px rgba(0,0,0,0.2); 
+      display: flex; flex-direction: column; 
+      overflow: hidden;
+      /* EL TRUCO DEL FONDO DIVIDIDO: AZUL ARRIBA, BLANCO ABAJO */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 48%, var(--bg-app) 48%, var(--bg-app) 100%);
+    }
+
+    @media (min-width: 500px) { 
+      .mobile-frame { height: 95vh; border-radius: 30px; border: 4px solid #fff; } 
+    }
     
-    /* LOADER */
-    .loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
+    #scroll-viewport { 
+      flex: 1; overflow-y: auto; overflow-x: hidden; 
+      display: flex; flex-direction: column; 
+      position: relative; 
+      /* Quitamos el padding bottom exagerado porque ya no hay barra fija */
+      padding-bottom: 40px; 
+    }
+
+    /* LOADER (Adaptado al tema oscuro/claro) */
+    .loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
     .brand-loader-logo { font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1; margin-bottom: 5px; }
-    .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--color-primary); }
-    .loader-bar { width: 150px; height: 4px; background: #e2e8f0; border-radius: 4px; margin-top: 20px; overflow: hidden; }
+    .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--white); }
+    .loader-bar { width: 150px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-top: 20px; overflow: hidden; }
     .loader-progress { height: 100%; width: 0%; background: var(--color-accent); animation: loadProgress 5s ease-out forwards; }
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     
-    /* HEADER */
-    .header-wrapper { background: var(--bg-app); padding: 20px 20px 40px 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; position: relative; }
-    .header-info { text-align: center; margin-bottom: 10px; width: 100%;}
-    .sub-label { font-size: 0.65rem; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 1.5px; }
-    .main-title { font-size: 1.2rem; font-weight: 800; color: var(--color-primary); margin: 5px 0; line-height: 1.1; }
-    .student-info { font-size: 0.8rem; font-weight: 600; color: var(--color-primary); background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 5px;}
+    /* HEADER (Sobre Fondo Azul) */
+    .header-wrapper { 
+      padding: 30px 20px 10px 20px; 
+      display: flex; flex-direction: column; align-items: center; 
+      z-index: 50; position: relative; 
+      color: var(--white); /* Texto blanco por defecto aquí */
+    }
     
-    /* SCORE CIRCLE (Interactivo con Sombra 3D MEJORADA) */
-    .core-section { position: relative; margin: 10px 0; cursor: pointer; }
+    .header-info { text-align: center; margin-bottom: 10px; width: 100%; }
+    .sub-label { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; }
+    .main-title { font-size: 1.4rem; font-weight: 800; color: var(--white); margin: 5px 0; letter-spacing: -0.5px; }
+    .student-info { 
+      font-size: 0.8rem; font-weight: 600; 
+      color: rgba(255,255,255,0.9); 
+      background: rgba(255,255,255,0.15); 
+      padding: 4px 14px; border-radius: 20px; 
+      display: inline-block; margin-top: 8px;
+      backdrop-filter: blur(5px);
+    }
+    
+    /* SCORE CIRCLE (Anillo Dorado Metálico) */
+    .core-section { position: relative; margin: 20px 0; cursor: pointer; }
     .score-circle-svg { 
         width: 260px; height: 260px; transform: rotate(-90deg); 
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)) drop-shadow(0 15px 35px rgba(0,0,0,0.3)) drop-shadow(0 0 25px rgba(212, 175, 55, 0.7));
+        /* Sombra brillante dorada */
+        filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
     }
-    .circle-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; transition: stroke 2s ease; }
-    .core-section.show-gap .circle-bg { stroke: var(--color-red-btn); } 
-    .circle-fill { fill: none; stroke-width: 8; stroke-linecap: round; stroke: var(--color-accent); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* Fondo del círculo (inactivo) */
+    .circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 10; }
+    
+    /* Relleno del círculo (El gradiente se aplica via ID en HTML) */
+    .circle-fill { 
+      fill: none; stroke-width: 10; stroke-linecap: round; 
+      stroke: url(#goldGradient); /* Referencia al gradiente SVG */
+      stroke-dasharray: 100; stroke-dashoffset: 100; 
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
-    .score-big { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--color-primary); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
-    .score-label { font-size: 0.7rem; font-weight: 800; color: var(--color-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
-    
-    /* Mensaje Flotante de Falta */
-    .gap-message-overlay {
-        position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
-        background: rgba(220, 38, 38, 0.9); color: white;
-        padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-        opacity: 0; transition: opacity 0.5s ease; pointer-events: none; white-space: nowrap;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    .score-big { 
+      font-size: 5.5rem; font-weight: 800; line-height: 1; 
+      color: var(--white); 
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .core-section.show-gap .gap-message-overlay { opacity: 1; top: 80%; }
-
-    /* BADGE FLOTANTE */
+    .score-label { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
+    
+    /* GLASSMORPHISM BADGE (INSIGNIA FLOTANTE) */
     .level-badge { 
-        background: #fff; padding: 8px 30px; border-radius: 30px; 
-        font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; 
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
-        margin-top: -30px; position: relative; z-index: 20; 
-        border: 3px solid var(--color-accent); color: var(--color-primary); 
-        animation: floatBadge 3s ease-in-out infinite; 
+        background: var(--glass-bg); 
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: var(--glass-border);
+        padding: 8px 24px; border-radius: 50px; 
+        font-weight: 800; font-size: 0.9rem; letter-spacing: 1px;
+        display: flex; align-items: center; gap: 8px; 
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2); 
+        margin-top: -35px; position: relative; z-index: 20; 
+        color: var(--color-accent); /* Color base, luego se sobrescribe por JS */
+        animation: floatBadge 4s ease-in-out infinite; 
+        text-transform: uppercase;
+        cursor: pointer;
     }
-    @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
-    .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; }
+    /* CONTENEDOR PRINCIPAL */
+    .content-padder { padding: 0 20px 30px 20px; display: flex; flex-direction: column; gap: 25px; }
     
-    /* TARJETA DE MENSAJE (Sombra Profunda) */
-    .greeting-card { background: white; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; overflow: hidden; border-left: 6px solid var(--color-primary); margin-top: 10px; }
-    .greeting-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .greeting-title { font-size: 1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
-    .greeting-content { padding: 0 15px 15px 15px; display: block; } 
-    .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
+    /* TARJETA DE SALUDO FLOTANTE (Bridge Card) */
+    .greeting-card { 
+      background: white; 
+      border-radius: 20px; 
+      box-shadow: var(--card-shadow); 
+      padding: 25px;
+      margin-top: 15px;
+      position: relative;
+      /* Efecto flotante sobre la división de colores */
+      transform: translateY(0);
+      border: 1px solid #f1f5f9;
+    }
     
-    /* GRÁFICO BARRAS (Sombra Profunda) */
-    .chart-box { background: white; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; height: 300px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); }
-    .chart-hint { font-size: 0.7rem; color: var(--color-muted); text-align: center; margin-top: 8px; font-style: italic; }
+    .greeting-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .greeting-icon { font-size: 1.5rem; }
+    .greeting-title { font-size: 1.1rem; font-weight: 800; color: var(--color-primary); margin: 0; }
+    .greeting-text { font-size: 0.95rem; color: var(--color-text); line-height: 1.6; font-weight: 500; }
+    
+    /* BOTÓN PDF INTEGRADO (GRADIENTE) */
+    .btn-action { 
+      width: 100%; 
+      padding: 16px; 
+      border-radius: 16px; 
+      border: none; 
+      font-family: 'Manrope', sans-serif; 
+      font-weight: 800; font-size: 1rem; letter-spacing: 0.5px;
+      cursor: pointer; 
+      display: flex; align-items: center; justify-content: center; gap: 12px; 
+      
+      /* Estilo Gradiente Nuevo */
+      background: var(--btn-gradient);
+      color: white; 
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4); 
+      transition: transform 0.2s, box-shadow 0.2s; 
+    }
+    .btn-action:active { transform: scale(0.97); box-shadow: 0 5px 15px -5px rgba(37, 99, 235, 0.5); }
 
-    /* GRÁFICO DONA/POLAR (GAP) - (Sombra Profunda y Espaciado) */
-    .gap-chart-box { background: white; padding: 15px 5px; border-radius: 16px; border: 1px solid #f1f5f9; height: auto; min-height: 380px; position: relative; box-shadow: 0 20px 45px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;}
-    .gap-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; text-transform: uppercase; text-align: center; }
+    /* CHART BOXES (Estilo Limpio sobre fondo blanco) */
+    .chart-box { 
+      background: white; padding: 20px; border-radius: 20px; 
+      border: 1px solid #f1f5f9; height: 320px; position: relative; 
+      box-shadow: var(--card-shadow); 
+    }
+    .chart-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 10px; font-style: italic; }
+
+    /* GAP CHART BOX */
+    .gap-chart-box { 
+      background: white; padding: 25px 10px; border-radius: 20px; 
+      border: 1px solid #f1f5f9; min-height: 400px; position: relative; 
+      box-shadow: var(--card-shadow); 
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .gap-title { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 10px; text-transform: uppercase; text-align: center; letter-spacing: 1px; }
     
-    /* Texto inferior rosquilla (Espaciado Corregido) */
     .gap-chart-text-container {
-        margin-top: 25px; margin-bottom: 35px; 
-        background: #f1f5f9; padding: 12px 20px; border-radius: 12px;
+        margin-top: 30px; margin-bottom: 20px; 
+        background: #f1f5f9; padding: 15px 20px; border-radius: 12px;
         text-align: center; width: 90%;
     }
-    .gap-text-style { font-size: 0.75rem; color: var(--color-primary); font-weight: 700; line-height: 1.3; }
+    .gap-text-style { font-size: 0.8rem; color: var(--color-text); font-weight: 700; line-height: 1.4; }
 
-    /* MISIONES (Estilo Bicolor y Sombra Profunda) */
-    .card-box { background: var(--white); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; overflow: hidden; }
-    
-    .mission-box.dark-mode {
+    /* MISIONES (Estilo Acordeón Premium) */
+    .mission-box.card-box.dark-mode {
         border: none;
-        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5); 
+        box-shadow: var(--card-shadow); 
         background: var(--color-primary); 
+        border-radius: 20px;
+        overflow: hidden;
     }
-    .mission-box.dark-mode .mission-header-bar {
-        background: transparent;
-        border-bottom: none;
+    .mission-header-bar { 
+      padding: 20px; cursor: pointer; display: flex; 
+      justify-content: space-between; align-items: center; 
+      background: rgba(255,255,255,0.05); /* Sutil glass */
     }
-    .mission-box.dark-mode .mission-title-text,
-    .mission-box.dark-mode .toggle-icon { color: white; } 
+    .mission-title-text { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--white); letter-spacing: 1px; }
+    .toggle-icon { color: var(--white); }
 
-    /* CONTENIDO BLANCO */
-    .mission-box.dark-mode .mission-content-box {
-        background: var(--white);
-        padding: 20px;
+    .mission-content-box { 
+      background: var(--white); 
+      padding: 25px; 
     }
-
-    .mission-header-bar { padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
-    .mission-title-text { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-muted); letter-spacing: 1px; }
-    .mission-content-box { padding: 15px 20px; display: block; } 
-    .mission-item { display: flex; gap: 12px; align-items: start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
-    .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .mission-content { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     
-    /* BOTÓN PDF */
-    .btn-action { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--color-red-btn); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); transition: transform 0.1s; }
-    .btn-action:active { transform: scale(0.98); }
-
+    .mission-item { display: flex; gap: 15px; align-items: start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0; }
+    .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .mission-content { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
+    
     /* MODAL */
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; }
-    .modal-card { background: var(--white); width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+    .modal-card { background: var(--white); width: 85%; max-width: 380px; border-radius: 24px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
     @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .modal-header { background: var(--color-primary); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
-    .modal-body { padding: 25px 20px; }
-    .verdict-box { background: #f1f5f9; padding: 15px; border-radius: 12px; border-left: 5px solid var(--color-accent); margin-bottom: 20px; }
-    .verdict-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--color-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-    .verdict-text { font-size: 0.95rem; line-height: 1.5; color: var(--color-primary); font-weight: 600; font-style: italic; }
-    .close-modal { width: 100%; padding: 15px; border: none; background: #0f172a; color: white; font-weight: 700; cursor: pointer; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px;}
-    .pdf-hint { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.75rem; color: var(--color-muted); text-align: center; font-style: italic; }
-    .level-details-modal { display: none; padding: 20px; background: #fff; margin-top: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;}
-    .range-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
-    .range-color-box { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; }
+    .modal-header { background: var(--color-primary); padding: 25px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 30px 25px; }
+    .verdict-box { background: #f8fafc; padding: 20px; border-radius: 16px; border-left: 5px solid var(--color-accent); margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .verdict-label { display: block; font-size: 0.75rem; font-weight: 900; color: var(--color-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .verdict-text { font-size: 1rem; line-height: 1.6; color: var(--color-primary); font-weight: 600; font-style: italic; }
+    .close-modal { width: 100%; padding: 18px; border: none; background: var(--color-primary); color: white; font-weight: 800; cursor: pointer; border-radius: 16px; text-transform: uppercase; letter-spacing: 1px; transition: opacity 0.2s; }
+    .close-modal:active { opacity: 0.9; }
+    .pdf-hint { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0; font-size: 0.8rem; color: var(--color-muted); text-align: center; font-style: italic; }
+
+    /* DETALLES DE NIVEL (Pop-up pequeño) */
+    .level-details-modal { 
+      display: none; padding: 20px; background: rgba(255,255,255,0.95); 
+      margin-top: 20px; border-radius: 16px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%;
+      backdrop-filter: blur(10px); color: var(--color-text);
+    }
+    .range-item { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px; font-weight: 600; }
+    .range-color-box { width: 14px; height: 14px; border-radius: 4px; display: inline-block; margin-right: 8px; }
+    
+    /* Overlay Rojo para el "Gap" */
+    .gap-message-overlay {
+        position: absolute; top: 75%; left: 50%; transform: translateX(-50%);
+        background: rgba(220, 38, 38, 0.95); color: white;
+        padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+        opacity: 0; transition: opacity 0.5s ease; pointer-events: none; white-space: nowrap;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    }
+    .core-section.show-gap .gap-message-overlay { opacity: 1; top: 82%; }
+    .core-section.show-gap .circle-bg { stroke: rgba(220, 38, 38, 0.3); } 
   </style>
 </head>
 <body>
@@ -167,7 +284,7 @@
       <div class="brand-loader-logo">Q.</div>
       <div class="brand-loader-text">Academia Quijano</div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Cargando...</div>
+      <div style="margin-top: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.7);">Preparando informe...</div>
     </div>
 
     <div id="scroll-viewport">
@@ -180,6 +297,15 @@
         
         <div class="core-section" onclick="pulseCircle()">
           <svg class="score-circle-svg" viewBox="0 0 220 220">
+            <defs>
+                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#bf953f" />
+                    <stop offset="25%" stop-color="#fcf6ba" />
+                    <stop offset="50%" stop-color="#b38728" />
+                    <stop offset="75%" stop-color="#fbf5b7" />
+                    <stop offset="100%" stop-color="#aa771c" />
+                </linearGradient>
+            </defs>
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
             <circle class="circle-fill" id="scoreCircle" cx="110" cy="110" r="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></circle>
           </svg>
@@ -190,15 +316,15 @@
           <div class="gap-message-overlay" id="gapMsg">...</div>
         </div>
         
-        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-chart-simple"></i> ...</div>
+        <div class="level-badge" id="levelBadge" onclick="toggleLevel()"><i class="fa-solid fa-trophy"></i> ...</div>
         
         <div class="level-details-modal" id="levelDetails">
-             <div style="text-align:center; font-weight:700; margin-bottom:10px; font-size:0.85rem;">Rangos de Referencia:</div>
+             <div style="text-align:center; font-weight:800; margin-bottom:15px; font-size:0.9rem; color:var(--color-primary);">RANGOS DE REFERENCIA</div>
              <div class="range-list">
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-top)"></span>Superior</div><span>380 - 500</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-high)"></span>Alto</div><span>300 - 379</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-mid)"></span>Medio</div><span>230 - 299</span></div>
-               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-low)"></span>Bajo</div><span>0 - 229</span></div>
+               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-top)"></span>SUPERIOR</div><span>380 - 500</span></div>
+               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-high)"></span>ALTO</div><span>300 - 379</span></div>
+               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-mid)"></span>MEDIO</div><span>230 - 299</span></div>
+               <div class="range-item"><div style="display:flex; align-items:center;"><span class="range-color-box" style="background:var(--level-low)"></span>BAJO</div><span>0 - 229</span></div>
              </div>
         </div>
       </div>
@@ -211,6 +337,10 @@
           </div>
           <div class="greeting-content"><div class="greeting-text" id="greetingText">...</div></div>
         </div>
+
+        <button class="btn-action" onclick="downloadPDF()">
+            <i class="fa-solid fa-file-arrow-down"></i> DESCARGAR INFORME PDF
+        </button>
 
         <div class="chart-box">
             <canvas id="performanceChart"></canvas>
@@ -238,19 +368,11 @@
       </div> 
     </div>
 
-    <div class="bottom-fixed-area">
-      <div class="bottom-bar">
-        <button class="btn-action" onclick="downloadPDF()">
-          <i class="fa-solid fa-file-pdf"></i> DESCARGAR INFORME PDF
-        </button>
-      </div>
-    </div>
-
     <div class="modal-overlay" id="modal" onclick="closeModal()">
       <div class="modal-card" onclick="event.stopPropagation()">
         <div class="modal-header">
           <span style="font-weight:800; text-transform:uppercase;" id="mTitle">Materia</span>
-          <span style="font-weight:800; color:var(--color-accent); font-size: 1.2rem;" id="mScore">0</span>
+          <span style="font-weight:800; color:var(--color-accent); font-size: 1.4rem;" id="mScore">0</span>
         </div>
         <div class="modal-body">
           <div class="verdict-box">
@@ -265,7 +387,7 @@
   </div>
 
   <script>
-    // --- ⚙️ CONFIGURACIÓN ---
+    // --- ⚙️ CONFIGURACIÓN Y LÓGICA (INTACTA) ---
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
     const NOMBRE_SIMULACRO = "S11-R"; 
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
@@ -315,7 +437,7 @@
         if(student) {
             initApp(student.data, calculatedList.indexOf(student) + 1, calculatedList.length, student.scores);
         } else {
-            document.getElementById('loader').innerHTML = "<div style='color:red;'>Estudiante no encontrado.</div>";
+            document.getElementById('loader').innerHTML = "<div style='color:white; font-weight:bold;'>Estudiante no encontrado.</div>";
         }
     }
 
@@ -478,7 +600,7 @@
             if (s.p < 60) icon = '🚨';      
             else if (s.p < 80) icon = '⚠️'; 
             else if (s.p < 90) icon = '💪'; 
-            else icon = '🏆';              
+            else icon = '🏆';               
 
             html += `
             <div class="mission-item">
@@ -499,20 +621,21 @@
         const txt = document.getElementById('greetingText'); 
         const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; 
         
+        // Ajustamos los colores del icono y título para que combinen con el tema claro de la tarjeta
         if(score >= 380){ 
-            c.style.borderLeftColor="var(--level-top)"; 
+            //c.style.borderLeftColor="var(--level-top)"; 
             t.innerText=`¡INCREÍBLE, ${n}! 🏆`; t.style.color="var(--level-top)"; 
             txt.innerHTML="Estás volando alto. Mantén este ritmo y la beca es tuya. ¡Orgullo total!"; 
         } else if(score >= 300){ 
-            c.style.borderLeftColor="var(--level-high)"; 
+            //c.style.borderLeftColor="var(--level-high)"; 
             t.innerText=`¡BIEN JUGADO, ${n}! 🤙`; t.style.color="var(--level-high)"; 
             txt.innerHTML="Tienes buen nivel, pero no te confíes. Afina esos detalles pequeños para llegar a la excelencia."; 
         } else if(score >= 230){ 
-            c.style.borderLeftColor="var(--level-mid)"; 
+            //c.style.borderLeftColor="var(--level-mid)"; 
             t.innerText=`¡PILAS, ${n}! ⚠️`; t.style.color="var(--level-mid)"; 
             txt.innerHTML="Estás en el promedio y el promedio es peligroso. No es suficiente para asegurar tu cupo. ¡Aprieta!"; 
         } else {
-            c.style.borderLeftColor="var(--color-red-btn)"; 
+            //c.style.borderLeftColor="var(--color-red-btn)"; 
             t.innerText=`¡ALARMA, ${n}! 🚨`; t.style.color="var(--color-red-btn)"; 
             txt.innerHTML="Si el examen fuera hoy, no pasamos. Necesito que te despiertes y empieces a estudiar de verdad."; 
         } 
@@ -538,12 +661,16 @@
     function calculateLevel(s){ 
         const b=document.getElementById('levelBadge'); 
         let l="",c=""; 
-        if(s>=380){l="SUPERIOR";c="#15803d";} 
-        else if(s>=300){l="ALTO";c="#1d4ed8";} 
-        else if(s>=230){l="MEDIO";c="#d97706";} 
-        else {l="BAJO";c="#dc2626";} 
-        b.innerHTML=`<i class="fa-solid fa-chart-simple"></i> ${l}`; 
-        b.style.color=c; b.style.borderColor=c; 
+        
+        // Colores de texto dentro del Glass Badge (Deben ser visibles sobre el azul oscuro)
+        if(s>=380){l="SUPERIOR";c="#4ade80";} // Verde claro neón
+        else if(s>=300){l="ALTO";c="#60a5fa";} // Azul claro
+        else if(s>=230){l="MEDIO";c="#fbbf24";} // Amarillo dorado
+        else {l="BAJO";c="#f87171";} // Rojo claro
+        
+        b.innerHTML=`<i class="fa-solid fa-trophy"></i> ${l}`; 
+        b.style.color=c; 
+        b.style.borderColor=c; /* Borde sutil del mismo color */
     }
     
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
@@ -573,8 +700,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
