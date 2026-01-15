@@ -23,7 +23,6 @@
 
   <style>
     :root {
-      /* PALETA PREMIUM */
       --bg-body: #cbd5e1; 
       --bg-app: #f8fafc; 
       --color-primary: #0a2540; 
@@ -45,7 +44,6 @@
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
-    /* SCROLL REAL PARA OCULTAR BARRA NAVEGADOR */
     body { 
       margin: 0; padding: 0; 
       font-family: 'Manrope', sans-serif; 
@@ -58,15 +56,12 @@
       overflow-y: auto; 
     }
     
-    /* MARCO MÓVIL */
     .mobile-frame { 
       width: 100%; max-width: 480px; 
       min-height: 100vh; 
       position: relative; 
       box-shadow: 0 0 50px rgba(0,0,0,0.25); 
       display: flex; flex-direction: column; 
-      
-      /* CORTE AZUL MILIMÉTRICO (520px) PARA EMPATAR CON EL SALUDO */
       background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 520px, var(--bg-app) 520px, var(--bg-app) 100%);
       background-repeat: no-repeat;
       background-color: var(--bg-app);
@@ -82,7 +77,6 @@
       position: relative; padding-bottom: 40px; 
     }
 
-    /* LOADER */
     .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
     .brand-loader-logo { font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1; margin-bottom: 5px; }
     .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--white); }
@@ -90,7 +84,6 @@
     .loader-progress { height: 100%; width: 0%; background: var(--color-accent); animation: loadProgress 5s ease-out forwards; }
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     
-    /* HEADER INFO */
     .header-wrapper { 
       padding: 10px 20px 0px 20px; 
       display: flex; flex-direction: column; align-items: center; 
@@ -99,19 +92,8 @@
     }
     
     .header-info { text-align: center; margin-bottom: 5px; width: 100%; }
-    
-    .sub-label { 
-      font-size: 0.75rem; font-weight: 700; 
-      color: rgba(255,255,255,0.8); 
-      text-transform: uppercase; letter-spacing: 2px; 
-      margin-bottom: 5px; display:block; 
-    }
-    
-    .main-title { 
-      font-size: 1.5rem; 
-      font-weight: 900; color: var(--white); margin: 0; 
-      letter-spacing: 1px; line-height: 1; 
-    }
+    .sub-label { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; display:block; }
+    .main-title { font-size: 1.5rem; font-weight: 900; color: var(--white); margin: 0; letter-spacing: 1px; line-height: 1; }
     
     .student-info { 
       margin-top: 10px;
@@ -126,13 +108,11 @@
     .name-text { font-size: 0.9rem; font-weight: 700; color: #fff; line-height: 1.2; text-transform: uppercase; margin-bottom: 2px; }
     .rank-text { font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2px; width: 100%; }
     
-    /* SCORE CIRCLE */
     .core-section { position: relative; margin: 20px 0 30px 0; cursor: pointer; }
     .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3)); }
     .circle-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 20; }
     .circle-fill { fill: none; stroke-width: 20; stroke-linecap: round; stroke: url(#goldGradient); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     
-    /* DESTELLO */
     .static-flare { position: absolute; top: 25px; right: 40px; width: 0; height: 0; z-index: 20; pointer-events: none; box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9); }
     .static-flare::before, .static-flare::after { content: ''; position: absolute; background: white; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 0 8px white; }
     .static-flare::before { width: 45px; height: 4px; } 
@@ -163,18 +143,23 @@
         display: flex; flex-direction: column; align-items: center;
     }
     
-    /* BADGE GLOBAL INTEGRADO Y CENTRADO */
     .badge-global {
-        margin-bottom: 15px;
-        background: rgba(10, 37, 64, 0.08); 
+        margin-bottom: 10px;
+        background: rgba(10, 37, 64, 0.1); 
         color: var(--color-primary);
-        padding: 6px 20px; border-radius: 30px;
-        font-size: 0.9rem; font-weight: 800;
+        padding: 6px 16px; border-radius: 20px;
+        font-size: 0.85rem; font-weight: 800;
         display: inline-block;
-        border: 1px solid rgba(10, 37, 64, 0.1);
+        border: 1px solid rgba(10, 37, 64, 0.15);
     }
 
-    .horizontal-bars-container { display: flex; flex-direction: column; gap: 12px; background: white; padding: 20px; border-radius: 20px; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9; margin-top: 15px; }
+    /* ESTILO ACORDEÓN PARA BARRAS HORIZONTALES */
+    .expandable-box { border: none; box-shadow: var(--card-shadow); background: var(--color-primary); border-radius: 20px; overflow: hidden; margin-top: 15px; }
+    .expandable-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); }
+    .expandable-title { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--white); letter-spacing: 1px; }
+    .expandable-content { background: var(--white); padding: 20px; display: none; }
+
+    .horizontal-bars-container { display: flex; flex-direction: column; gap: 12px; }
     .h-bar-item { cursor: pointer; transition: transform 0.1s; }
     .h-bar-item:active { transform: scale(0.98); }
     .h-bar-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
@@ -183,7 +168,8 @@
     .h-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.5s ease-out; }
     .interactive-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    .mission-box.card-box.dark-mode { border: none; box-shadow: var(--card-shadow); background: var(--color-primary); border-radius: 20px; overflow: hidden; }
+    /* PLAN DE ACCIÓN */
+    .mission-box { border: none; box-shadow: var(--card-shadow); background: var(--color-primary); border-radius: 20px; overflow: hidden; }
     .mission-header-bar { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); }
     .mission-title-text { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--white); letter-spacing: 1px; }
     .toggle-icon { color: var(--white); }
@@ -228,17 +214,14 @@
         <div class="header-info">
           <div class="sub-label">RESULTADOS SIMULACRO</div>
           <div class="main-title" id="simTitle">S11-R</div>
-          
           <div class="student-info">
               <span class="name-text" id="uiName">ALUMNO</span> 
               <span class="rank-text" id="uiRank">Puesto: #1</span>
           </div>
-          
         </div>
         
         <div class="core-section" onclick="pulseCircle()">
           <div class="static-flare"></div>
-          
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -273,7 +256,6 @@
       </div>
 
       <div class="content-padder">
-        
         <div class="greeting-card" id="greetingCard">
           <div class="greeting-header">
              <div class="greeting-title" id="greetingTitle">...</div>
@@ -292,9 +274,17 @@
             </div>
         </div>
 
-        <div id="horizontalBarsContainer" class="horizontal-bars-container"></div>
+        <div class="expandable-box">
+          <div class="expandable-header" onclick="toggleAnalysis()">
+             <div class="expandable-title">🔍 Ver Análisis Detallado</div>
+             <i class="fa-solid fa-chevron-down toggle-icon" id="analysisIcon"></i>
+          </div>
+          <div id="analysisContent" class="expandable-content">
+             <div id="horizontalBarsContainer" class="horizontal-bars-container"></div>
+          </div>
+        </div>
 
-        <div class="mission-box card-box dark-mode">
+        <div class="mission-box">
           <div class="mission-header-bar" onclick="toggleMissions()">
              <div class="mission-title-text">🚀 Plan de Acción Personalizado</div>
              <i class="fa-solid fa-chevron-down toggle-icon" id="missionIcon"></i>
@@ -324,7 +314,6 @@
   </div>
 
   <script>
-    // --- ⚙️ LÓGICA INTACTA ---
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR98rgj8Svq5N0V4TiCiTdk21zubyW6DdaB7bMKD2mMlIndgc01sNRGoWAUVjKrccTm62nNWgA3wTrC/pub?gid=0&single=true&output=csv";
     const NOMBRE_SIMULACRO = "S11-R"; 
     const MAX = { m: 50, l: 41, s: 50, c: 58, i: 55 };
@@ -365,19 +354,15 @@
             let sSoc = (parseInt(row.S1_Soc)||0) + (parseInt(row.S2_Soc)||0);
             let sCien = (parseInt(row.S1_Cien)||0) + (parseInt(row.S2_Cien)||0);
             let sIng = (parseInt(row.S2_Ing)||0); 
-            
             let pMat = Math.min(100, Math.round((sMat / MAX.m) * 100));
             let pLec = Math.min(100, Math.round((sLec / MAX.l) * 100));
             let pSoc = Math.min(100, Math.round((sSoc / MAX.s) * 100));
             let pCien = Math.min(100, Math.round((sCien / MAX.c) * 100));
             let pIng = Math.min(100, Math.round((sIng / MAX.i) * 100));
-            
             return { token: row.TOKEN, data: row, scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: pMat+pLec+pSoc+pCien+pIng } };
         });
-
         calculatedList.sort((a, b) => b.scores.g - a.scores.g);
         let student = calculatedList.find(s => s.token === id);
-
         if(student) {
             initApp(student.data, calculatedList.indexOf(student) + 1, calculatedList.length, student.scores);
         } else {
@@ -394,7 +379,6 @@
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
       currentPdfLink = data['LINK PDF'] || "#"; 
-      
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       document.getElementById('badgeGlobal').innerText = `🏆 Puntaje Global: ${realScore}`;
@@ -413,7 +397,6 @@
       buildNarrative(data.Nombre, realScore); 
       updateCircle(realScore);
       calculateLevel(realScore);
-      
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
@@ -439,7 +422,6 @@
 
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
-        const dataValues = subs.map(s => s.p);
         const bgColors = subs.map(s => SUBJECT_COLORS[s.n] || '#334155');
         if(myChart) myChart.destroy();
         Chart.register(ChartDataLabels);
@@ -447,14 +429,14 @@
             type: 'bar',
             data: {
                 labels: subs.map(s => s.s), 
-                datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
+                datasets: [{ data: subs.map(s => s.p), backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
                     datalabels: { color: 'white', textStrokeColor: 'rgba(0,0,0,0.7)', textStrokeWidth: 4, font: { weight: '900', size: 13 }, anchor: 'end', align: 'start' },
-                    title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
+                    title: { display: true, text: 'Comparativa de Rendimiento', font: {family: 'Manrope', size: 14} }
                 },
                 scales: {
                     y: { beginAtZero: true, max: 100, grid: { display: true, color: '#f1f5f9' } },
@@ -498,6 +480,7 @@
         b.innerHTML=`<i class="fa-solid fa-trophy"></i> ${l}`; b.style.color="#ffffff"; b.style.borderColor="rgba(255,255,255,0.4)"; b.style.boxShadow=`0 0 15px ${c}40`; 
     }
     
+    function toggleAnalysis(){ const c=document.getElementById('analysisContent'); const i=document.getElementById('analysisIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
     function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
     function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.v; document.querySelector('.modal-overlay').style.display='flex'; }
