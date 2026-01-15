@@ -372,7 +372,6 @@
             let pSoc = Math.min(100, Math.round((sSoc / MAX.s) * 100));
             let pCien = Math.min(100, Math.round((sCien / MAX.c) * 100));
             let pIng = Math.min(100, Math.round((sIng / MAX.i) * 100));
-            
             return { token: row.TOKEN, data: row, scores: { m: pMat, l: pLec, s: pSoc, c: pCien, i: pIng, g: pMat+pLec+pSoc+pCien+pIng } };
         });
 
@@ -395,7 +394,6 @@
     function loadData(data, rank, total, scores) {
       realScore = scores.g;
       currentPdfLink = data['LINK PDF'] || "#"; 
-      
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       document.getElementById('badgeGlobal').innerText = `🏆 Puntaje Global: ${realScore}`;
@@ -412,10 +410,8 @@
       renderHorizontalBars(subjects); 
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
-      
       updateCircle(realScore);
       calculateLevel(realScore);
-      
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
@@ -441,29 +437,24 @@
 
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
-        const dataValues = subs.map(s => s.p);
         const bgColors = subs.map(s => SUBJECT_COLORS[s.n] || '#334155');
-
         if(myChart) myChart.destroy();
         Chart.register(ChartDataLabels);
-
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: subs.map(s => s.s), 
-                datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
+                datasets: [{ data: subs.map(s => s.p), backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                },
                 plugins: {
                     legend: { display: false },
-                    datalabels: { 
-                        color: 'white',
-                        textStrokeColor: 'rgba(0,0,0,0.7)',
-                        textStrokeWidth: 4,
-                        font: { weight: '900', size: 13 },
-                        anchor: 'end', align: 'start' 
-                    },
+                    datalabels: { color: 'white', textStrokeColor: 'rgba(0,0,0,0.7)', textStrokeWidth: 4, font: { weight: '900', size: 13 }, anchor: 'end', align: 'start' },
                     title: { display: true, text: 'Rendimiento por Materia', font: {family: 'Manrope', size: 14} }
                 },
                 scales: {
@@ -491,11 +482,10 @@
         const t = document.getElementById('greetingTitle'); const txt = document.getElementById('greetingText'); const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; 
         if(score >= 380){ t.innerText=`¡INCREÍBLE, ${n}! 🏆`; t.style.color="var(--level-top)"; txt.innerHTML="Estás volando alto. Mantén este ritmo y la beca es tuya. ¡Orgullo total!"; } 
         else if(score >= 230){ t.innerText=`¡PILAS, ${n}! ⚠️`; t.style.color="var(--level-mid)"; txt.innerHTML="Estás en el promedio y el promedio es peligroso. No es suficiente para asegurar tu cupo. ¡Aprieta!"; } 
-        else { t.innerText=`¡ALARMA, ${n}! 🚨`; t.style.color="var(--level-low)"; txt.innerHTML="Si el examen fuera hoy, no pasamos. Necesito que te despiertes y empieces a estudiar de verdad."; } 
+        else { t.innerText=`¡ALARMA, ${n}! 🚨`; t.style.color="var(--level-low)"; txt.innerHTML="Necesito que te despiertes y empieces a estudiar de verdad."; } 
     }
 
     function updateCircle(v){ const p=(v/500)*100; document.getElementById('scoreCircle').style.strokeDashoffset=100-p; document.getElementById('uiScore').innerText = v;}
-    
     function pulseCircle() {
         const container = document.querySelector('.core-section'); const gapMsg = document.getElementById('gapMsg'); const gap = 500 - realScore;
         container.classList.add('show-gap'); gapMsg.innerText = `¡Te faltan ${gap} puntos para la excelencia!`; 
@@ -511,27 +501,16 @@
     function toggleAnalysis(){ 
         const c=document.getElementById('analysisContent'); const i=document.getElementById('analysisIcon'); 
         if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}
-        else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} 
+        else{
+            c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";
+            if(myChart) { myChart.update(); } // Dispara la animación de subida al abrir
+        } 
     }
     
-    function toggleMissions(){ 
-        const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); 
-        if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}
-        else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} 
-    }
-    
+    function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
     function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
-    
-    function openModal(i){ 
-        const s=subjects[i]; 
-        document.getElementById('mTitle').innerText=s.n; 
-        document.getElementById('mScore').innerText=s.p+"/100"; 
-        document.getElementById('mVeredicto').innerText=s.v; 
-        document.querySelector('.modal-overlay').style.display='flex'; 
-    }
-    
+    function openModal(i){ const s=subjects[i]; document.getElementById('mTitle').innerText=s.n; document.getElementById('mScore').innerText=s.p+"/100"; document.getElementById('mVeredicto').innerText=s.v; document.querySelector('.modal-overlay').style.display='flex'; }
     function closeModal(){ document.querySelector('.modal-overlay').style.display='none'; }
-    
     function downloadPDF() { 
         if(currentPdfLink && currentPdfLink.length > 10) {
             let directLink = currentPdfLink;
