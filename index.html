@@ -71,8 +71,7 @@
       box-shadow: 0 0 50px rgba(0,0,0,0.25); 
       display: flex; flex-direction: column; 
       overflow: hidden;
-      
-      /* --- CORTE AZUL AL 79%: Cubre totalmente el botón flotante --- */
+      /* CORTE AZUL AL 79% */
       background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 79%, var(--bg-app) 79%, var(--bg-app) 100%);
     }
 
@@ -97,7 +96,7 @@
     
     /* HEADER INFO */
     .header-wrapper { 
-      padding: 10px 20px 0px 20px; /* Reducido para subir todo 2mm */
+      padding: 10px 20px 0px 20px; 
       display: flex; flex-direction: column; align-items: center; 
       z-index: 50; position: relative; 
       color: var(--white); 
@@ -162,23 +161,23 @@
     .circle-bg { 
       fill: none; 
       stroke: rgba(255,255,255,0.08); 
-      stroke-width: 20; /* 2mm más ancho */
+      stroke-width: 20; 
     }
     
     /* Relleno del círculo */
     .circle-fill { 
       fill: none; 
-      stroke-width: 20; /* 2mm más ancho */
+      stroke-width: 20; 
       stroke-linecap: round; 
       stroke: url(#goldGradient); 
       stroke-dasharray: 100; stroke-dashoffset: 100; 
       transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
     }
     
-    /* EL DESTELLO FIJO (FLARE) */
+    /* DESTELLO FIJO */
     .static-flare {
         position: absolute;
-        top: 25px; right: 40px; /* Ajustado para el nuevo grosor */
+        top: 25px; right: 40px; 
         width: 0; height: 0;
         z-index: 20; pointer-events: none;
         box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9); 
@@ -193,7 +192,7 @@
 
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     
-    /* TEXTO PUNTAJE - BLANCO */
+    /* TEXTO PUNTAJE */
     .score-big { 
       font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
       color: var(--white); 
@@ -205,13 +204,11 @@
       text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
     }
     
-    /* BOTÓN MEDIO - JOYERÍA (Sobre Azul) */
+    /* BOTÓN MEDIO */
     .level-badge { 
       background: rgba(10, 37, 64, 0.6); 
       backdrop-filter: blur(15px);
-      /* Borde Oro Puro */
       border: 1px solid #FFD700; 
-      /* Glow dorado */
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
       padding: 8px 30px; border-radius: 50px; 
       font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
@@ -252,9 +249,22 @@
     }
     .btn-action:active { transform: scale(0.98); box-shadow: 0 5px 15px -5px rgba(0, 30, 60, 0.4); }
 
-    /* RESTO DE CARTAS */
+    /* CARTAS */
     .chart-box { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; height: 320px; position: relative; box-shadow: var(--card-shadow); }
-    .chart-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 10px; font-style: italic; }
+    .chart-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px;}
+
+    /* NUEVAS BARRAS HORIZONTALES (ESTILO BATERÍA) */
+    .horizontal-bars-container {
+        display: flex; flex-direction: column; gap: 12px;
+        background: white; padding: 20px; border-radius: 20px;
+        box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;
+    }
+    .h-bar-item { cursor: pointer; transition: transform 0.1s; }
+    .h-bar-item:active { transform: scale(0.98); }
+    .h-bar-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
+    .h-bar-score { font-weight: 800; }
+    .h-bar-track { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+    .h-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.5s ease-out; }
 
     .gap-chart-box { background: white; padding: 25px 10px; border-radius: 20px; border: 1px solid #f1f5f9; min-height: 400px; position: relative; box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; }
     .gap-title { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 10px; text-transform: uppercase; text-align: center; letter-spacing: 1px; }
@@ -369,6 +379,8 @@
             <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
+        <div id="horizontalBarsContainer" class="horizontal-bars-container"></div>
+
         <div class="gap-chart-box">
             <div class="gap-title">🏆 CAMINO A LA EXCELENCIA</div>
             <div style="flex:1; width:100%; position:relative;">
@@ -419,6 +431,15 @@
     let currentPdfLink = "#";
     let myChart = null;
     let gapChart = null;
+
+    // COLORES POR MATERIA PARA LAS BARRAS HORIZONTALES
+    const SUBJECT_COLORS = {
+        "Lectura": "#8b5cf6",      // Violeta
+        "Matemáticas": "#2563eb",  // Azul Fuerte
+        "Sociales": "#ea580c",     // Naranja Quemado
+        "Ciencias": "#06b6d4",     // Cian/Turquesa
+        "Inglés": "#db2777"        // Rosa Intenso
+    };
 
     window.onload = function() {
       document.getElementById('simTitle').innerText = NOMBRE_SIMULACRO;
@@ -478,33 +499,34 @@
       
       subjects = [
         { 
-            n: "Lectura", p: scores.l, 
+            n: "Lectura", p: scores.l, icon: "📖",
             v: data['XT_LEC_VEREDICTO'] || data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_LEC_MISION'] || "Sin misión."
         },
         { 
-            n: "Matemáticas", p: scores.m, 
+            n: "Matemáticas", p: scores.m, icon: "📐",
             v: data['TXT_MAT_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_MAT_MISION'] || "Sin misión."
         },
         { 
-            n: "Sociales", p: scores.s, 
+            n: "Sociales", p: scores.s, icon: "🌍",
             v: data['TXT_SOC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_SOC_MISION'] || "Sin misión."
         },
         { 
-            n: "Ciencias", p: scores.c, 
+            n: "Ciencias", p: scores.c, icon: "🧬",
             v: data['TXT_CIE_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_CIE_MISION'] || "Sin misión."
         },
         { 
-            n: "Inglés", p: scores.i, 
+            n: "Inglés", p: scores.i, icon: "🇬🇧",
             v: data['TXT_ING_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_ING_MISION'] || "Sin misión."
         }
       ];
 
       renderChart(subjects);
+      renderHorizontalBars(subjects); // NUEVA FUNCIÓN
       renderGapChart(subjects); 
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
@@ -515,10 +537,39 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
+    // --- NUEVA FUNCIÓN: BARRAS HORIZONTALES ESTILO BATERÍA ---
+    function renderHorizontalBars(subs) {
+        const container = document.getElementById('horizontalBarsContainer');
+        let html = '';
+        
+        subs.forEach((s, index) => {
+            const color = SUBJECT_COLORS[s.n] || '#334155';
+            html += `
+            <div class="h-bar-item" onclick="openModal(${index})">
+                <div class="h-bar-header">
+                    <span>${s.icon} ${s.n}</span>
+                    <span class="h-bar-score" style="color:${color}">${s.p} / 100</span>
+                </div>
+                <div class="h-bar-track">
+                    <div class="h-bar-fill" style="width:${s.p}%; background:${color}"></div>
+                </div>
+            </div>`;
+        });
+        
+        container.innerHTML = html;
+    }
+
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
-        const bgColors = dataValues.map(v => v >= 80 ? '#22c55e' : (v >= 60 ? '#eab308' : '#ef4444'));
+        
+        // LÓGICA DE SEMÁFORO DE 4 COLORES
+        const bgColors = dataValues.map(v => {
+            if (v < 30) return '#dc2626';      // Rojo Crítico
+            if (v < 60) return '#d97706';      // Naranja Alerta
+            if (v < 80) return '#2563eb';      // Azul Bueno
+            return '#16a34a';                  // Verde Excelente
+        });
 
         if(myChart) myChart.destroy();
         Chart.register(ChartDataLabels);
@@ -599,6 +650,9 @@
                 scales: {
                     r: { 
                         min: 0, max: 100, 
+                        // Truco para evitar la mancha: forzar escala visible de 0 a 100
+                        suggestedMin: 0,
+                        suggestedMax: 100,
                         ticks: { display: true, stepSize: 100, color: '#94a3b8', backdropColor: 'transparent', font: { size: 9 } }, 
                         grid: { color: '#e2e8f0' },
                         pointLabels: { display: false } 
@@ -636,7 +690,6 @@
         const txt = document.getElementById('greetingText'); 
         const n = name ? name.split(' ')[0].toUpperCase() : "ALUMNO"; 
         
-        // Colores solo en el texto del título, la tarjeta sigue blanca y limpia
         if(score >= 380){ 
             t.innerText=`¡INCREÍBLE, ${n}! 🏆`; t.style.color="var(--level-top)"; 
             txt.innerHTML="Estás volando alto. Mantén este ritmo y la beca es tuya. ¡Orgullo total!"; 
@@ -671,8 +724,6 @@
         const b=document.getElementById('levelBadge'); 
         let l="",c=""; 
         
-        // Letra del nivel en BLANCO para contrastar con el fondo azul (ahora que está sobre azul)
-        // OJO: Si el badge está sobre el azul, la letra blanca es perfecta.
         if(s>=380){l="SUPERIOR";c="#4ade80";} 
         else if(s>=300){l="ALTO";c="#60a5fa";} 
         else if(s>=230){l="MEDIO";c="#fbbf24";} 
