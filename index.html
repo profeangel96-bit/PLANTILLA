@@ -27,7 +27,7 @@
       --bg-body: #cbd5e1; 
       --bg-app: #f8fafc; 
       
-      /* AZUL REAL PROFUNDO */
+      /* AZUL REAL PROFUNDO (Deep Navy) */
       --color-primary: #0a2540; 
       
       /* DORADO MAESTRO */
@@ -41,7 +41,7 @@
       --level-mid: #d97706; 
       --level-low: #dc2626;
 
-      /* Gradiente del Botón PDF */
+      /* Gradiente del Botón PDF (Elegante) */
       --btn-gradient: linear-gradient(135deg, #0a2540 0%, #1e40af 100%);
       
       --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
@@ -71,8 +71,10 @@
       box-shadow: 0 0 50px rgba(0,0,0,0.25); 
       display: flex; flex-direction: column; 
       overflow: hidden;
-      /* EL CORTE AL 72% */
-      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 72%, var(--bg-app) 72%, var(--bg-app) 100%);
+      
+      /* --- CAMBIO 1: AZUL BAJADO AL 78% --- 
+         Llega justo al inicio de la tarjeta de saludo, cubriendo el botón MEDIO */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 78%, var(--bg-app) 78%, var(--bg-app) 100%);
     }
 
     @media (min-width: 500px) { 
@@ -117,30 +119,27 @@
       letter-spacing: 1px; line-height: 1; 
     }
     
-    /* --- CAMBIO: BARRA DE INFORMACIÓN UNIFICADA (Para nombres largos) --- */
     .student-info { 
       font-size: 0.8rem; font-weight: 600; 
       color: rgba(255,255,255,0.95); 
       margin-top: 8px;
       
-      /* Estilos de "Pill" aplicados al contenedor padre */
       background: rgba(255,255,255,0.15); 
       padding: 6px 18px; 
       border-radius: 30px;
       border: 1px solid rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
       
-      /* Layout flexible */
       display: inline-flex; 
       align-items: center; 
       justify-content: center; 
       gap: 8px;
-      max-width: 95%; /* Evita que rompa la pantalla */
-      flex-wrap: wrap; /* Si es EXTREMADAMENTE largo, baja línea de forma segura */
+      max-width: 95%; 
+      flex-wrap: wrap; 
       text-align: center;
     }
     
-    /* SCORE CIRCLE */
+    /* SCORE CIRCLE - SOBRE EL AZUL */
     .core-section { position: relative; margin: 15px 0 25px 0; cursor: pointer; }
     
     .score-circle-svg { 
@@ -186,7 +185,7 @@
 
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     
-    /* TEXTO PUNTAJE */
+    /* TEXTO PUNTAJE - BLANCO */
     .score-big { 
       font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
       color: var(--white); 
@@ -198,11 +197,13 @@
       text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
     }
     
-    /* BOTÓN MEDIO CON BORDE DE ORO 3D */
+    /* --- CAMBIO 2: BOTÓN MEDIO CON BORDE DE ORO 3D --- */
     .level-badge { 
       background: rgba(10, 37, 64, 0.4); 
       backdrop-filter: blur(15px);
-      border: 1px solid #FFD700; 
+      /* Borde dorado metálico rico */
+      border: 1px solid #E6BE55; 
+      /* Sombra interna para volumen 3D + resplandor externo */
       box-shadow: inset 0 0 5px rgba(0,0,0,0.2), 0 0 15px rgba(230, 190, 85, 0.4);
       padding: 8px 30px; border-radius: 50px; 
       font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
@@ -314,11 +315,13 @@
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FFD700" />
-                    <stop offset="35%" stop-color="#FFFFE0" /> 
-                    <stop offset="50%" stop-color="#DAA520" /> 
-                    <stop offset="75%" stop-color="#FFFFE0" /> 
-                    <stop offset="100%" stop-color="#B8860B" /> 
+                    <stop offset="0%" stop-color="#8C6239" />
+                    <stop offset="20%" stop-color="#D4AF37" />
+                    <stop offset="35%" stop-color="#FFFFFF" />
+                    <stop offset="50%" stop-color="#FDB931" />
+                    <stop offset="70%" stop-color="#FFFFE0" />
+                    <stop offset="85%" stop-color="#C6934B" />
+                    <stop offset="100%" stop-color="#7A5330" />
                 </linearGradient>
             </defs>
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
