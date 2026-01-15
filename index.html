@@ -27,7 +27,7 @@
       --bg-body: #cbd5e1; 
       --bg-app: #f8fafc; 
       
-      /* AZUL REAL PROFUNDO (Deep Navy) */
+      /* AZUL REAL PROFUNDO */
       --color-primary: #0a2540; 
       
       /* DORADO MAESTRO */
@@ -41,7 +41,7 @@
       --level-mid: #d97706; 
       --level-low: #dc2626;
 
-      /* Gradiente del Botón PDF (Elegante) */
+      /* Gradiente del Botón PDF */
       --btn-gradient: linear-gradient(135deg, #0a2540 0%, #1e40af 100%);
       
       --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
@@ -71,10 +71,8 @@
       box-shadow: 0 0 50px rgba(0,0,0,0.25); 
       display: flex; flex-direction: column; 
       overflow: hidden;
-      
-      /* --- CAMBIO 1: AZUL BAJADO AL 78% --- 
-         Llega justo al inicio de la tarjeta de saludo */
-      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 78%, var(--bg-app) 78%, var(--bg-app) 100%);
+      /* EL CORTE AL 72% */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 72%, var(--bg-app) 72%, var(--bg-app) 100%);
     }
 
     @media (min-width: 500px) { 
@@ -119,20 +117,30 @@
       letter-spacing: 1px; line-height: 1; 
     }
     
+    /* --- CAMBIO: BARRA DE INFORMACIÓN UNIFICADA (Para nombres largos) --- */
     .student-info { 
-      font-size: 0.85rem; font-weight: 600; 
+      font-size: 0.8rem; font-weight: 600; 
       color: rgba(255,255,255,0.95); 
       margin-top: 8px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .student-pill {
+      
+      /* Estilos de "Pill" aplicados al contenedor padre */
       background: rgba(255,255,255,0.15); 
-      padding: 4px 14px; border-radius: 20px;
+      padding: 6px 18px; 
+      border-radius: 30px;
       border: 1px solid rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
+      
+      /* Layout flexible */
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px;
+      max-width: 95%; /* Evita que rompa la pantalla */
+      flex-wrap: wrap; /* Si es EXTREMADAMENTE largo, baja línea de forma segura */
+      text-align: center;
     }
     
-    /* SCORE CIRCLE - SOBRE EL AZUL */
+    /* SCORE CIRCLE */
     .core-section { position: relative; margin: 15px 0 25px 0; cursor: pointer; }
     
     .score-circle-svg { 
@@ -178,7 +186,7 @@
 
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     
-    /* TEXTO PUNTAJE - BLANCO */
+    /* TEXTO PUNTAJE */
     .score-big { 
       font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
       color: var(--white); 
@@ -190,13 +198,11 @@
       text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
     }
     
-    /* --- CAMBIO 2: BOTÓN MEDIO CON BORDE DE ORO 3D --- */
+    /* BOTÓN MEDIO CON BORDE DE ORO 3D */
     .level-badge { 
       background: rgba(10, 37, 64, 0.4); 
       backdrop-filter: blur(15px);
-      /* Borde dorado metálico rico */
-      border: 1px solid #E6BE55; 
-      /* Sombra interna para volumen 3D + resplandor externo */
+      border: 1px solid #FFD700; 
       box-shadow: inset 0 0 5px rgba(0,0,0,0.2), 0 0 15px rgba(230, 190, 85, 0.4);
       padding: 8px 30px; border-radius: 50px; 
       font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
@@ -250,6 +256,7 @@
     .mission-header-bar { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); }
     .mission-title-text { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: var(--white); letter-spacing: 1px; }
     .toggle-icon { color: var(--white); }
+    /* PLAN DE ACCIÓN OCULTO */
     .mission-content-box { background: var(--white); padding: 25px; display: none; }
     .mission-item { display: flex; gap: 15px; align-items: start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0; }
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
@@ -274,7 +281,7 @@
     
     .gap-message-overlay { position: absolute; top: 75%; left: 50%; transform: translateX(-50%); background: rgba(220, 38, 38, 0.95); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; white-space: nowrap; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); }
     .core-section.show-gap .gap-message-overlay { opacity: 1; top: 82%; }
-    .core-section.show-gap .circle-bg { stroke: rgba(220, 38, 38, 0.3); } 
+    .core-section.show-gap .circle-bg { stroke: rgba(220, 38, 38, 0.3); } 
   </style>
 </head>
 <body>
@@ -292,10 +299,13 @@
         <div class="header-info">
           <div class="sub-label">RESULTADOS SIMULACRO</div>
           <div class="main-title" id="simTitle">S11-R</div>
+          
           <div class="student-info">
-              <span class="student-pill" id="uiName">ALUMNO</span> 
-              <span class="student-pill" id="uiRank">#1</span>
+              <span id="uiName">ALUMNO</span> 
+              <span>/</span> 
+              <span id="uiRank">#1</span>
           </div>
+          
         </div>
         
         <div class="core-section" onclick="pulseCircle()">
@@ -304,13 +314,11 @@
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#8C6239" />
-                    <stop offset="20%" stop-color="#D4AF37" />
-                    <stop offset="35%" stop-color="#FFFFFF" />
-                    <stop offset="50%" stop-color="#FDB931" />
-                    <stop offset="70%" stop-color="#FFFFE0" />
-                    <stop offset="85%" stop-color="#C6934B" />
-                    <stop offset="100%" stop-color="#7A5330" />
+                    <stop offset="0%" stop-color="#FFD700" />
+                    <stop offset="35%" stop-color="#FFFFE0" /> 
+                    <stop offset="50%" stop-color="#DAA520" /> 
+                    <stop offset="75%" stop-color="#FFFFE0" /> 
+                    <stop offset="100%" stop-color="#B8860B" /> 
                 </linearGradient>
             </defs>
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
@@ -669,7 +677,7 @@
         b.style.boxShadow=`0 0 15px ${c}40`; 
     }
     
-    function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-down toggle-icon";} }
+    function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
     function toggleLevel(){ const d=document.getElementById('levelDetails'); d.style.display=d.style.display==="block"?"none":"block"; }
     
     function openModal(i){ 
