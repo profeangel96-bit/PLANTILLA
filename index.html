@@ -30,7 +30,7 @@
       /* AZUL REAL PROFUNDO (Deep Navy) */
       --color-primary: #0a2540; 
       
-      /* DORADO MAESTRO (Más intenso) */
+      /* DORADO MAESTRO */
       --color-accent: #FFD700;
       --white: #ffffff;
       --color-text: #334155; 
@@ -72,9 +72,9 @@
       display: flex; flex-direction: column; 
       overflow: hidden;
       
-      /* --- CAMBIO CRÍTICO 1: CORTE AL 72% --- 
-         Esto hace que el azul cubra TOTALMENTE la bola y el botón MEDIO */
-      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 72%, var(--bg-app) 72%, var(--bg-app) 100%);
+      /* --- CAMBIO 1: AZUL BAJADO AL 78% --- 
+         Llega justo al inicio de la tarjeta de saludo */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 78%, var(--bg-app) 78%, var(--bg-app) 100%);
     }
 
     @media (min-width: 500px) { 
@@ -137,7 +137,6 @@
     
     .score-circle-svg { 
       width: 260px; height: 260px; 
-      /* Rotación base para el progreso */
       transform: rotate(-90deg); 
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
     }
@@ -159,31 +158,27 @@
       transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
     }
     
-    /* --- CAMBIO CRÍTICO 2: EL DESTELLO EXACTO (FLARE) --- 
-       Posicionado estáticamente a la derecha (aprox 1:30 del reloj) 
-       Esto simula el brillo de la foto */
+    /* EL DESTELLO FIJO (FLARE) */
     .static-flare {
         position: absolute;
-        top: 30px; right: 40px; /* Coordenada visual para la 1:30 */
+        top: 30px; right: 40px; 
         width: 0; height: 0;
         z-index: 55;
         pointer-events: none;
-        /* El brillo en sí */
         box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.9);
     }
-    /* La cruz del destello */
     .static-flare::before, .static-flare::after {
         content: ''; position: absolute; background: white;
         top: 50%; left: 50%; transform: translate(-50%, -50%);
         border-radius: 50%;
         box-shadow: 0 0 10px white;
     }
-    .static-flare::before { width: 40px; height: 3px; } /* Horizontal */
-    .static-flare::after { width: 3px; height: 40px; } /* Vertical */
+    .static-flare::before { width: 40px; height: 3px; } 
+    .static-flare::after { width: 3px; height: 40px; } 
 
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     
-    /* TEXTO PUNTAJE - BLANCO (Porque está sobre azul) */
+    /* TEXTO PUNTAJE - BLANCO */
     .score-big { 
       font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
       color: var(--white); 
@@ -195,16 +190,17 @@
       text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
     }
     
-    /* --- CAMBIO CRÍTICO 3: BOTÓN MEDIO CON BORDE DE ORO --- */
+    /* --- CAMBIO 2: BOTÓN MEDIO CON BORDE DE ORO 3D --- */
     .level-badge { 
-      background: rgba(10, 37, 64, 0.4); /* Fondo sutil oscuro para contraste */
+      background: rgba(10, 37, 64, 0.4); 
       backdrop-filter: blur(15px);
-      /* AQUÍ ESTÁ EL BORDE DORADO SOLICITADO */
-      border: 1px solid #FFD700; 
+      /* Borde dorado metálico rico */
+      border: 1px solid #E6BE55; 
+      /* Sombra interna para volumen 3D + resplandor externo */
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.2), 0 0 15px rgba(230, 190, 85, 0.4);
       padding: 8px 30px; border-radius: 50px; 
       font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
       display: flex; align-items: center; justify-content: center; gap: 8px; 
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); /* Glow dorado suave */
       margin-top: -45px; position: relative; z-index: 20; 
       color: var(--white); 
       animation: floatBadge 4s ease-in-out infinite; 
@@ -308,8 +304,14 @@
           <svg class="score-circle-svg" viewBox="0 0 220 220">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FFD700" />
-                    <stop offset="35%" stop-color="#FFFFE0" /> <stop offset="50%" stop-color="#DAA520" /> <stop offset="75%" stop-color="#FFFFE0" /> <stop offset="100%" stop-color="#B8860B" /> </linearGradient>
+                    <stop offset="0%" stop-color="#8C6239" />
+                    <stop offset="20%" stop-color="#D4AF37" />
+                    <stop offset="35%" stop-color="#FFFFFF" />
+                    <stop offset="50%" stop-color="#FDB931" />
+                    <stop offset="70%" stop-color="#FFFFE0" />
+                    <stop offset="85%" stop-color="#C6934B" />
+                    <stop offset="100%" stop-color="#7A5330" />
+                </linearGradient>
             </defs>
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
             <circle class="circle-fill" id="scoreCircle" cx="110" cy="110" r="100" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></circle>
