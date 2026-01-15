@@ -23,14 +23,10 @@
 
   <style>
     :root {
-      /* PALETA PREMIUM DE LUJO */
+      /* PALETA PREMIUM */
       --bg-body: #cbd5e1; 
       --bg-app: #f8fafc; 
-      
-      /* AZUL REAL PROFUNDO */
       --color-primary: #0a2540; 
-      
-      /* DORADO MAESTRO */
       --color-accent: #FFD700;
       --white: #ffffff;
       --color-text: #334155; 
@@ -41,53 +37,58 @@
       --level-mid: #d97706; 
       --level-low: #dc2626;
 
-      /* Gradiente del Botón PDF */
       --btn-gradient: linear-gradient(135deg, #0a2540 0%, #1e40af 100%);
-      
       --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-      
-      /* Efecto Vidrio */
       --glass-bg: rgba(255, 255, 255, 0.15);
       --glass-border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
+    /* CAMBIO 3: SCROLL REAL PARA OCULTAR BARRA NAVEGADOR */
     body { 
       margin: 0; padding: 0; 
       font-family: 'Manrope', sans-serif; 
       background-color: var(--bg-body); 
       color: var(--color-text); 
-      height: 100vh; height: 100dvh; 
+      /* Quitamos height: 100vh fijo para permitir scroll nativo */
+      min-height: 100vh; 
       display: flex; flex-direction: column; 
-      align-items: center; justify-content: center; 
-      overflow: hidden; 
+      align-items: center; justify-content: flex-start; /* Alineación superior */
+      overflow-x: hidden; 
+      overflow-y: auto; /* Scroll en el body principal */
     }
     
     /* MARCO MÓVIL */
     .mobile-frame { 
-      width: 100%; max-width: 480px; height: 100%; 
+      width: 100%; max-width: 480px; 
+      /* Altura mínima para llenar pantalla, pero crece con el contenido */
+      min-height: 100vh; 
       position: relative; 
       box-shadow: 0 0 50px rgba(0,0,0,0.25); 
       display: flex; flex-direction: column; 
-      overflow: hidden;
-      /* CORTE AZUL AL 79% */
-      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 79%, var(--bg-app) 79%, var(--bg-app) 100%);
+      
+      /* CORTE AZUL AL 79% DE LA PANTALLA INICIAL APROX */
+      /* Usamos background-attachment: scroll para que el fondo se mueva natural */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 550px, var(--bg-app) 550px, var(--bg-app) 100%);
+      background-repeat: no-repeat;
+      background-color: var(--bg-app);
     }
 
     @media (min-width: 500px) { 
-      .mobile-frame { height: 95vh; border-radius: 30px; border: 4px solid #fff; } 
+      /* En escritorio sí mantenemos el marco fijo centrado */
+      body { justify-content: center; height: 100vh; overflow: hidden; }
+      .mobile-frame { height: 95vh; min-height: unset; border-radius: 30px; border: 4px solid #fff; overflow-y: auto; } 
     }
     
+    /* VIEWPORT INTERNO (Solo util para desktop ahora, en movil es transparente) */
     #scroll-viewport { 
-      flex: 1; overflow-y: auto; overflow-x: hidden; 
-      display: flex; flex-direction: column; 
-      position: relative; 
-      padding-bottom: 40px; 
+      flex: 1; display: flex; flex-direction: column; 
+      position: relative; padding-bottom: 40px; 
     }
 
     /* LOADER */
-    .loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
+    .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease-out; }
     .brand-loader-logo { font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1; margin-bottom: 5px; }
     .brand-loader-text { font-size: 1.5rem; font-weight: 800; color: var(--white); }
     .loader-bar { width: 150px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-top: 20px; overflow: hidden; }
@@ -117,7 +118,6 @@
       letter-spacing: 1px; line-height: 1; 
     }
     
-    /* CAPSULA DE NOMBRE VERTICAL */
     .student-info { 
       margin-top: 10px;
       background: rgba(255,255,255,0.15); 
@@ -125,154 +125,64 @@
       border-radius: 12px; 
       border: 1px solid rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
-      
-      display: inline-flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      text-align: center;
-      max-width: 90%;
+      display: inline-flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; max-width: 90%;
     }
     
-    .name-text {
-        font-size: 0.9rem; font-weight: 700; color: #fff;
-        line-height: 1.2; text-transform: uppercase;
-        margin-bottom: 2px; 
-    }
-    .rank-text {
-        font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.8);
-        border-top: 1px solid rgba(255,255,255,0.2); 
-        padding-top: 2px; width: 100%;
-    }
+    .name-text { font-size: 0.9rem; font-weight: 700; color: #fff; line-height: 1.2; text-transform: uppercase; margin-bottom: 2px; }
+    .rank-text { font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2px; width: 100%; }
     
     /* SCORE CIRCLE */
-    .core-section { 
-        position: relative; margin: 20px 0 30px 0; 
-        cursor: pointer; 
-    }
+    .core-section { position: relative; margin: 20px 0 30px 0; cursor: pointer; }
+    .score-circle-svg { width: 260px; height: 260px; transform: rotate(-90deg); filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3)); }
+    .circle-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 20; }
+    .circle-fill { fill: none; stroke-width: 20; stroke-linecap: round; stroke: url(#goldGradient); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
     
-    .score-circle-svg { 
-      width: 260px; height: 260px; 
-      transform: rotate(-90deg); 
-      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
-    }
-    
-    /* Fondo del círculo */
-    .circle-bg { 
-      fill: none; 
-      stroke: rgba(255,255,255,0.08); 
-      stroke-width: 20; 
-    }
-    
-    /* Relleno del círculo */
-    .circle-fill { 
-      fill: none; 
-      stroke-width: 20; 
-      stroke-linecap: round; 
-      stroke: url(#goldGradient); 
-      stroke-dasharray: 100; stroke-dashoffset: 100; 
-      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
-    }
-    
-    /* DESTELLO FIJO */
-    .static-flare {
-        position: absolute;
-        top: 25px; right: 40px; 
-        width: 0; height: 0;
-        z-index: 20; pointer-events: none;
-        box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9); 
-    }
-    .static-flare::before, .static-flare::after {
-        content: ''; position: absolute; background: white;
-        top: 50%; left: 50%; transform: translate(-50%, -50%);
-        border-radius: 50%; box-shadow: 0 0 8px white;
-    }
+    /* DESTELLO */
+    .static-flare { position: absolute; top: 25px; right: 40px; width: 0; height: 0; z-index: 20; pointer-events: none; box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9); }
+    .static-flare::before, .static-flare::after { content: ''; position: absolute; background: white; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 0 8px white; }
     .static-flare::before { width: 45px; height: 4px; } 
     .static-flare::after { width: 4px; height: 45px; } 
 
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
+    .score-big { font-size: 5.5rem; font-weight: 800; line-height: 0.9; color: var(--white); text-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+    .score-label { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; }
     
-    /* TEXTO PUNTAJE */
-    .score-big { 
-      font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
-      color: var(--white); 
-      text-shadow: 0 5px 25px rgba(0,0,0,0.3);
-    }
-    .score-label { 
-      font-size: 0.75rem; font-weight: 700; 
-      color: rgba(255,255,255,0.9); 
-      text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
-    }
-    
-    /* BOTÓN MEDIO */
-    .level-badge { 
-      background: rgba(10, 37, 64, 0.6); 
-      backdrop-filter: blur(15px);
-      border: 1px solid #FFD700; 
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-      padding: 8px 30px; border-radius: 50px; 
-      font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
-      display: flex; align-items: center; justify-content: center; gap: 8px; 
-      margin-top: -45px; position: relative; z-index: 25; 
-      color: var(--white); 
-      animation: floatBadge 4s ease-in-out infinite; 
-      text-transform: uppercase;
-      cursor: pointer;
-    }
+    .level-badge { background: rgba(10, 37, 64, 0.6); backdrop-filter: blur(15px); border: 1px solid #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); padding: 8px 30px; border-radius: 50px; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: -45px; position: relative; z-index: 25; color: var(--white); animation: floatBadge 4s ease-in-out infinite; text-transform: uppercase; cursor: pointer; }
     @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-    /* CONTENEDOR PRINCIPAL */
     .content-padder { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 15px; }
     
-    /* TARJETA DE SALUDO */
-    .greeting-card { 
-      background: white; border-radius: 20px; box-shadow: var(--card-shadow); 
-      padding: 20px 15px; 
-      margin-top: 5px; 
-      position: relative; border: 1px solid #f1f5f9; text-align: center; z-index: 10;
-    }
-    
+    .greeting-card { background: white; border-radius: 20px; box-shadow: var(--card-shadow); padding: 20px 15px; margin-top: 5px; position: relative; border: 1px solid #f1f5f9; text-align: center; z-index: 10; }
     .greeting-header { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 5px; }
     .greeting-title { font-size: 1.1rem; font-weight: 900; color: var(--color-primary); margin: 0; }
     .greeting-text { font-size: 0.85rem; color: var(--color-text); line-height: 1.4; font-weight: 500; }
     
-    /* BOTÓN PDF */
-    .btn-action { 
-      width: 100%; padding: 16px; border-radius: 16px; border: none; 
-      font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.95rem; letter-spacing: 0.5px; 
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; 
-      background: var(--btn-gradient); color: white; 
-      box-shadow: 0 10px 25px -5px rgba(0, 30, 60, 0.3); 
-      transition: transform 0.2s, box-shadow 0.2s; 
-      margin-top: 5px; 
-      -webkit-tap-highlight-color: transparent; 
-    }
+    .btn-action { width: 100%; padding: 16px; border-radius: 16px; border: none; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 0.95rem; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--btn-gradient); color: white; box-shadow: 0 10px 25px -5px rgba(0, 30, 60, 0.3); transition: transform 0.2s, box-shadow 0.2s; margin-top: 5px; -webkit-tap-highlight-color: transparent; }
     .btn-action:active { transform: scale(0.98); box-shadow: 0 5px 15px -5px rgba(0, 30, 60, 0.4); }
 
-    /* CARTAS */
-    .chart-box { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; height: 320px; position: relative; box-shadow: var(--card-shadow); }
-    /* NOTA ELIMINADA DE AQUÍ, SE MOVIÓ A LAS BARRAS HORIZONTALES */
-
-    /* NUEVAS BARRAS HORIZONTALES (ESTILO BATERÍA) */
-    .horizontal-bars-container {
-        display: flex; flex-direction: column; gap: 12px;
-        background: white; padding: 20px; border-radius: 20px;
-        box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;
-        margin-top: 15px; /* Espacio para separarlo del gráfico de arriba */
+    /* --- CHART BOX CON RECORDATORIO GLOBAL --- */
+    .chart-box { 
+        background: white; padding: 20px; border-radius: 20px; 
+        border: 1px solid #f1f5f9; height: 320px; position: relative; 
+        box-shadow: var(--card-shadow); 
     }
+    /* CAMBIO 4: BADGE GLOBAL FLOTANTE */
+    .badge-global {
+        position: absolute; top: 15px; right: 15px;
+        background: var(--color-primary); color: white;
+        padding: 4px 10px; border-radius: 12px;
+        font-size: 0.7rem; font-weight: 800;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .horizontal-bars-container { display: flex; flex-direction: column; gap: 12px; background: white; padding: 20px; border-radius: 20px; box-shadow: var(--card-shadow); border: 1px solid #f1f5f9; margin-top: 15px; }
     .h-bar-item { cursor: pointer; transition: transform 0.1s; }
     .h-bar-item:active { transform: scale(0.98); }
     .h-bar-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
     .h-bar-score { font-weight: 800; }
     .h-bar-track { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
     .h-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.5s ease-out; }
-    
-    /* El mensaje de "Toca una barra..." ahora vive aquí */
-    .interactive-hint { 
-        font-size: 0.75rem; color: var(--color-muted); text-align: center; 
-        margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px;
-        display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
+    .interactive-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
     .gap-chart-box { background: white; padding: 25px 10px; border-radius: 20px; border: 1px solid #f1f5f9; min-height: 400px; position: relative; box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; }
     .gap-title { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 10px; text-transform: uppercase; text-align: center; letter-spacing: 1px; }
@@ -288,8 +198,7 @@
     .mission-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .mission-content { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
     
-    /* MODAL */
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 60, 0.9); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 60, 0.9); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: center; }
     .modal-card { background: var(--white); width: 85%; max-width: 380px; border-radius: 24px; overflow: hidden; animation: popIn 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
     @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-header { background: var(--color-primary); padding: 25px; color: white; display: flex; justify-content: space-between; align-items: center; }
@@ -383,12 +292,11 @@
         </button>
 
         <div class="chart-box">
+            <div class="badge-global" id="badgeGlobal">Global: 0</div>
             <canvas id="performanceChart"></canvas>
         </div>
 
-        <div id="horizontalBarsContainer" class="horizontal-bars-container">
-            <div class="interactive-hint">👆 Toca una barra para ver el veredicto del coach.</div>
-        </div>
+        <div id="horizontalBarsContainer" class="horizontal-bars-container"></div>
 
         <div class="gap-chart-box">
             <div class="gap-title">🏆 CAMINO A LA EXCELENCIA</div>
@@ -441,13 +349,13 @@
     let myChart = null;
     let gapChart = null;
 
-    // COLORES POR MATERIA PARA LAS BARRAS HORIZONTALES
+    // CAMBIO 1: UNIFICACIÓN DE COLORES DE IDENTIDAD
     const SUBJECT_COLORS = {
         "Lectura": "#8b5cf6",      // Violeta
-        "Matemáticas": "#2563eb",  // Azul Fuerte
-        "Sociales": "#ea580c",     // Naranja Quemado
-        "Ciencias": "#06b6d4",     // Cian/Turquesa
-        "Inglés": "#db2777"        // Rosa Intenso
+        "Matemáticas": "#2563eb",  // Azul
+        "Sociales": "#ea580c",     // Naranja
+        "Ciencias": "#06b6d4",     // Cian
+        "Inglés": "#db2777"        // Rosa
     };
 
     window.onload = function() {
@@ -506,9 +414,12 @@
       document.getElementById('uiName').innerText = data.Nombre ? data.Nombre.toUpperCase() : "ALUMNO";
       document.getElementById('uiRank').innerText = `Puesto: ${rank} de ${total}`;
       
+      // CAMBIO 4: ACTUALIZAR EL BADGE FLOTANTE
+      document.getElementById('badgeGlobal').innerText = `Global: ${realScore}`;
+
       subjects = [
         { 
-            n: "Lectura", s:"LEC", p: scores.l, icon: "📖", // s = Short name
+            n: "Lectura", s:"LEC", p: scores.l, icon: "📖", 
             v: data['XT_LEC_VEREDICTO'] || data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_LEC_MISION'] || "Sin misión."
         },
@@ -546,7 +457,6 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- BARRAS HORIZONTALES (INTERACTIVAS) ---
     function renderHorizontalBars(subs) {
         const container = document.getElementById('horizontalBarsContainer');
         let html = '';
@@ -565,23 +475,17 @@
             </div>`;
         });
         
-        // AGREGAMOS EL HINT AL FINAL DE LA LISTA
         html += `<div class="interactive-hint">👆 Toca una barra para ver el veredicto del coach.</div>`;
         
         container.innerHTML = html;
     }
 
-    // --- BARRAS VERTICALES (SOLO VISUALES CON ABREVIATURAS) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
         
-        const bgColors = dataValues.map(v => {
-            if (v < 30) return '#dc2626';      
-            if (v < 60) return '#d97706';      
-            if (v < 80) return '#2563eb';      
-            return '#16a34a';                  
-        });
+        // AHORA USAMOS LOS MISMOS COLORES DE IDENTIDAD
+        const bgColors = subs.map(s => SUBJECT_COLORS[s.n] || '#334155');
 
         if(myChart) myChart.destroy();
         Chart.register(ChartDataLabels);
@@ -589,7 +493,7 @@
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: subs.map(s => s.s), // USAMOS LAS ABREVIATURAS (LEC, MAT...)
+                labels: subs.map(s => s.s), 
                 datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
             },
             options: {
@@ -607,9 +511,12 @@
                 },
                 scales: {
                     y: { beginAtZero: true, max: 100, grid: { display: true, color: '#f1f5f9' } },
-                    x: { grid: { display: false } }
+                    // CAMBIO 2: EJE X AZUL OSCURO Y NEGRILLA
+                    x: { 
+                        grid: { display: false },
+                        ticks: { font: { weight: '900', size: 12 }, color: '#0a2540' } 
+                    }
                 }
-                // ELIMINADO EL onClick AQUÍ. AHORA SOLO ES VISUAL.
             }
         });
     }
@@ -618,13 +525,8 @@
         const ctx = document.getElementById('gapChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
         
-        const colors = [
-            'rgba(239, 68, 68, 0.7)', 
-            'rgba(59, 130, 246, 0.7)', 
-            'rgba(234, 179, 8, 0.7)',  
-            'rgba(16, 185, 129, 0.7)', 
-            'rgba(244, 63, 94, 0.7)'   
-        ];
+        // COLORES UNIFICADOS AQUÍ TAMBIÉN
+        const colors = subs.map(s => SUBJECT_COLORS[s.n] || '#334155');
 
         if(gapChart) gapChart.destroy();
         Chart.register(ChartDataLabels); 
@@ -632,7 +534,7 @@
         gapChart = new Chart(ctx, {
             type: 'polarArea',
             data: {
-                labels: subs.map(s => s.n), // Aquí sí usamos nombre completo
+                labels: subs.map(s => s.n), 
                 datasets: [{
                     data: dataValues,
                     backgroundColor: colors,
@@ -652,7 +554,7 @@
                         textStrokeWidth: 4,
                         font: { weight: '900', size: 12 },
                         backgroundColor: function(context) {
-                             return context.dataset.backgroundColor[context.dataIndex].replace('0.7', '1');
+                             return context.dataset.backgroundColor[context.dataIndex];
                         },
                         borderRadius: 3,
                         padding: 3,
