@@ -23,11 +23,11 @@
 
   <style>
     :root {
-      /* PALETA PREMIUM */
+      /* PALETA PREMIUM AJUSTADA */
       --bg-body: #cbd5e1; 
-      --bg-app: #ffffff; /* Fondo inferior blanco puro */
+      --bg-app: #f8fafc; 
       
-      /* AZUL REAL PROFUNDO (Intacto) */
+      /* AZUL REAL PROFUNDO (Más elegante que el anterior) */
       --color-primary: #001e3c; 
       
       --color-accent: #d4af37; 
@@ -40,10 +40,10 @@
       --level-mid: #d97706; 
       --level-low: #dc2626;
 
-      /* Gradiente del Botón PDF */
-      --btn-gradient: linear-gradient(135deg, #001e3c 0%, #1e3a8a 100%);
+      /* Gradiente del Botón PDF (Más oscuro y serio) */
+      --btn-gradient: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
       
-      --card-shadow: 0 20px 40px -10px rgba(0, 30, 60, 0.12);
+      --card-shadow: 0 20px 40px -10px rgba(0, 30, 60, 0.15);
       --glass-bg: rgba(255, 255, 255, 0.1);
       --glass-border: 1px solid rgba(255, 255, 255, 0.15);
     }
@@ -61,15 +61,15 @@
       overflow: hidden; 
     }
     
-    /* MARCO MÓVIL - AJUSTE CLAVE DE FONDO (35% Azul / 65% Blanco) */
+    /* MARCO MÓVIL - AJUSTE DE FONDO DIVIDIDO */
     .mobile-frame { 
       width: 100%; max-width: 480px; height: 100%; 
       position: relative; 
       box-shadow: 0 0 50px rgba(0,0,0,0.2); 
       display: flex; flex-direction: column; 
       overflow: hidden;
-      /* Aquí está la magia: El corte sube al 35% */
-      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 35%, var(--bg-app) 35%, var(--bg-app) 100%);
+      /* Bajamos la división al 52% para asegurar que el puntaje quede en lo azul */
+      background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary) 52%, var(--bg-app) 52%, var(--bg-app) 100%);
     }
 
     @media (min-width: 500px) { 
@@ -91,45 +91,48 @@
     .loader-progress { height: 100%; width: 0%; background: var(--color-accent); animation: loadProgress 5s ease-out forwards; }
     @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
     
-    /* HEADER INFO (Compactado para subir todo) */
+    /* HEADER INFO (Intacto pero optimizado para el azul) */
     .header-wrapper { 
-      padding: 25px 20px 0px 20px; 
+      padding: 30px 20px 0px 20px; 
       display: flex; flex-direction: column; align-items: center; 
       z-index: 50; position: relative; 
       color: var(--white); 
     }
     
-    .header-info { text-align: center; margin-bottom: 5px; width: 100%; }
-    .sub-label { font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; }
-    .main-title { font-size: 1.4rem; font-weight: 800; color: var(--white); margin: 2px 0; letter-spacing: -0.5px; }
+    .header-info { text-align: center; margin-bottom: 10px; width: 100%; }
+    .sub-label { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; }
+    .main-title { font-size: 1.5rem; font-weight: 800; color: var(--white); margin: 5px 0; letter-spacing: -0.5px; }
     .student-info { 
-      font-size: 0.8rem; font-weight: 600; 
+      font-size: 0.85rem; font-weight: 600; 
       color: rgba(255,255,255,0.95); 
       background: rgba(255,255,255,0.1); 
-      padding: 4px 14px; border-radius: 20px; 
-      display: inline-block; margin-top: 5px;
+      padding: 5px 16px; border-radius: 20px; 
+      display: inline-block; margin-top: 8px;
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255,255,255,0.1);
     }
     
-    /* SCORE CIRCLE (Posicionado sobre el corte) */
-    .core-section { position: relative; margin: 15px 0 25px 0; cursor: pointer; }
+    /* SCORE CIRCLE (Anillo 3D Refinado) */
+    .core-section { position: relative; margin: 25px 0 35px 0; cursor: pointer; }
     
     .score-circle-svg { 
-        width: 270px; height: 270px; 
+        width: 280px; height: 280px; /* Tamaño controlado, no gigante */
         transform: rotate(-90deg); 
-        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+        /* Sombra fuerte para despegarlo del fondo */
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
     
+    /* Fondo del círculo */
     .circle-bg { 
-        fill: none; /* TRANSPARENTE para ver el fondo azul/blanco detrás */
-        stroke: rgba(200,200,200,0.15); 
-        stroke-width: 18; 
+        fill: none; 
+        stroke: rgba(255,255,255,0.05); 
+        stroke-width: 18; /* Más grueso para parecerse a la referencia */
     }
     
+    /* Relleno del círculo */
     .circle-fill { 
       fill: none; 
-      stroke-width: 18; 
+      stroke-width: 18; /* Grosor coincidente */
       stroke-linecap: round; 
       stroke: url(#goldGradient); 
       stroke-dasharray: 100; stroke-dashoffset: 100; 
@@ -138,30 +141,31 @@
     
     .core-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; pointer-events: none; }
     
-    /* CAMBIO CRÍTICO: TEXTO AZUL OSCURO (Para verse sobre lo blanco) */
+    /* NÚMEROS: Sombra de texto para asegurar legibilidad */
     .score-big { 
-      font-size: 5.5rem; font-weight: 800; line-height: 0.9; 
-      color: var(--color-primary); /* AZUL OSCURO */
-      text-shadow: none;
+      font-size: 6rem; font-weight: 800; line-height: 0.9; 
+      color: var(--white); 
+      text-shadow: 0 4px 30px rgba(0,0,0,0.5); /* Sombra para que se lea SIEMPRE */
     }
     .score-label { 
-      font-size: 0.7rem; font-weight: 800; 
-      color: var(--color-primary); /* AZUL OSCURO */
-      opacity: 0.8;
-      text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; 
-      text-shadow: none;
+      font-size: 0.75rem; font-weight: 700; 
+      color: rgba(255,255,255,0.8); 
+      text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; 
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
     
-    /* INSIGNIA FLOTANTE (Badge) */
+    /* INSIGNIA FLOTANTE (Centrada en el hueco) */
     .level-badge { 
-        background: white; /* Fondo sólido blanco para resaltar */
-        border: 2px solid #e2e8f0;
-        padding: 8px 24px; border-radius: 50px; 
-        font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;
+        background: rgba(255,255,255,0.05); 
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 10px 28px; border-radius: 50px; 
+        font-weight: 900; font-size: 0.95rem; letter-spacing: 1px;
         display: flex; align-items: center; justify-content: center; gap: 8px; 
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-        margin-top: -40px; position: relative; z-index: 20; 
-        /* El color del texto se inyecta vía JS según el nivel */
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
+        margin-top: -45px; /* Subimos más para que quede en el hueco del anillo */
+        position: relative; z-index: 20; 
+        color: var(--white); /* Texto siempre blanco para contraste */
         animation: floatBadge 4s ease-in-out infinite; 
         text-transform: uppercase;
         cursor: pointer;
@@ -169,47 +173,47 @@
     @keyframes floatBadge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
     /* CONTENEDOR PRINCIPAL */
-    .content-padder { padding: 0 20px 30px 20px; display: flex; flex-direction: column; gap: 20px; }
+    .content-padder { padding: 0 20px 30px 20px; display: flex; flex-direction: column; gap: 25px; }
     
-    /* TARJETA DE SALUDO (Centrada y Compacta) */
+    /* TARJETA DE SALUDO (Centrada Estilo Invitación) */
     .greeting-card { 
       background: white; 
-      border-radius: 20px; 
+      border-radius: 24px; 
       box-shadow: var(--card-shadow); 
-      padding: 25px 20px;
-      margin-top: 10px;
+      padding: 30px 20px;
+      margin-top: 20px;
       position: relative;
       border: 1px solid #f1f5f9;
-      text-align: center; /* CENTRADO TOTAL */
+      text-align: center; /* CENTRADO MAESTRO */
     }
     
     .greeting-header { 
-        display: flex; flex-direction: column; 
+        display: flex; flex-direction: column; /* Apilar icono y título */
         align-items: center; justify-content: center; 
-        margin-bottom: 10px; 
+        margin-bottom: 12px; 
     }
-    .greeting-title { font-size: 1.2rem; font-weight: 900; color: var(--color-primary); margin: 0; }
-    .greeting-text { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; font-weight: 500; }
+    .greeting-title { font-size: 1.3rem; font-weight: 900; color: var(--color-primary); margin: 0; }
+    .greeting-text { font-size: 0.95rem; color: var(--color-text); line-height: 1.6; font-weight: 500; }
     
-    /* BOTÓN PDF (Integrado bajo el saludo) */
+    /* BOTÓN PDF (Oscuro y Elegante) */
     .btn-action { 
       width: 100%; 
-      padding: 16px; 
-      border-radius: 16px; 
+      padding: 18px; 
+      border-radius: 18px; 
       border: none; 
       font-family: 'Manrope', sans-serif; 
-      font-weight: 800; font-size: 0.95rem; letter-spacing: 0.5px;
+      font-weight: 800; font-size: 1rem; letter-spacing: 0.5px;
       cursor: pointer; 
-      display: flex; align-items: center; justify-content: center; gap: 10px; 
+      display: flex; align-items: center; justify-content: center; gap: 12px; 
       
-      background: var(--btn-gradient); 
+      background: var(--btn-gradient); /* Gradiente Navy Profundo */
       color: white; 
-      box-shadow: 0 10px 25px -5px rgba(0, 30, 60, 0.3); 
+      box-shadow: 0 15px 30px -5px rgba(15, 23, 42, 0.4); 
       transition: transform 0.2s, box-shadow 0.2s; 
     }
-    .btn-action:active { transform: scale(0.98); box-shadow: 0 5px 15px -5px rgba(0, 30, 60, 0.4); }
+    .btn-action:active { transform: scale(0.98); box-shadow: 0 5px 15px -5px rgba(15, 23, 42, 0.5); }
 
-    /* RESTO DE ELEMENTOS (Intactos) */
+    /* RESTO DE CARTAS (Intactas estilo limpio) */
     .chart-box { 
       background: white; padding: 20px; border-radius: 20px; 
       border: 1px solid #f1f5f9; height: 320px; position: relative; 
@@ -656,16 +660,17 @@
         const b=document.getElementById('levelBadge'); 
         let l="",c=""; 
         
-        // Letra del nivel (Superior, etc) del color del rango, NO BLANCA, porque el fondo es blanco
+        // Letra siempre blanca para contraste sobre fondo oscuro
+        // El borde tendrá el color del nivel
         if(s>=380){l="SUPERIOR";c="#4ade80";} 
         else if(s>=300){l="ALTO";c="#60a5fa";} 
         else if(s>=230){l="MEDIO";c="#fbbf24";} 
         else {l="BAJO";c="#f87171";} 
         
         b.innerHTML=`<i class="fa-solid fa-trophy"></i> ${l}`; 
-        b.style.color=c;  /* Texto en color para contrastar con fondo blanco */
-        b.style.borderColor=c;   
-        b.style.boxShadow=`0 0 15px ${c}40`; 
+        b.style.color="#ffffff"; /* Texto blanco */
+        b.style.borderColor=c;   /* Borde de color */
+        b.style.boxShadow=`0 0 15px ${c}40`; /* Glow sutil */
     }
     
     function toggleMissions(){ const c=document.getElementById('missionList'); const i=document.getElementById('missionIcon'); if(c.style.display==="block"){c.style.display="none";i.className="fa-solid fa-chevron-down toggle-icon";}else{c.style.display="block";i.className="fa-solid fa-chevron-up toggle-icon";} }
