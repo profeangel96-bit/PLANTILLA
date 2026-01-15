@@ -251,13 +251,14 @@
 
     /* CARTAS */
     .chart-box { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; height: 320px; position: relative; box-shadow: var(--card-shadow); }
-    .chart-hint { font-size: 0.75rem; color: var(--color-muted); text-align: center; margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px;}
+    /* NOTA ELIMINADA DE AQUÍ, SE MOVIÓ A LAS BARRAS HORIZONTALES */
 
     /* NUEVAS BARRAS HORIZONTALES (ESTILO BATERÍA) */
     .horizontal-bars-container {
         display: flex; flex-direction: column; gap: 12px;
         background: white; padding: 20px; border-radius: 20px;
         box-shadow: var(--card-shadow); border: 1px solid #f1f5f9;
+        margin-top: 15px; /* Espacio para separarlo del gráfico de arriba */
     }
     .h-bar-item { cursor: pointer; transition: transform 0.1s; }
     .h-bar-item:active { transform: scale(0.98); }
@@ -265,6 +266,13 @@
     .h-bar-score { font-weight: 800; }
     .h-bar-track { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
     .h-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.5s ease-out; }
+    
+    /* El mensaje de "Toca una barra..." ahora vive aquí */
+    .interactive-hint { 
+        font-size: 0.75rem; color: var(--color-muted); text-align: center; 
+        margin-top: 15px; font-style: italic; border-top: 1px solid #f1f5f9; padding-top: 10px;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
 
     .gap-chart-box { background: white; padding: 25px 10px; border-radius: 20px; border: 1px solid #f1f5f9; min-height: 400px; position: relative; box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; }
     .gap-title { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); margin-bottom: 10px; text-transform: uppercase; text-align: center; letter-spacing: 1px; }
@@ -376,10 +384,11 @@
 
         <div class="chart-box">
             <canvas id="performanceChart"></canvas>
-            <div class="chart-hint">👆 Toca una barra para ver el veredicto del coach.</div>
         </div>
 
-        <div id="horizontalBarsContainer" class="horizontal-bars-container"></div>
+        <div id="horizontalBarsContainer" class="horizontal-bars-container">
+            <div class="interactive-hint">👆 Toca una barra para ver el veredicto del coach.</div>
+        </div>
 
         <div class="gap-chart-box">
             <div class="gap-title">🏆 CAMINO A LA EXCELENCIA</div>
@@ -499,34 +508,34 @@
       
       subjects = [
         { 
-            n: "Lectura", p: scores.l, icon: "📖",
+            n: "Lectura", s:"LEC", p: scores.l, icon: "📖", // s = Short name
             v: data['XT_LEC_VEREDICTO'] || data['TXT_LEC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_LEC_MISION'] || "Sin misión."
         },
         { 
-            n: "Matemáticas", p: scores.m, icon: "📐",
+            n: "Matemáticas", s:"MAT", p: scores.m, icon: "📐",
             v: data['TXT_MAT_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_MAT_MISION'] || "Sin misión."
         },
         { 
-            n: "Sociales", p: scores.s, icon: "🌍",
+            n: "Sociales", s:"SOC", p: scores.s, icon: "🌍",
             v: data['TXT_SOC_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_SOC_MISION'] || "Sin misión."
         },
         { 
-            n: "Ciencias", p: scores.c, icon: "🧬",
+            n: "Ciencias", s:"CIE", p: scores.c, icon: "🧬",
             v: data['TXT_CIE_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_CIE_MISION'] || "Sin misión."
         },
         { 
-            n: "Inglés", p: scores.i, icon: "🇬🇧",
+            n: "Inglés", s:"ING", p: scores.i, icon: "🇬🇧",
             v: data['TXT_ING_VEREDICTO'] || "Sin diagnóstico.", 
             m: data['TXT_ING_MISION'] || "Sin misión."
         }
       ];
 
       renderChart(subjects);
-      renderHorizontalBars(subjects); // NUEVA FUNCIÓN
+      renderHorizontalBars(subjects); 
       renderGapChart(subjects); 
       renderMissions(subjects);
       buildNarrative(data.Nombre, realScore); 
@@ -537,7 +546,7 @@
       if(realScore > 350) setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors:['#d4af37', '#0f172a'] }), 1000);
     }
 
-    // --- NUEVA FUNCIÓN: BARRAS HORIZONTALES ESTILO BATERÍA ---
+    // --- BARRAS HORIZONTALES (INTERACTIVAS) ---
     function renderHorizontalBars(subs) {
         const container = document.getElementById('horizontalBarsContainer');
         let html = '';
@@ -556,19 +565,22 @@
             </div>`;
         });
         
+        // AGREGAMOS EL HINT AL FINAL DE LA LISTA
+        html += `<div class="interactive-hint">👆 Toca una barra para ver el veredicto del coach.</div>`;
+        
         container.innerHTML = html;
     }
 
+    // --- BARRAS VERTICALES (SOLO VISUALES CON ABREVIATURAS) ---
     function renderChart(subs) {
         const ctx = document.getElementById('performanceChart').getContext('2d');
         const dataValues = subs.map(s => s.p);
         
-        // LÓGICA DE SEMÁFORO DE 4 COLORES
         const bgColors = dataValues.map(v => {
-            if (v < 30) return '#dc2626';      // Rojo Crítico
-            if (v < 60) return '#d97706';      // Naranja Alerta
-            if (v < 80) return '#2563eb';      // Azul Bueno
-            return '#16a34a';                  // Verde Excelente
+            if (v < 30) return '#dc2626';      
+            if (v < 60) return '#d97706';      
+            if (v < 80) return '#2563eb';      
+            return '#16a34a';                  
         });
 
         if(myChart) myChart.destroy();
@@ -577,7 +589,7 @@
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: subs.map(s => s.n),
+                labels: subs.map(s => s.s), // USAMOS LAS ABREVIATURAS (LEC, MAT...)
                 datasets: [{ data: dataValues, backgroundColor: bgColors, borderRadius: 6, barPercentage: 0.6 }]
             },
             options: {
@@ -596,8 +608,8 @@
                 scales: {
                     y: { beginAtZero: true, max: 100, grid: { display: true, color: '#f1f5f9' } },
                     x: { grid: { display: false } }
-                },
-                onClick: (e, activeEls) => { if(activeEls.length > 0) openModal(activeEls[0].index); }
+                }
+                // ELIMINADO EL onClick AQUÍ. AHORA SOLO ES VISUAL.
             }
         });
     }
@@ -620,7 +632,7 @@
         gapChart = new Chart(ctx, {
             type: 'polarArea',
             data: {
-                labels: subs.map(s => s.n),
+                labels: subs.map(s => s.n), // Aquí sí usamos nombre completo
                 datasets: [{
                     data: dataValues,
                     backgroundColor: colors,
@@ -650,7 +662,6 @@
                 scales: {
                     r: { 
                         min: 0, max: 100, 
-                        // Truco para evitar la mancha: forzar escala visible de 0 a 100
                         suggestedMin: 0,
                         suggestedMax: 100,
                         ticks: { display: true, stepSize: 100, color: '#94a3b8', backdropColor: 'transparent', font: { size: 9 } }, 
